@@ -1,34 +1,14 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+제 28회 경영정보시스템 프로젝트 경진대회
 
-## Getting Started
+# 🧐Hobby Discovery
 
-First, run the development server:
+> 나에게 꼭 맞는 취미를 발견하기 위해 3개월 마다 취미 패키지를 랜덤(범위 지정 가능)으로 받아서 직접 경험해보는 구독형 서비스
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+## Demo
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+추가 예정
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## 협업 툴
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- [notion](https://www.notion.so/28-abf165e85ed04c1ab6f9fa535a2623c1)
+- [figma](https://www.figma.com/file/HOP1TVHNjm6OHEB9b8BksB/2022_%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EA%B2%BD%EC%A7%84%EB%8C%80%ED%9A%8C?node-id=0%3A1)
