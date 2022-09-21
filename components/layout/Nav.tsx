@@ -1,23 +1,34 @@
-import useHandlePage from "hooks/useHandlePage";
+import NavLi from "components/common/NavLi";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import Close from "public/asset/svg/Close";
+import Hamburger from "public/asset/svg/Hamburger";
 import { useState } from "react";
+import navLink from "util/navLink";
 
-const Nav = () => {
+interface Props {
+  user: string | null;
+}
+
+const Nav = ({ user }: Props) => {
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const router = useRouter();
 
   const handleHamburger = () => {
     setIsNavOpen(!isNavOpen);
     if (!isNavOpen) {
       document.querySelector("html")?.classList.add("overflow-hidden");
+    } else {
+      document.querySelector("html")?.classList.remove("overflow-hidden");
     }
   };
 
   return (
     <>
-      <nav className="sticky z-40 w-full pt-4 bg-white -top-2 h-14">
+      <nav className="sticky top-0 z-[500] w-full bg-white dark:bg-black h-14">
         <div className="flex justify-between w-full h-full">
           <div className="flex items-center justify-start w-full h-full pl-4">
-            <div className="cursor-pointer" onClick={useHandlePage("/")}>
+            <div className="cursor-pointer" onClick={() => router.push("/")}>
               <Image
                 src="/asset/image/logo.png"
                 alt="logo"
@@ -28,8 +39,8 @@ const Nav = () => {
           </div>
           <div className="flex items-center justify-end w-full h-full pr-4">
             <div
-              className="pr-4 cursor-pointer"
-              onClick={useHandlePage("/profile")}
+              className="flex items-center justify-center pr-4 cursor-pointer"
+              onClick={() => router.push("/profile")}
             >
               <Image
                 src="/asset/image/default-profile.jpg"
@@ -39,30 +50,46 @@ const Nav = () => {
                 className="rounded-full"
               />
             </div>
-            <div className="cursor-pointer" onClick={handleHamburger}>
-              <Image
-                src="/asset/svg/hamburger.svg"
-                alt="hamberger"
-                width={32}
-                height={32}
-              />
+            <div
+              className="w-8 h-8 text-[#8e8e8e] cursor-pointer dark:text-white"
+              onClick={handleHamburger}
+            >
+              <Hamburger />
             </div>
             {isNavOpen && (
-              <div className="z-50">
-                <div className="absolute top-0 right-0 w-screen h-screen bg-black opacity-70"></div>
-                <div className="absolute top-0 right-0 w-[90vw] h-screen bg-black flex justify-center items-center">
-                  <ul className="z-10 flex flex-col items-center justify-center space-y-8 text-2xl font-bold text-white w-fit h-fit">
-                    <li>메인으로 돌아가기</li>
-                    <li>취미 체험하기</li>
-                    <li>고객 커뮤니티</li>
-                    <li>후기 모음집</li>
-                    <li>챌린지</li>
-                    <li>원데이 클래스</li>
-                    <li>마이 페이지</li>
-                    <li>로그아웃</li>
+              <>
+                <div className="absolute top-0 right-0 w-full h-screen bg-white dark:bg-black opacity-70"></div>
+                <div
+                  className={`absolute top-0 right-0 w-[90%] h-screen bg-white dark:bg-black flex justify-center items-center`}
+                >
+                  <div
+                    className="absolute top-0 right-0 w-8 h-8 m-4 text-[#8e8e8e] cursor-pointer dark:text-white"
+                    onClick={handleHamburger}
+                  >
+                    <Close />
+                  </div>
+                  <ul className="z-10 flex flex-col items-center justify-center space-y-8 text-2xl text-black dark:text-white w-fit h-fit">
+                    {navLink.map((link) => (
+                      <NavLi
+                        key={link.title}
+                        title={link.title}
+                        path={link.path}
+                      />
+                    ))}
+                    {user ? (
+                      <>
+                        <NavLi title={"마이 페이지"} path={"/profile"} />
+                        <NavLi title={"로그아웃"} path={"/"} />
+                      </>
+                    ) : (
+                      <>
+                        <NavLi title={"로그인"} path={"/login"} />
+                        <NavLi title={"회원가입"} path={"/signup"} />
+                      </>
+                    )}
                   </ul>
                 </div>
-              </div>
+              </>
             )}
           </div>
         </div>

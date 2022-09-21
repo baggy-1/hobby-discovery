@@ -9,3 +9,8 @@ html {
     sans-serif;
   overflow-x: hidden;
 }
+
+* {
+  transition: all;
+  transition-duration: 300ms;
+}
