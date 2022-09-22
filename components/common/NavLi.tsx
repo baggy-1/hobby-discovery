@@ -1,15 +1,14 @@
 import { useRouter } from "next/router";
+import { MouseEventHandler } from "react";
 
 interface Props {
   title: string;
-  path: string;
+  event: MouseEventHandler<HTMLLIElement>;
 }
 
-const NavLi = ({ title, path }: Props) => {
-  const router = useRouter();
-
+const NavLi = ({ title, event }: Props) => {
   return (
-    <li className="cursor-pointer" onClick={() => router.push(path)}>
+    <li className="cursor-pointer" onClick={event}>
       {title}
     </li>
   );

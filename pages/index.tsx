@@ -2,12 +2,9 @@ import Seo from "components/Seo";
 import type { NextPage } from "next";
 import Image from "next/image";
 import useHandlePage from "hooks/useHandlePage";
+import changeTheme from "function/changeTheme";
 
 const Home: NextPage = () => {
-  const changeTheme = () => {
-    document.querySelector("html")?.classList.toggle("dark");
-  };
-
   return (
     <>
       <Seo />

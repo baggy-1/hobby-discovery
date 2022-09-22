@@ -23,12 +23,19 @@ const Nav = ({ user }: Props) => {
     }
   };
 
+  const pushRouterEvent = (path: string) => {
+    return () => {
+      router.push(path);
+      setIsNavOpen(false);
+    };
+  };
+
   return (
     <>
       <nav className="sticky top-0 z-[500] w-full bg-white dark:bg-black h-14">
         <div className="flex justify-between w-full h-full">
           <div className="flex items-center justify-start w-full h-full pl-4">
-            <div className="cursor-pointer" onClick={() => router.push("/")}>
+            <div className="cursor-pointer" onClick={pushRouterEvent("/")}>
               <Image
                 src="/asset/image/logo.png"
                 alt="logo"
@@ -39,8 +46,8 @@ const Nav = ({ user }: Props) => {
           </div>
           <div className="flex items-center justify-end w-full h-full pr-4">
             <div
-              className="flex items-center justify-center pr-4 cursor-pointer"
-              onClick={() => router.push("/profile")}
+              className="flex items-center justify-center mr-4 cursor-pointer"
+              onClick={pushRouterEvent("/profile")}
             >
               <Image
                 src="/asset/image/default-profile.jpg"
@@ -73,18 +80,30 @@ const Nav = ({ user }: Props) => {
                       <NavLi
                         key={link.title}
                         title={link.title}
-                        path={link.path}
+                        event={pushRouterEvent(link.path)}
                       />
                     ))}
                     {user ? (
                       <>
-                        <NavLi title={"마이 페이지"} path={"/profile"} />
-                        <NavLi title={"로그아웃"} path={"/"} />
+                        <NavLi
+                          title={"마이 페이지"}
+                          event={pushRouterEvent("/profile")}
+                        />
+                        <NavLi
+                          title={"로그아웃"}
+                          event={pushRouterEvent("/")}
+                        />
                       </>
                     ) : (
                       <>
-                        <NavLi title={"로그인"} path={"/login"} />
-                        <NavLi title={"회원가입"} path={"/signup"} />
+                        <NavLi
+                          title={"로그인"}
+                          event={pushRouterEvent("/login")}
+                        />
+                        <NavLi
+                          title={"회원가입"}
+                          event={pushRouterEvent("/signup")}
+                        />
                       </>
                     )}
                   </ul>
