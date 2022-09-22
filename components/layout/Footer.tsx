@@ -3,11 +3,19 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import footerLink from "util/footerLink";
 
-const Footer = () => {
+interface Props {
+  home: boolean;
+}
+
+const Footer = ({ home }: Props) => {
   const router = useRouter();
 
   return (
-    <footer className="text-xs bg-[#EBEBEB] dark:bg-[#8e8e8e] text-black flex justify-between w-full h-32">
+    <footer
+      className={`text-xs bg-[#EBEBEB] dark:bg-[#8e8e8e] text-black flex justify-between w-full ${
+        home ? "h-32" : "h-20"
+      }`}
+    >
       <div className="flex flex-col items-start justify-end w-full h-20 p-4">
         <div className="text-bold">
           <span

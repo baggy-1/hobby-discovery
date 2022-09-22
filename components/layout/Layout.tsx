@@ -35,7 +35,7 @@ const Layout = ({ children }: Props) => {
         <div className="relative">
           <Nav user={user} />
           <main>{children}</main>
-          <Footer />
+          <Footer home={router.pathname === "/" ? true : false} />
         </div>
       </>
     );

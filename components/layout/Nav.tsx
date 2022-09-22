@@ -32,7 +32,7 @@ const Nav = ({ user }: Props) => {
 
   return (
     <>
-      <nav className="sticky top-0 z-[500] w-full bg-white dark:bg-black h-14">
+      <nav className="sticky top-0 z-[500] w-full bg-white dark:bg-black h-14 border-b border-0">
         <div className="flex justify-between w-full h-full">
           <div className="flex items-center justify-start w-full h-full pl-4">
             <div className="cursor-pointer" onClick={pushRouterEvent("/")}>
