@@ -1,0 +1,83 @@
+{
+  "page": 1,
+  "results": [
+    {
+      "id": 1,
+      "title": "원데이 클래스 괜찮은 곳 추천 좀 해주세요!",
+      "description": "향수 공방이나 도자기 공방은 이미 다녀왔어요",
+      "created_at": "2022-09-18T17:12:00.000Z",
+      "counts": 124,
+      "userId": "gomdol_30",
+      "comment": [
+        {
+          "id": 1,
+          "content": "베이커리 어떠신가요? 케이크 만드는 원데이 클래스 많아요",
+          "created_at": "2022-09-18T17:14:00.000Z",
+          "userId": "see_allLife"
+        },
+        {
+          "id": 2,
+          "content": "베이커리도 좋네요 ~ 감사합니다",
+          "created_at": "2022-09-18T17:15:00.000Z",
+          "userId": "gomdol_30"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "이것도 하고 싶고 저것도 하고 싶고 할게 너무 많아요...",
+      "description": "어떻게 해야 할까요?",
+      "created_at": "2022-09-19T12:03:00.000Z",
+      "counts": 21,
+      "userId": "palal2",
+      "comment": [
+        {
+          "id": 1,
+          "content": "처음이시면 실내 취미로 시작해보세요",
+          "created_at": "2022-09-19T12:04:00.000Z",
+          "userId": "zozo33"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "여기 커뮤니티도 있네요! 좋은 정보들 서로 공유해요~!",
+      "description": "오늘 가입해서 처음 글을 써봅니다. 잘 부탁드려요~",
+      "created_at": "2022-09-19T13:12:00.000Z",
+      "counts": 75,
+      "userId": "pqpq2",
+      "comment": [
+        {
+          "id": 1,
+          "content": "만나서 반갑습니다~",
+          "created_at": "2022-09-19T13:47:00.000Z",
+          "userId": "ewq123"
+        },
+        {
+          "id": 2,
+          "content": "우와 저도 새로 가입했어요~",
+          "created_at": "2022-09-19T14:32:00.000Z",
+          "userId": "qweqwe"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "서핑 위험하지 않나요? 그래도 한 번 도전해보려고 하는데 어떻게 해야 할까요?",
+      "description": "제곧내",
+      "created_at": "2022-09-19T15:00:00.000Z",
+      "counts": 32,
+      "userId": "qpqp1",
+      "comment": [
+        {
+          "id": 1,
+          "content": "서핑 클래스 한 번 들어보세요",
+          "created_at": "2022-09-19T15:03:00.000Z",
+          "userId": "qwe123"
+        }
+      ]
+    }
+  ],
+  "totalPage": 1,
+  "totalResults": 4
+}

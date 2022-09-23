@@ -51,21 +51,23 @@ const Profile = () => {
               <Chevron />
             </div>
           </div>
-          <div
-            className={`${
-              openHobby ? "animate-open" : "animate-close"
-            } w-72 h-40`}
-          >
-            {hobbies.map((hobby) => (
-              <div
-                key={hobby.id}
-                className="flex items-center justify-between w-full h-12 text-base font-normal border-0 border-b opacity-70"
-              >
-                <span>{hobby.name}</span>
-                <span>{hobby.timestamp}</span>
-              </div>
-            ))}
-          </div>
+          {openHobby && (
+            <div
+              className={`${
+                openHobby ? "animate-open" : "animate-close"
+              } w-72 h-40`}
+            >
+              {hobbies.map((hobby) => (
+                <div
+                  key={hobby.id}
+                  className="flex items-center justify-between w-full h-12 text-base font-normal border-0 border-b opacity-70"
+                >
+                  <span>{hobby.name}</span>
+                  <span>{hobby.timestamp}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </>

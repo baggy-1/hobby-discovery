@@ -14,8 +14,7 @@ const Nav = ({ user }: Props) => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const router = useRouter();
 
-  const handleHamburger = () => {
-    setIsNavOpen(!isNavOpen);
+  const handleOverFlow = () => {
     if (!isNavOpen) {
       document.querySelector("html")?.classList.add("overflow-hidden");
     } else {
@@ -23,10 +22,16 @@ const Nav = ({ user }: Props) => {
     }
   };
 
+  const handleHamburger = () => {
+    setIsNavOpen(!isNavOpen);
+    handleOverFlow();
+  };
+
   const pushRouterEvent = (path: string) => {
     return () => {
       router.push(path);
       setIsNavOpen(false);
+      handleOverFlow();
     };
   };
 
@@ -58,7 +63,7 @@ const Nav = ({ user }: Props) => {
               />
             </div>
             <div
-              className="w-8 h-8 text-[#8e8e8e] cursor-pointer dark:text-white"
+              className="w-8 h-8 text-[#8e8e8e] cursor-pointer dark:text-white flex items-center justify-center"
               onClick={handleHamburger}
             >
               <Hamburger />
