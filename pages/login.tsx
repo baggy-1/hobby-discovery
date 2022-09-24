@@ -1,3 +1,4 @@
+import Seo from "components/Seo";
 import useInput from "hooks/useInput";
 import { useRouter } from "next/router";
 import { FormEvent } from "react";
@@ -13,6 +14,7 @@ const Login = () => {
 
   return (
     <>
+      <Seo title="로그인" />
       <div className="w-screen min-h-screen text-lg text-black bg-white dark:bg-black dark:text-white">
         <div className="flex flex-col items-center justify-start border-b w-full h-96 border-[#8e8e8e] py-7">
           <div className="m-8 text-2xl font-bold">로그인</div>

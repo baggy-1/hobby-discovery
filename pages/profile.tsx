@@ -1,3 +1,4 @@
+import Seo from "components/Seo";
 import { useRouter } from "next/router";
 import Chevron from "public/asset/svg/Chevron";
 import { useEffect, useState } from "react";
@@ -29,6 +30,7 @@ const Profile = () => {
 
   return (
     <>
+      <Seo title="마이프로필" />
       <div className="flex flex-col items-center justify-start space-y-6 min-h-[calc(100vh-3.5rem-5rem)] w-full pt-14 text-xl">
         <div className="flex flex-col items-center justify-center space-y-4">
           <div>

@@ -13,7 +13,10 @@ const SimpleNav = () => {
       >
         <Arrow />
       </div>
-      <div className="flex items-center justify-center cursor-pointer">
+      <div
+        className="flex items-center justify-center cursor-pointer"
+        onClick={() => router.replace("/")}
+      >
         <Image src="/asset/image/logo.png" alt="logo" width={32} height={32} />
       </div>
     </div>

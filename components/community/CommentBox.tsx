@@ -8,7 +8,7 @@ const CommentBox = ({ comment }: Props) => {
   return (
     <div
       key={comment.id}
-      className="space-y-2 w-72 h-auto p-4 rounded-lg bg-[#EBEBEB]"
+      className="space-y-2 w-72 h-auto p-4 rounded-lg bg-[#EBEBEB] text-[#8e8e8e]"
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-start space-x-2">

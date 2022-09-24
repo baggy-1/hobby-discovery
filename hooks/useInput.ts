@@ -2,7 +2,9 @@ import { useState } from "react";
 
 const useInput = (vaild?: RegExp) => {
   const [value, setValue] = useState("");
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const {
       currentTarget: { value },
     } = event;

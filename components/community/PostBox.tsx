@@ -10,11 +10,17 @@ interface Props {
 const PostBox = ({ post }: Props) => {
   const [openDetail, setOpenDetail] = useState(false);
 
+  const onClickOpenDetail = () => {
+    if (!openDetail) {
+      setOpenDetail(true);
+    }
+  };
+
   return (
     <div
       key={post.id}
-      className="flex items-center justify-between w-72 h-auto border-b-[1px] cursor-pointer relative pb-8"
-      onClick={() => setOpenDetail((prev) => !prev)}
+      className="flex items-center justify-between w-72 h-auto border-b-[1px] cursor-pointer relative pb-8 z-0"
+      onClick={onClickOpenDetail}
     >
       <div className="flex flex-col items-end justify-center w-full h-auto space-y-2">
         <div className="flex items-center justify-end space-x-2 text-xs">
@@ -41,7 +47,10 @@ const PostBox = ({ post }: Props) => {
             {openDetail && (
               <div className="w-full space-y-2">
                 <div className="flex items-center justify-end w-full">
-                  <div className="bg-[#5C96CA] rounded-full w-16 h-7 text-white flex justify-center items-center text-xs font-normal">
+                  <div
+                    className="bg-[#5C96CA] rounded-full w-16 h-7 text-white flex justify-center items-center text-xs font-normal z-50"
+                    onClick={() => console.log("달기")}
+                  >
                     댓글달기
                   </div>
                 </div>
@@ -57,6 +66,7 @@ const PostBox = ({ post }: Props) => {
             className={`${
               openDetail ? "rotate-180" : "rotate"
             } w-8 h-8 absolute bottom-0 right-0`}
+            onClick={() => setOpenDetail((prev) => !prev)}
           >
             <Chevron />
           </div>
