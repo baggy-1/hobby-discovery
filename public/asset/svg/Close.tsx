@@ -6,7 +6,7 @@ const Close = () => {
       viewBox="0 0 24 24"
       strokeWidth={1}
       stroke="currentColor"
-      className="w-8 h-8"
+      className="w-full h-auto"
     >
       <path
         strokeLinecap="round"

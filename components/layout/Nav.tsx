@@ -14,8 +14,8 @@ const Nav = ({ user }: Props) => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const router = useRouter();
 
-  const handleOverFlow = () => {
-    if (!isNavOpen) {
+  const handleOverFlow = (hidden: boolean) => {
+    if (hidden) {
       document.querySelector("html")?.classList.add("overflow-hidden");
     } else {
       document.querySelector("html")?.classList.remove("overflow-hidden");
@@ -24,14 +24,14 @@ const Nav = ({ user }: Props) => {
 
   const handleHamburger = () => {
     setIsNavOpen(!isNavOpen);
-    handleOverFlow();
+    handleOverFlow(!isNavOpen);
   };
 
   const pushRouterEvent = (path: string) => {
     return () => {
       router.push(path);
+      handleOverFlow(false);
       setIsNavOpen(false);
-      handleOverFlow();
     };
   };
 

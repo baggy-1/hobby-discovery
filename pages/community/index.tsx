@@ -1,18 +1,12 @@
-import { useState } from "react";
 import data from "data.json";
 import PostBox from "components/community/PostBox";
 import Seo from "components/Seo";
 import { useRouter } from "next/router";
+import useTab from "hooks/useTab";
 
 const Community = () => {
-  const [currentTap, setCurrentTap] = useState<"all" | "comment">("all");
+  const { currentTab, onClickChangeTab } = useTab("all", ["all", "comment"]);
   const router = useRouter();
-
-  const onClickChangeTap = (tap: "all" | "comment") => {
-    return () => {
-      setCurrentTap(tap);
-    };
-  };
 
   return (
     <>
@@ -28,21 +22,21 @@ const Community = () => {
           <div className="flex w-1/2 h-10">
             <div
               className={`flex items-center justify-center h-full border border-l-0 rounded-tr-lg w-14 transition-none cursor-pointer ${
-                currentTap === "all"
+                currentTab === "all"
                   ? "-translate-y-1 border-b-0"
                   : "border-b-[1px]"
               }`}
-              onClick={onClickChangeTap("all")}
+              onClick={onClickChangeTab("all")}
             >
               전체
             </div>
             <div
               className={`flex items-center justify-center w-16 h-full border rounded-t-lg transition-none cursor-pointer ${
-                currentTap === "comment"
+                currentTab === "comment"
                   ? "border-b-0 -translate-y-1"
                   : "border-b-[1px]"
               }`}
-              onClick={onClickChangeTap("comment")}
+              onClick={onClickChangeTab("comment")}
             >
               댓글순
             </div>
@@ -59,9 +53,9 @@ const Community = () => {
         <div>
           {data.results
             .sort((a, b) => {
-              if (currentTap === "comment") {
+              if (currentTab === "comment") {
                 return b.comment.length - a.comment.length;
-              } else if (currentTap === "all") {
+              } else if (currentTab === "all") {
                 return (
                   new Date(b.created_at).getTime() -
                   new Date(a.created_at).getTime()

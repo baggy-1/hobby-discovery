@@ -1,7 +1,9 @@
 import Chevron from "public/asset/svg/Chevron";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { Post } from "types/community";
 import CommentBox from "components/community/CommentBox";
+import useInput from "hooks/useInput";
+import Close from "public/asset/svg/Close";
 
 interface Props {
   post: Post;
@@ -9,11 +11,21 @@ interface Props {
 
 const PostBox = ({ post }: Props) => {
   const [openDetail, setOpenDetail] = useState(false);
+  const [openComment, setOpenComment] = useState(false);
+  const inputComment = useInput();
 
   const onClickOpenDetail = () => {
     if (!openDetail) {
       setOpenDetail(true);
     }
+  };
+
+  const onClickHandleCommentBox = () => {
+    setOpenComment((prev) => !prev);
+  };
+
+  const onSubmitComment = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
   };
 
   return (
@@ -49,7 +61,7 @@ const PostBox = ({ post }: Props) => {
                 <div className="flex items-center justify-end w-full">
                   <div
                     className="bg-[#5C96CA] rounded-full w-16 h-7 text-white flex justify-center items-center text-xs font-normal z-50"
-                    onClick={() => console.log("달기")}
+                    onClick={onClickHandleCommentBox}
                   >
                     댓글달기
                   </div>
@@ -58,6 +70,24 @@ const PostBox = ({ post }: Props) => {
                   {post.comment.map((comment) => (
                     <CommentBox key={comment.id} comment={comment} />
                   ))}
+                  {openComment && (
+                    <div className="relative w-full h-auto">
+                      <div
+                        className="absolute top-0 right-0 z-50 w-5 h-5 m-1 cursor-pointer"
+                        onClick={onClickHandleCommentBox}
+                      >
+                        <Close />
+                      </div>
+                      <form onSubmit={onSubmitComment}>
+                        <input
+                          type="text"
+                          placeholder="여기에 댓글을 입력해 주세요"
+                          {...inputComment}
+                          className={`bg-[#EBEBEB] rounded-lg w-full h-auto min-h-[4rem] px-4 text-sm focus:outline-none`}
+                        />
+                      </form>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
