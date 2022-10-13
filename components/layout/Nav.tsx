@@ -1,4 +1,5 @@
 import NavLi from "components/common/NavLi";
+import { useFetchUser } from "hooks/useFetchUser";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Close from "public/asset/svg/Close";
@@ -6,11 +7,9 @@ import Hamburger from "public/asset/svg/Hamburger";
 import { useState } from "react";
 import navLink from "util/navLink";
 
-interface Props {
-  user: string | null;
-}
+const Nav = () => {
+  const { user, setUser } = useFetchUser();
 
-const Nav = ({ user }: Props) => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const router = useRouter();
 
@@ -33,6 +32,14 @@ const Nav = ({ user }: Props) => {
       handleOverFlow(false);
       setIsNavOpen(false);
     };
+  };
+
+  const handleLogout = () => {
+    document.cookie = "_hobby_at=; Max-Age=0";
+    document.cookie = "_hobby_rt=; Max-Age=0";
+    document.cookie = "_hobby_ae=; Max-Age=0";
+    setUser(null);
+    pushRouterEvent("/")();
   };
 
   return (
@@ -94,10 +101,7 @@ const Nav = ({ user }: Props) => {
                           title={"마이 페이지"}
                           event={pushRouterEvent("/profile")}
                         />
-                        <NavLi
-                          title={"로그아웃"}
-                          event={pushRouterEvent("/")}
-                        />
+                        <NavLi title={"로그아웃"} event={handleLogout} />
                       </>
                     ) : (
                       <>

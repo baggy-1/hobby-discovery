@@ -1,7 +1,8 @@
 import Seo from "components/Seo";
-import { useRouter } from "next/router";
+import { useFetchUser } from "hooks/useFetchUser";
+import Image from "next/image";
 import Chevron from "public/asset/svg/Chevron";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const hobbies = [
   {
@@ -17,16 +18,12 @@ const hobbies = [
 ];
 
 const Profile = () => {
-  const router = useRouter();
   const [openHobby, setOpenHobby] = useState(false);
+  const { user } = useFetchUser();
 
-  useEffect(() => {
-    const user = localStorage.getItem("user");
+  if (!user) return <div>로그인 해주세요</div>;
 
-    if (!user) {
-      router.replace("/login");
-    }
-  }, [router]);
+  const { username, profile, nickname } = user;
 
   return (
     <>
@@ -34,9 +31,19 @@ const Profile = () => {
       <div className="flex flex-col items-center justify-start space-y-6 min-h-[calc(100vh-3.5rem-5rem)] w-full pt-14 text-xl">
         <div className="flex flex-col items-center justify-center space-y-4">
           <div>
-            <div className="w-32 h-32 bg-red-500 rounded-full"></div>
+            {profile ? (
+              <Image
+                src={profile}
+                alt="user-profile"
+                width={128}
+                height={128}
+              />
+            ) : (
+              <div className="w-32 h-32 bg-red-500 rounded-full"></div>
+            )}
           </div>
-          <span>최강서퍼</span>
+          <span>{nickname}</span>
+          <span>{username}</span>
         </div>
         <div className="bg-[#F4BB5F] w-72 h-12 rounded text-white font-bold text-xl flex justify-center items-center">
           내 정보 수정

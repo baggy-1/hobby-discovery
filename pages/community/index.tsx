@@ -3,10 +3,31 @@ import PostBox from "components/community/PostBox";
 import Seo from "components/Seo";
 import { useRouter } from "next/router";
 import useTab from "hooks/useTab";
+import { useEffect } from "react";
+import axios, { AxiosError } from "axios";
 
 const Community = () => {
   const { currentTab, onClickChangeTab } = useTab("all", ["all", "comment"]);
   const router = useRouter();
+
+  useEffect(() => {
+    const getPosts = async () => {
+      try {
+        const result = await axios.get(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/community/views`
+        );
+        console.log(result);
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          throw new Error(`${error.name}${error.message}`);
+        } else if (error instanceof Error) {
+          throw new Error(`${error.name}${error.message}`);
+        }
+      }
+    };
+
+    getPosts();
+  }, []);
 
   return (
     <>

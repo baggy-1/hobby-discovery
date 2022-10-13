@@ -1,16 +1,65 @@
+import axios from "axios";
 import Seo from "components/Seo";
+import { UserContext } from "contexts/contexts";
 import useInput from "hooks/useInput";
 import { useRouter } from "next/router";
-import { FormEvent } from "react";
+import { FormEvent, useContext, useEffect } from "react";
 
 const Login = () => {
   const router = useRouter();
   const userId = useInput(/^[a-zA-Z0-9]*$/gm);
   const userPw = useInput();
+  const { user } = useContext(UserContext);
 
   const onSubmitLogin = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (userId.value && userPw.value) {
+      try {
+        const fetchLogin = async (data: {
+          username: string;
+          password: string;
+        }) => {
+          const result = await axios.post(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/user/login`,
+            data
+          );
+          const {
+            access_token: accessToken,
+            access_exp: accessExp,
+            refresh_token: refreshToken,
+          } = result.data;
+          document.cookie = `_hobby_at=${accessToken};`;
+          document.cookie = `_hobby_ae=${accessExp};`;
+          document.cookie = `_hobby_rt=${refreshToken};`;
+          axios.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${accessToken}`;
+
+          router.push("/");
+        };
+
+        const data = {
+          username: userId.value,
+          password: userPw.value,
+        };
+
+        fetchLogin(data);
+      } catch (error) {
+        if (error instanceof Error) {
+          throw new Error(`${error.name}${error.message}`);
+        } else if (error instanceof Error) {
+          throw new Error(`${error.name}${error.message}`);
+        }
+      }
+    }
   };
+
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, [router, user]);
 
   return (
     <>

@@ -1,37 +1,79 @@
+import axios, { AxiosError } from "axios";
 import Seo from "components/Seo";
+import { UserContext } from "contexts/contexts";
 import useInput from "hooks/useInput";
 import { useRouter } from "next/router";
-import { FormEvent } from "react";
+import { FormEvent, useContext, useEffect, useState } from "react";
 
 const SignUp = () => {
   const router = useRouter();
+  const { user, setUser } = useContext(UserContext);
+  const [notice, setNotice] = useState("");
   const userId = useInput(/^[a-zA-Z0-9]*$/gm);
   const { value: valuePwFirst, onChange: onChangePwFirst } = useInput(
     /^[a-zA-Z0-9~!@#$%^&*?]*$/gm
   );
   const { value: valuePwSecond, onChange: onChangePwSecond } = useInput();
 
-  const onSubmitSignUp = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmitSignUp = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const isEmpty = [userId.value, valuePwFirst, valuePwSecond].some(
       (value) => value === ""
     );
 
     if (isEmpty) {
-      alert("아이디와 비밀번호를 입력해주세요");
+      setNotice("아이디와 비밀번호를 입력해주세요");
       return;
     }
 
     if (valuePwFirst.length < 8) {
-      alert("비밀번호는 8자 이상 입력해주세요");
+      setNotice("비밀번호는 8자 이상 입력해주세요");
       return;
     }
 
     if (valuePwFirst !== valuePwSecond) {
-      alert("비밀번호가 서로 달라요");
+      setNotice("비밀번호가 서로 달라요");
       return;
     }
+
+    const data = {
+      username: userId.value,
+      password: valuePwFirst,
+      nickname: `${Date.now()}`,
+      profile: null,
+    };
+
+    try {
+      const result = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/user/signup`,
+        data
+      );
+      const {
+        access_token: accessToken,
+        access_exp: accessExp,
+        refresh_token: refreshToken,
+      } = result.data;
+      document.cookie = `_hobby_at=${accessToken};`;
+      document.cookie = `_hobby_ae=${accessExp};`;
+      document.cookie = `_hobby_rt=${refreshToken};`;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
+      router.push("/");
+    } catch (error) {
+      console.log(error);
+      if (error instanceof AxiosError) {
+        throw new Error(`${error.name}${error.message}${error.response}`);
+      } else if (error instanceof Error) {
+        throw new Error(`${error.name}${error.message}`);
+      }
+    }
   };
+
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, [router, user]);
 
   return (
     <>
@@ -40,10 +82,10 @@ const SignUp = () => {
         <div className="flex flex-col items-center justify-start border-b w-full h-96 border-[#8e8e8e] py-7">
           <div className="m-8 text-2xl font-bold">회원가입</div>
           <form
-            className="flex flex-col items-center justify-center space-y-6 font-bold"
+            className="flex flex-col items-center justify-center font-bold"
             onSubmit={onSubmitSignUp}
           >
-            <div className="flex items-center justify-between w-80">
+            <div className="flex items-center justify-between mb-6 w-80">
               <label htmlFor="id">아이디</label>
               <input
                 type="text"
@@ -52,7 +94,7 @@ const SignUp = () => {
                 {...userId}
               />
             </div>
-            <div className="flex items-center justify-between w-80">
+            <div className="flex items-center justify-between mb-6 w-80">
               <label htmlFor="password">비밀번호</label>
               <input
                 type="password"
@@ -62,7 +104,7 @@ const SignUp = () => {
                 onChange={onChangePwFirst}
               />
             </div>
-            <div className="flex items-center justify-between w-80">
+            <div className="flex items-center justify-between mb-4 w-80">
               <label htmlFor="passwordCheck">비밀번호 확인</label>
               <input
                 type="password"
@@ -71,6 +113,9 @@ const SignUp = () => {
                 value={valuePwSecond}
                 onChange={onChangePwSecond}
               />
+            </div>
+            <div className="w-full h-auto min-h-[2rem] flex justify-center items-center text-red-500">
+              {notice}
             </div>
             <button
               type="submit"
