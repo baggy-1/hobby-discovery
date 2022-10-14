@@ -1,24 +1,18 @@
 import Seo from "components/Seo";
+import { useFetchUser } from "hooks/useFetchUser";
 import useInput from "hooks/useInput";
-import { useRouter } from "next/router";
-import { FormEvent, useEffect } from "react";
+import { FormEvent } from "react";
 
 const Write = () => {
+  const { user } = useFetchUser();
   const title = useInput();
   const content = useInput();
-  const router = useRouter();
 
   const onSubmitCommunityPost = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
 
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-
-    if (!user) {
-      router.replace("/login");
-    }
-  }, [router]);
+  if (!user) return <div>로그인이 필요한 서비스 입니다</div>;
 
   return (
     <>
