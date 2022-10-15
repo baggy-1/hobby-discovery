@@ -2,16 +2,38 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { User } from "types/user";
 
+const getToken = (name: string) => {
+  const token = document.cookie
+    .split("; ")
+    .find((cookie) => cookie.split("=")[0] === name)
+    ?.split("=")[1];
+
+  return token;
+};
+
 const useFetchUser = () => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const accToken = document.cookie
-      .split("; ")
-      .find((cookie) => cookie.split("=")[0] === "_hobby_at")
-      ?.split("=")[1];
+    const accToken = getToken("_hobby_at");
 
     if (!accToken) return;
+
+    const accTokenExp = getToken("_hobby_ae");
+
+    if (!accTokenExp) return;
+
+    const now = new Date().getTime();
+    const exp = new Date(+accTokenExp * 1000).getTime();
+    const diffSec = exp - now / 1000;
+    const isExpiration = diffSec < 30;
+
+    if (isExpiration) {
+      const refToken = getToken("_hobby_rt");
+
+      if (!refToken) return;
+      return;
+    }
 
     axios
       .get(`${process.env.NEXT_PUBLIC_BASE_URL}/user/user`, {
@@ -32,13 +54,7 @@ const useFetchUser = () => {
         setUser(userData);
       })
       .catch((error: unknown) => {
-        if (axios.isAxiosError(error)) {
-          throw new Error(`${error.name}, ${error.message}`);
-        } else if (error instanceof Error) {
-          throw new Error(error.message);
-        }
-
-        throw new Error("알 수 없는 에러가 발생했습니다.");
+        throw new Error(`error: ${error}`);
       });
   }, []);
 
