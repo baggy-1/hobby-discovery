@@ -2,6 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  compiler: {
+    emotion: true,
+  },
   images: {
     domains: ["user-images.githubusercontent.com"],
   },

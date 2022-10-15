@@ -1,9 +1,9 @@
 import Chevron from "public/asset/svg/Chevron";
 import { FormEvent, useState } from "react";
 import { Post } from "types/community";
-import CommentBox from "components/community/CommentBox";
 import useInput from "hooks/useInput";
 import Close from "public/asset/svg/Close";
+import CommentView from "components/community/CommentView";
 
 interface Props {
   post: Post;
@@ -36,9 +36,9 @@ const PostBox = ({ post }: Props) => {
     >
       <div className="flex flex-col items-end justify-center w-full h-auto space-y-2">
         <div className="flex items-center justify-end space-x-2 text-xs">
-          <span>{`조회수 ${post.counts}`}</span>
-          <span>{`댓글수 ${post.comment.length}`}</span>
-          <span>{post.created_at.slice(0, 10)}</span>
+          <span>{`조회수 ${post.hits}`}</span>
+          <span>{`추천수 ${post.recomend}`}</span>
+          <span>{post.create_time.slice(0, 10)}</span>
         </div>
         <div className="flex w-full">
           <div className="flex flex-col justify-center w-full text-base font-bold">
@@ -54,7 +54,7 @@ const PostBox = ({ post }: Props) => {
                   ? post.title
                   : post.title.slice(0, 22) + "..."}
               </span>
-              {openDetail && <span>{post.description}</span>}
+              {openDetail && <span>{post.body}</span>}
             </div>
             {openDetail && (
               <div className="w-full space-y-2">
@@ -67,9 +67,7 @@ const PostBox = ({ post }: Props) => {
                   </div>
                 </div>
                 <div className="space-y-4">
-                  {post.comment.map((comment) => (
-                    <CommentBox key={comment.id} comment={comment} />
-                  ))}
+                  <CommentView postId={post.id} />
                   {openComment && (
                     <div className="relative w-full h-auto">
                       <div

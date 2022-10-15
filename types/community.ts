@@ -1,16 +1,15 @@
-export interface Comment {
+export interface Post {
+  body: string;
+  create_time: string;
+  hits: number;
   id: number;
-  content: string;
-  created_at: string;
-  userId: string;
+  recomend: number;
+  title: string;
+  user: number;
 }
 
-export interface Post {
-  id: number;
-  title: string;
-  description: string;
-  created_at: string;
-  userId: string;
-  comment: Comment[];
-  counts: number;
+export interface Comment {
+  coment: string;
+  create_time: string;
+  user: string;
 }

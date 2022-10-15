@@ -1,33 +1,42 @@
-import data from "data.json";
 import PostBox from "components/community/PostBox";
 import Seo from "components/Seo";
 import { useRouter } from "next/router";
 import useTab from "hooks/useTab";
-import { useEffect } from "react";
-import axios, { AxiosError } from "axios";
+import useSWR from "swr";
+import { Post } from "types/community";
+import Tab from "components/community/Tab";
+
+const COMMUNITY_POST_URL = `${process.env.NEXT_PUBLIC_BASE_URL}/community/views`;
 
 const Community = () => {
-  const { currentTab, onClickChangeTab } = useTab("all", ["all", "comment"]);
+  const { currentTab, onClickChangeTab } = useTab("all", [
+    "all",
+    "hits",
+    "recomend",
+  ]);
+  const { data } = useSWR<Post[]>(COMMUNITY_POST_URL);
   const router = useRouter();
 
-  useEffect(() => {
-    const getPosts = async () => {
-      try {
-        const result = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/community/views`
-        );
-        console.log(result);
-      } catch (error) {
-        if (error instanceof AxiosError) {
-          throw new Error(`${error.name}${error.message}`);
-        } else if (error instanceof Error) {
-          throw new Error(`${error.name}${error.message}`);
+  const sortPost = data
+    ?.slice()
+    .sort(
+      (
+        { hits: aHits, recomend: aRecomend, create_time: aCreate_time },
+        { hits: bHits, recomend: bRecomend, create_time: bCreate_time }
+      ) => {
+        if (currentTab === "hits") {
+          return bHits - aHits;
+        } else if (currentTab === "all") {
+          return (
+            new Date(bCreate_time).getTime() - new Date(aCreate_time).getTime()
+          );
+        } else if (currentTab === "recomend") {
+          return bRecomend - aRecomend;
+        } else {
+          return 0;
         }
       }
-    };
-
-    getPosts();
-  }, []);
+    );
 
   return (
     <>
@@ -41,26 +50,24 @@ const Community = () => {
         </div>
         <div className="flex items-center justify-between h-10 w-72">
           <div className="flex w-1/2 h-10">
-            <div
-              className={`flex items-center justify-center h-full border border-l-0 rounded-tr-lg w-14 transition-none cursor-pointer ${
-                currentTab === "all"
-                  ? "-translate-y-1 border-b-0"
-                  : "border-b-[1px]"
-              }`}
-              onClick={onClickChangeTab("all")}
-            >
-              전체
-            </div>
-            <div
-              className={`flex items-center justify-center w-16 h-full border rounded-t-lg transition-none cursor-pointer ${
-                currentTab === "comment"
-                  ? "border-b-0 -translate-y-1"
-                  : "border-b-[1px]"
-              }`}
-              onClick={onClickChangeTab("comment")}
-            >
-              댓글순
-            </div>
+            <Tab
+              title={"전체"}
+              tabName={"all"}
+              currentTab={currentTab}
+              onClickChangeTab={onClickChangeTab}
+            />
+            <Tab
+              title={"조회순"}
+              tabName={"hits"}
+              currentTab={currentTab}
+              onClickChangeTab={onClickChangeTab}
+            />
+            <Tab
+              title={"추천순"}
+              tabName={"recomend"}
+              currentTab={currentTab}
+              onClickChangeTab={onClickChangeTab}
+            />
           </div>
           <div className="flex items-center justify-end w-full border-b-[1px] h-10">
             <div
@@ -71,24 +78,9 @@ const Community = () => {
             </div>
           </div>
         </div>
-        <div>
-          {data.results
-            .sort((a, b) => {
-              if (currentTab === "comment") {
-                return b.comment.length - a.comment.length;
-              } else if (currentTab === "all") {
-                return (
-                  new Date(b.created_at).getTime() -
-                  new Date(a.created_at).getTime()
-                );
-              } else {
-                return 0;
-              }
-            })
-            .map((post) => (
-              <PostBox key={post.id} post={post} />
-            ))}
-        </div>
+        {sortPost?.map((post) => (
+          <PostBox key={post.id} post={post} />
+        ))}
       </div>
     </>
   );
