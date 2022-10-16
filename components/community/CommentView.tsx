@@ -1,10 +1,10 @@
 import useSWR from "swr";
-import { Comment } from "types/community";
 import CommentBox from "components/community/CommentBox";
 import axios from "axios";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useFetchUser } from "hooks/useFetchUser";
 import Close from "public/asset/svg/Close";
+import { Comment } from "types";
 
 interface Props {
   postId: number;

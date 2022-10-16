@@ -1,6 +1,7 @@
 import Seo from "components/Seo";
 import { useFetchUser } from "hooks/useFetchUser";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import Chevron from "public/asset/svg/Chevron";
 import { useState } from "react";
 
@@ -19,9 +20,14 @@ const hobbies = [
 
 const Profile = () => {
   const [openHobby, setOpenHobby] = useState(false);
-  const { user } = useFetchUser();
+  const { user, loading, error } = useFetchUser();
+  const router = useRouter();
 
-  if (!user) return <div>로그인 해주세요</div>;
+  if (loading) return <div>정보 가져오는 중...</div>;
+  if (!user || error) {
+    router.push("/login");
+    return <div>정보 가져오기 실패... 잠시 후 로그인 화면으로 이동됩니다</div>;
+  }
 
   const { username, profile, nickname } = user;
 

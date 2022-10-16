@@ -1,6 +1,5 @@
 import useSWR from "swr";
-import { Comment } from "types/community";
-import { User } from "types/user";
+import { Comment, User } from "types";
 
 interface Props {
   comment: Comment;

@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import { MouseEventHandler } from "react";
 
 interface Props {

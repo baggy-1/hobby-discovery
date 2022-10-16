@@ -3,8 +3,8 @@ import Seo from "components/Seo";
 import { useRouter } from "next/router";
 import useTab from "hooks/useTab";
 import useSWR from "swr";
-import { Post } from "types/community";
 import Tab from "components/community/Tab";
+import { Post } from "types";
 
 const COMMUNITY_POST_URL = `${process.env.NEXT_PUBLIC_BASE_URL}/community/views`;
 

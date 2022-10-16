@@ -6,7 +6,10 @@ const nextConfig = {
     emotion: true,
   },
   images: {
-    domains: ["user-images.githubusercontent.com"],
+    domains: [
+      "user-images.githubusercontent.com",
+      "hobbydiscovery.herokuapp.com",
+    ],
   },
 };
 

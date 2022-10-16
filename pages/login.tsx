@@ -1,15 +1,15 @@
 import axios from "axios";
 import Seo from "components/Seo";
-import { UserContext } from "contexts/contexts";
+import { useFetchUser } from "hooks/useFetchUser";
 import useInput from "hooks/useInput";
 import { useRouter } from "next/router";
-import { FormEvent, useContext, useEffect } from "react";
+import { FormEvent } from "react";
 
 const Login = () => {
   const router = useRouter();
   const userId = useInput(/^[a-zA-Z0-9]*$/gm);
   const userPw = useInput();
-  const { user } = useContext(UserContext);
+  const { user } = useFetchUser();
 
   const onSubmitLogin = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -22,7 +22,10 @@ const Login = () => {
         }) => {
           const result = await axios.post(
             `${process.env.NEXT_PUBLIC_BASE_URL}/user/login`,
-            data
+            data,
+            {
+              withCredentials: true,
+            }
           );
           const {
             access_token: accessToken,
@@ -55,11 +58,9 @@ const Login = () => {
     }
   };
 
-  useEffect(() => {
-    if (user) {
-      router.push("/");
-    }
-  }, [router, user]);
+  if (user) {
+    router.push("/");
+  }
 
   return (
     <>

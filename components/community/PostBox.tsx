@@ -1,7 +1,7 @@
 import Chevron from "public/asset/svg/Chevron";
 import { useState } from "react";
-import { Post } from "types/community";
 import CommentView from "components/community/CommentView";
+import { Post } from "types";
 
 interface Props {
   post: Post;
@@ -10,17 +10,23 @@ interface Props {
 const PostBox = ({ post }: Props) => {
   const [openDetail, setOpenDetail] = useState(false);
 
-  const onClickOpenDetail = () => {
+  const openPostDetail = () => {
     if (!openDetail) {
       setOpenDetail(true);
     }
+  };
+
+  const onClickPostView = () => {
+    openPostDetail();
+
+    // TODO: post view api
   };
 
   return (
     <div
       key={post.id}
       className="flex items-center justify-between w-72 h-auto border-b-[1px] cursor-pointer relative pb-8 z-0"
-      onClick={onClickOpenDetail}
+      onClick={onClickPostView}
     >
       <div className="flex flex-col items-end justify-center w-full h-auto space-y-2">
         <div className="flex items-center justify-end space-x-2 text-xs">
