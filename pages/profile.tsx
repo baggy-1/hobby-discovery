@@ -23,11 +23,12 @@ const Profile = () => {
   const { user, loading, error } = useFetchUser();
   const router = useRouter();
 
-  if (loading) return <div>정보 가져오는 중...</div>;
-  if (!user || error) {
+  if (error) {
     router.push("/login");
     return <div>정보 가져오기 실패... 잠시 후 로그인 화면으로 이동됩니다</div>;
   }
+
+  if (!user || loading) return <div>정보 가져오는 중...</div>;
 
   const { username, profile, nickname } = user;
 

@@ -22,10 +22,7 @@ const Login = () => {
         }) => {
           const result = await axios.post(
             `${process.env.NEXT_PUBLIC_BASE_URL}/user/login`,
-            data,
-            {
-              withCredentials: true,
-            }
+            data
           );
           const {
             access_token: accessToken,

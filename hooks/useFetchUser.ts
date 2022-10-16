@@ -1,7 +1,24 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import getToken from "function/getToken";
 import { useEffect, useState } from "react";
 import { User } from "types";
+
+const getRefreshTokenToAccessToken = async (refreshToken: string) => {
+  const data = {
+    refresh_token: refreshToken,
+  };
+
+  try {
+    const result = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/user/refresh`,
+      data
+    );
+
+    return result.data;
+  } catch (error: unknown) {
+    throw new Error(`error: ${error}`);
+  }
+};
 
 const useFetchUser = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -29,29 +46,17 @@ const useFetchUser = () => {
     console.log(diffSec);
 
     if (isExpiration) {
-      const refToken = getToken("_hobby_rt");
-      console.log(refToken);
-
-      if (!refToken) {
+      const token = getToken("_hobby_rt");
+      if (!token) {
         setError("No refresh token");
         return;
       }
-
-      const data = {
-        refreshToken: refToken,
-      };
-
-      axios
-        .post(`${process.env.NEXT_PUBLIC_BASE_URL}/user/refresh`, data, {
-          headers: {
-            Authorization: `Bearer ${refToken}`,
-          },
-        })
-        .then((res) => {
-          console.log(res);
-        });
-
-      return;
+      getRefreshTokenToAccessToken(token).then(
+        (data: { access_token: string; access_exp: number }) => {
+          document.cookie = `_hobby_at=${data.access_token};`;
+          document.cookie = `_hobby_ae=${data.access_exp};`;
+        }
+      );
     }
 
     axios
@@ -73,6 +78,22 @@ const useFetchUser = () => {
         setUser(userData);
       })
       .catch((error: unknown) => {
+        if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            const token = getToken("_hobby_rt");
+            if (!token) {
+              setError("No refresh token");
+              return;
+            }
+            getRefreshTokenToAccessToken(token).then(
+              (data: { access_token: string; access_exp: number }) => {
+                document.cookie = `_hobby_at=${data.access_token};`;
+                document.cookie = `_hobby_ae=${data.access_exp};`;
+                return;
+              }
+            );
+          }
+        }
         setError(error);
         throw new Error(`error: ${error}`);
       });
