@@ -1,17 +1,22 @@
 import MainSection from "components/view/home/MainSection";
 import HobbySection from "components/view/home/HobbySection";
-import ThemeButton from "components/view/home/ThemeButton";
+import { css } from "@emotion/react";
 
 const HomeView = () => {
   return (
     <>
-      <div className="text-black bg-white dark:bg-black dark:text-white">
+      <div css={sectionWrapper}>
         <MainSection />
         <HobbySection />
-        <ThemeButton />
       </div>
     </>
   );
 };
 
 export default HomeView;
+
+const sectionWrapper = css({
+  width: "100%",
+  height: "100%",
+  maxWidth: "100rem",
+});

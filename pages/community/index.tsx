@@ -14,7 +14,9 @@ const Community = () => {
     "hits",
     "recomend",
   ]);
-  const { data } = useSWR<Post[]>(COMMUNITY_POST_URL);
+  const { data } = useSWR<Post[]>(COMMUNITY_POST_URL, {
+    refreshInterval: 1000,
+  });
   const router = useRouter();
 
   const sortPost = data

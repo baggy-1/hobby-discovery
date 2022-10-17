@@ -3,7 +3,7 @@ import Footer from "components/layout/Footer";
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import SimpleNav from "components/layout/SimpleNav";
-import Seo from "components/Seo";
+import { css } from "@emotion/react";
 
 interface Props {
   children: React.ReactNode;
@@ -21,19 +21,22 @@ const Layout = ({ children }: Props) => {
   const template = {
     loginSingup: (
       <>
-        <div className="relative">
-          <SimpleNav />
-          <main>{children}</main>
+        <div css={layout}>
+          <div css={wrapper}>
+            <SimpleNav />
+            <main>{children}</main>
+          </div>
         </div>
       </>
     ),
     default: (
       <>
-        <Seo />
-        <div className="relative">
-          <Nav />
-          <main>{children}</main>
-          <Footer home={router.pathname === "/" ? true : false} />
+        <div css={layout}>
+          <div css={wrapper}>
+            <Nav />
+            <main>{children}</main>
+            <Footer home={router.pathname === "/" ? true : false} />
+          </div>
         </div>
       </>
     ),
@@ -49,3 +52,15 @@ const Layout = ({ children }: Props) => {
 };
 
 export default Layout;
+
+const wrapper = css({
+  position: "relative",
+  width: "100%",
+});
+
+const layout = css({
+  width: "100%",
+  height: "auto",
+  display: "flex",
+  justifyContent: "center",
+});
