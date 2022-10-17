@@ -1,24 +1,9 @@
-import axios, { AxiosError } from "axios";
+import getAccessTokenUseRefreshToken from "function/getAccessTokenUseRefreshToken";
+import getDiffTimeSec from "function/getDiffTimeSec";
 import getToken from "function/getToken";
+import getUser from "function/getUser";
 import { useEffect, useState } from "react";
 import { User } from "types";
-
-const getRefreshTokenToAccessToken = async (refreshToken: string) => {
-  const data = {
-    refresh_token: refreshToken,
-  };
-
-  try {
-    const result = await axios.post(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/user/refresh`,
-      data
-    );
-
-    return result.data;
-  } catch (error: unknown) {
-    throw new Error(`error: ${error}`);
-  }
-};
 
 const useFetchUser = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -39,11 +24,8 @@ const useFetchUser = () => {
       return;
     }
 
-    const now = new Date().getTime();
-    const exp = new Date(+accTokenExp * 1000).getTime();
-    const diffSec = (exp - now) / 1000;
+    const diffSec = getDiffTimeSec(+accTokenExp);
     const isExpiration = diffSec < 30;
-    console.log(diffSec);
 
     if (isExpiration) {
       const token = getToken("_hobby_rt");
@@ -51,52 +33,34 @@ const useFetchUser = () => {
         setError("No refresh token");
         return;
       }
-      getRefreshTokenToAccessToken(token).then(
-        (data: { access_token: string; access_exp: number }) => {
-          document.cookie = `_hobby_at=${data.access_token};`;
-          document.cookie = `_hobby_ae=${data.access_exp};`;
-        }
-      );
-    }
+      getAccessTokenUseRefreshToken(token)
+        .then(({ access_token, access_exp }) => {
+          document.cookie = `_hobby_at=${access_token};`;
+          document.cookie = `_hobby_ae=${access_exp};`;
 
-    axios
-      .get(`${process.env.NEXT_PUBLIC_BASE_URL}/user/user`, {
-        headers: {
-          Authorization: `Bearer ${accToken}`,
-        },
-      })
-      .then((res) => {
-        const { id, username, password, nickname, profile } = res.data;
-        const userData: User = {
-          id,
-          username,
-          password,
-          nickname,
-          profile,
-        };
-
-        setUser(userData);
-      })
-      .catch((error: unknown) => {
-        if (error instanceof AxiosError) {
-          if (error.response?.status === 401) {
-            const token = getToken("_hobby_rt");
-            if (!token) {
-              setError("No refresh token");
+          getUser(access_token)
+            .then((user) => {
+              setUser(user);
+            })
+            .catch((error) => {
+              setError(error);
               return;
-            }
-            getRefreshTokenToAccessToken(token).then(
-              (data: { access_token: string; access_exp: number }) => {
-                document.cookie = `_hobby_at=${data.access_token};`;
-                document.cookie = `_hobby_ae=${data.access_exp};`;
-                return;
-              }
-            );
-          }
-        }
-        setError(error);
-        throw new Error(`error: ${error}`);
-      });
+            });
+        })
+        .catch((error) => {
+          setError(error);
+          return;
+        });
+    } else {
+      getUser(accToken)
+        .then((user) => {
+          setUser(user);
+        })
+        .catch((error) => {
+          setError(error);
+          return;
+        });
+    }
   }, []);
 
   return { user, setUser, loading: !user && !error, error };

@@ -12,10 +12,6 @@ const navLink = [
     path: "/review",
   },
   {
-    title: "챌린지",
-    path: "/challenge",
-  },
-  {
     title: "원데이 클래스",
     path: "/onedayclass",
   },

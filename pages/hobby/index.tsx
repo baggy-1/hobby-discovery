@@ -8,10 +8,12 @@ const Hobby = () => {
     `${process.env.NEXT_PUBLIC_BASE_URL}/main/hobby`
   );
 
+  if (!data) return <div>등록된 취미가 없어요</div>;
+
   return (
     <>
       <Seo title="취미" />
-      {data?.map((hobby) => (
+      {data.map((hobby) => (
         <div key={hobby.id}>
           <div>{hobby.hobby_title}</div>
           <div>{hobby.descrition}</div>

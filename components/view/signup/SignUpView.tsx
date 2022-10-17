@@ -70,7 +70,7 @@ const SignUpView = () => {
       document.cookie = `_hobby_rt=${refreshToken};`;
       axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
-      router.push("/");
+      router.replace("/");
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         throw new Error(`${error.name}${error.message}${error.response}`);
@@ -82,7 +82,7 @@ const SignUpView = () => {
   };
 
   if (user) {
-    router.push("/");
+    router.replace("/");
   }
 
   return (

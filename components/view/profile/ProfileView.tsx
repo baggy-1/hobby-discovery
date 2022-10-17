@@ -1,4 +1,3 @@
-import Seo from "components/Seo";
 import { useFetchUser } from "hooks/useFetchUser";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -18,13 +17,13 @@ const hobbies = [
   },
 ];
 
-const Profile = () => {
+const ProfileView = () => {
   const [openHobby, setOpenHobby] = useState(false);
   const { user, loading, error } = useFetchUser();
   const router = useRouter();
 
   if (error) {
-    router.push("/login");
+    router.replace("/login");
     return <div>정보 가져오기 실패... 잠시 후 로그인 화면으로 이동됩니다</div>;
   }
 
@@ -34,7 +33,6 @@ const Profile = () => {
 
   return (
     <>
-      <Seo title="마이프로필" />
       <div className="flex flex-col items-center justify-start space-y-6 min-h-[calc(100vh-3.5rem-5rem)] w-full pt-14 text-xl">
         <div className="flex flex-col items-center justify-center space-y-4">
           <div>
@@ -52,7 +50,10 @@ const Profile = () => {
           <span>{nickname}</span>
           <span>{username}</span>
         </div>
-        <div className="bg-[#F4BB5F] w-72 h-12 rounded text-white font-bold text-xl flex justify-center items-center">
+        <div
+          className="bg-[#F4BB5F] w-72 h-12 rounded text-white font-bold text-xl flex justify-center items-center"
+          onClick={() => router.push("/profile/update")}
+        >
           내 정보 수정
         </div>
         <div className="font-bold w-72">
@@ -90,4 +91,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default ProfileView;
