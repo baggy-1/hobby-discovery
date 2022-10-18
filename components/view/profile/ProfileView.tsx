@@ -1,3 +1,4 @@
+import { borderRadius } from "components/common/styles";
 import { useFetchUser } from "hooks/useFetchUser";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -42,6 +43,7 @@ const ProfileView = () => {
                 alt="user-profile"
                 width={128}
                 height={128}
+                css={borderRadius("50%")}
               />
             ) : (
               <div className="w-32 h-32 bg-red-500 rounded-full"></div>

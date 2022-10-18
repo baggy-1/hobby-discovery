@@ -22,9 +22,13 @@ export interface User {
   username: string;
 }
 
+interface Image {
+  image: string;
+}
+
 export interface Hobby {
   id: number;
   hobby_title: string;
   descrition: string;
-  hobby_image: string;
+  images: Image[];
 }

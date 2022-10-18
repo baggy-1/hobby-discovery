@@ -32,7 +32,7 @@ const Footer = ({ home }: Props) => {
           </span>
         </div>
         <span className="text-[#767676] dark:text-[#565656] cursor-pointer">
-          © HOBBY Discovery
+          © CHIHAM
         </span>
       </div>
       <div className="flex items-end justify-end w-full h-20 p-4 space-x-1">

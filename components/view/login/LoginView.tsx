@@ -7,7 +7,7 @@ const LoginView = () => {
   const { user } = useFetchUser();
 
   if (user) {
-    router.replace("/");
+    router.replace("/store");
   }
 
   return (

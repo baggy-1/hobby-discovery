@@ -9,6 +9,7 @@ const nextConfig = {
     domains: [
       "user-images.githubusercontent.com",
       "hobbydiscovery.herokuapp.com",
+      "chiham-image.s3.ap-northeast-2.amazonaws.com",
     ],
   },
 };

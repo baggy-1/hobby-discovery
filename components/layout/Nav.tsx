@@ -13,12 +13,21 @@ const Nav = () => {
   const { pathname } = router;
   const [navOpen, setNavOpen] = useState(false);
 
+  const onClickMoveTap = (path: string) => () => {
+    router.push(path);
+    setNavOpen(false);
+  };
+
+  const push = (path: string) => () => {
+    router.push(path);
+  };
+
   return (
     <>
-      <nav css={nav}>
+      <nav css={nav(pathname)}>
         <div css={wrapper}>
           <div css={imageWrapper}>
-            <div css={logo} onClick={() => router.push("/")}>
+            <div css={logo} onClick={push("/")}>
               <Image
                 src="/asset/image/logo.png"
                 alt="logo"
@@ -26,11 +35,14 @@ const Nav = () => {
                 height={32}
               />
             </div>
+            <span css={logoText} onClick={push("/")}>
+              CHIHAM
+            </span>
           </div>
           <div css={navTapWrapper}>
             <div css={taps}>
               {navLink.map((link) => (
-                <div key={link.title} onClick={() => router.push(link.path)}>
+                <div key={link.title} onClick={onClickMoveTap(link.path)}>
                   <div>{link.title}</div>
                 </div>
               ))}
@@ -42,12 +54,12 @@ const Nav = () => {
           </div>
         </div>
         {navOpen && (
-          <div css={mobTapWrapper}>
+          <div css={mobTapWrapper(pathname)}>
             {navLink.map((link) => (
               <div
                 key={link.title}
                 css={mobTap}
-                onClick={() => router.push(link.path)}
+                onClick={onClickMoveTap(link.path)}
               >
                 <div>{link.title}</div>
               </div>
@@ -61,14 +73,20 @@ const Nav = () => {
 
 export default Nav;
 
-const mobTapWrapper = css({
-  position: "absolute",
-  top: "100%",
-  left: "0",
-  backgroundColor: "rgba(0, 29, 54, 0.35)",
-  color: "#FFFFFF",
-  width: "100%",
+const logoText = css({
+  fontSize: "1.1rem",
+  fontWeight: "700",
+  cursor: "pointer",
 });
+
+const mobTapWrapper = (path: string) =>
+  css({
+    position: "absolute",
+    top: "100%",
+    left: "0",
+    backgroundColor: path === "/" ? "rgba(0, 29, 54, 0.35)" : "#FFFFFF",
+    width: "100%",
+  });
 
 const mobTap = css({
   display: "block",
@@ -84,7 +102,6 @@ const taps = css({
   justifyContent: "center",
   gap: "1rem",
   display: "none",
-  color: "#FFFFFF",
   cursor: "pointer",
   [mq[1]]: {
     display: "flex",
@@ -94,7 +111,6 @@ const taps = css({
 const hamburger = css({
   width: "2rem",
   height: "2rem",
-  color: "#FFFFFF",
   cursor: "pointer",
   display: "flex",
   alignItems: "center",
@@ -124,6 +140,7 @@ const imageWrapper = css({
   width: "100%",
   height: "100%",
   paddingLeft: "1rem",
+  gap: "1rem",
 });
 
 const wrapper = css({
@@ -134,15 +151,17 @@ const wrapper = css({
   maxWidth: "80rem",
 });
 
-const nav = css({
-  position: "fixed",
-  top: "0",
-  zIndex: "500",
-  width: "100%",
-  height: "4rem",
-  backgroundColor: "rgba(0, 29, 54, 0.25)",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  backdropFilter: "blur(10px)",
-});
+const nav = (path: string) =>
+  css({
+    position: "sticky",
+    top: "0",
+    zIndex: "500",
+    width: "100%",
+    height: "4rem",
+    backgroundColor: path === "/" ? "rgba(0, 29, 54, 0.25)" : "#FFFFFF",
+    color: path === "/" ? "#FFFFFF" : "#000000",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backdropFilter: path === "/" ? "blur(10px)" : "none",
+  });
