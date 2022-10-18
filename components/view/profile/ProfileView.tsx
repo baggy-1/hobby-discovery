@@ -37,17 +37,13 @@ const ProfileView = () => {
       <div className="flex flex-col items-center justify-start space-y-6 min-h-[calc(100vh-3.5rem-5rem)] w-full pt-14 text-xl">
         <div className="flex flex-col items-center justify-center space-y-4">
           <div>
-            {profile ? (
-              <Image
-                src={profile}
-                alt="user-profile"
-                width={128}
-                height={128}
-                css={borderRadius("50%")}
-              />
-            ) : (
-              <div className="w-32 h-32 bg-red-500 rounded-full"></div>
-            )}
+            <Image
+              src={profile || "/asset/image/default-profile.jpg"}
+              alt="user-profile"
+              width={128}
+              height={128}
+              css={borderRadius("50%")}
+            />
           </div>
           <span>{nickname}</span>
           <span>{username}</span>

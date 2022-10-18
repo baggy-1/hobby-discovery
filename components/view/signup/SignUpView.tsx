@@ -3,6 +3,8 @@ import useInput from "hooks/useInput";
 import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
+import LogoWithText from "components/common/LogoWithText";
+import { cursorPoint } from "components/common/styles";
 
 const SignUpView = () => {
   const router = useRouter();
@@ -86,38 +88,38 @@ const SignUpView = () => {
   }
 
   return (
-    <div className="w-screen min-h-screen text-lg text-black bg-white dark:bg-black dark:text-white">
+    <div className="w-screen min-h-screen text-lg text-black bg-white">
       <div className="flex flex-col items-center justify-start border-b w-full h-auto border-[#8e8e8e] py-7">
-        <div className="m-8 text-2xl font-bold">회원가입</div>
+        <LogoWithText text={"회원가입"} />
         <form
           className="flex flex-col items-center justify-center font-bold"
           onSubmit={onSubmitSignUp}
         >
           <div className="flex items-center justify-between mb-6 w-80">
-            <label htmlFor="id">아이디</label>
             <input
               type="text"
               id="id"
-              className="w-48 h-9 rounded bg-[#EBEBEB] cursor-text"
+              className="w-80 h-12 rounded bg-[#EBEBEB] cursor-text p-4"
+              placeholder="아이디"
               {...userId}
             />
           </div>
           <div className="flex items-center justify-between mb-6 w-80">
-            <label htmlFor="password">비밀번호</label>
             <input
               type="password"
               id="password"
-              className="w-48 h-9 rounded bg-[#EBEBEB] cursor-text"
+              className="w-80 h-12 rounded bg-[#EBEBEB] cursor-text p-4"
+              placeholder="비밀번호"
               value={valuePwFirst}
               onChange={onChangePwFirst}
             />
           </div>
           <div className="flex items-center justify-between mb-4 w-80">
-            <label htmlFor="passwordCheck">비밀번호 확인</label>
             <input
               type="password"
               id="passwordCheck"
-              className="w-48 h-9 rounded bg-[#EBEBEB] cursor-text"
+              className="w-80 h-12 rounded bg-[#EBEBEB] cursor-text p-4"
+              placeholder="비밀번호 확인"
               value={valuePwSecond}
               onChange={onChangePwSecond}
             />
@@ -134,8 +136,8 @@ const SignUpView = () => {
         </form>
       </div>
       <div className="mt-8 space-y-8">
-        <div className="flex items-center justify-between mb-4 w-80">
-          <label htmlFor="passwordCheck">닉네임</label>
+        {/* <div className="flex items-center justify-between mb-4 w-80">
+          <label htmlFor="nickname">닉네임</label>
           <input
             type="text"
             id="nickname"
@@ -144,10 +146,12 @@ const SignUpView = () => {
             {...nickname}
           />
         </div>
-        <input type="file" onChange={onChangeFile} />
+        <input type="file" onChange={onChangeFile} /> */}
         <div className="flex flex-col items-center justify-center">
           <span>이미 회원이신가요?</span>
-          <span onClick={() => router.replace("/login")}>로그인하기</span>
+          <span onClick={() => router.replace("/login")} css={cursorPoint}>
+            로그인하기
+          </span>
         </div>
       </div>
     </div>

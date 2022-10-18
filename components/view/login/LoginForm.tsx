@@ -18,8 +18,9 @@ const LoginForm = () => {
           password: userPw.value,
         };
 
-        fetchLogin(data);
-        router.replace("/");
+        fetchLogin(data).then((_) => {
+          router.replace("/store");
+        });
       } catch (error) {
         throw new Error(`error: ${error}`);
       }
@@ -33,20 +34,20 @@ const LoginForm = () => {
         onSubmit={onSubmitLogin}
       >
         <div className="flex items-center justify-between w-80">
-          <label htmlFor="id">아이디</label>
           <input
             type="text"
             id="id"
-            className="w-48 h-9 rounded bg-[#EBEBEB] cursor-text"
+            className="w-80 h-12 rounded bg-[#EBEBEB] cursor-text p-4"
+            placeholder="아이디"
             {...userId}
           />
         </div>
         <div className="flex items-center justify-between w-80">
-          <label htmlFor="password">비밀번호</label>
           <input
             type="password"
             id="password"
-            className="w-48 h-9 rounded bg-[#EBEBEB] cursor-text"
+            className="w-80 h-12 rounded bg-[#EBEBEB] cursor-text p-4"
+            placeholder="비밀번호"
             {...userPw}
           />
         </div>

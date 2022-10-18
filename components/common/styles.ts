@@ -1,5 +1,7 @@
 import { css } from "@emotion/react";
 
+export const MAIN_COLOR = "#F4BB5F";
+
 export const borderRadius = (radius: string) =>
   css({
     borderRadius: radius,
@@ -12,4 +14,6 @@ export const hoverTranslateY = css({
   transition: "all 0.3s ease",
 });
 
-export const MAIN_COLOR = "#F4BB5F";
+export const cursorPoint = css({
+  cursor: "pointer",
+});

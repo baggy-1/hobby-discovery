@@ -2,6 +2,7 @@ import { css } from "@emotion/react";
 import Profile from "components/common/Profile";
 import { mq } from "components/styles";
 import navLink from "data/navLink";
+import { useFetchUser } from "hooks/useFetchUser";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Close from "public/asset/svg/Close";
@@ -12,6 +13,7 @@ const Nav = () => {
   const router = useRouter();
   const { pathname } = router;
   const [navOpen, setNavOpen] = useState(false);
+  const { user, setUser } = useFetchUser();
 
   const onClickMoveTap = (path: string) => () => {
     router.push(path);
@@ -20,6 +22,16 @@ const Nav = () => {
 
   const push = (path: string) => () => {
     router.push(path);
+  };
+
+  const onClickLogout = () => {
+    document.cookie = "_hobby_rt=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    document.cookie = "_hobby_ae=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    document.cookie = "_hobby_at=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+
+    router.replace("/store");
+    setNavOpen(false);
+    setUser(null);
   };
 
   return (
@@ -46,7 +58,19 @@ const Nav = () => {
                   <div>{link.title}</div>
                 </div>
               ))}
-              {pathname !== "/" && <Profile />}
+              {pathname !== "/" && (
+                <>
+                  {user ? (
+                    <div onClick={onClickLogout}>로그아웃</div>
+                  ) : (
+                    <>
+                      <div onClick={onClickMoveTap(`/login`)}>로그인</div>
+                      <div onClick={onClickMoveTap(`/signup`)}>회원가입</div>
+                    </>
+                  )}
+                  <Profile />
+                </>
+              )}
             </div>
             <div css={hamburger} onClick={() => setNavOpen((prev) => !prev)}>
               {navOpen ? <Close /> : <Hamburger />}
@@ -64,6 +88,24 @@ const Nav = () => {
                 <div>{link.title}</div>
               </div>
             ))}
+            {pathname !== "/" && (
+              <>
+                {user ? (
+                  <div css={mobTap} onClick={onClickLogout}>
+                    로그아웃
+                  </div>
+                ) : (
+                  <>
+                    <div css={mobTap} onClick={onClickMoveTap(`/login`)}>
+                      로그인
+                    </div>
+                    <div css={mobTap} onClick={onClickMoveTap(`/signup`)}>
+                      회원가입
+                    </div>
+                  </>
+                )}
+              </>
+            )}
           </div>
         )}
       </nav>
@@ -76,7 +118,11 @@ export default Nav;
 const logoText = css({
   fontSize: "1.1rem",
   fontWeight: "700",
+  height: "100%",
   cursor: "pointer",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
 });
 
 const mobTapWrapper = (path: string) =>
@@ -126,11 +172,18 @@ const navTapWrapper = css({
   justifyContent: "flex-end",
   width: "100%",
   height: "100%",
-  paddingRight: "1rem",
+  [mq[2]]: {
+    fontSize: "0.8rem",
+    paddingRight: "1rem",
+  },
 });
 
 const logo = css({
   cursor: "pointer",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  height: "100%",
 });
 
 const imageWrapper = css({
@@ -139,8 +192,10 @@ const imageWrapper = css({
   justifyContent: "start",
   width: "100%",
   height: "100%",
-  paddingLeft: "1rem",
-  gap: "1rem",
+  gap: "0.5rem",
+  [mq[2]]: {
+    paddingLeft: "1rem",
+  },
 });
 
 const wrapper = css({

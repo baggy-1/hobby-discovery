@@ -5,26 +5,34 @@ import { useEffect, useState } from "react";
 const Slider = () => {
   const [index, setIndex] = useState(0);
 
+  const length = 4;
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((prev) => (prev >= 1 ? 0 : prev + 1));
+    const slideInterval = setInterval(() => {
+      setIndex((prev) => (prev >= length - 1 ? 0 : prev + 1));
     }, 3000);
 
-    return () => clearInterval(interval);
+    return () => clearInterval(slideInterval);
   }, []);
 
   return (
     <>
-      <div css={wrapper(index)}>
-        <div css={slide}>
-          <Image
-            src={`/asset/image/main-image.png`}
-            alt={`slide`}
-            layout={"fill"}
-            priority={true}
-          />
+      <div css={container}>
+        <div css={sliderWrapper}>
+          <div css={wrapper(index, length)}>
+            <div css={slide("#FFFFFF")}>
+              <Image
+                src={`/asset/image/main-image.png`}
+                alt={`slide`}
+                layout={"fill"}
+                priority={true}
+              />
+            </div>
+            <div css={slide("#F2F2F2")}></div>
+            <div css={slide("#000000")}></div>
+            <div css={slide("#E2E2E2")}></div>
+          </div>
         </div>
-        <div css={slide}></div>
       </div>
     </>
   );
@@ -32,21 +40,36 @@ const Slider = () => {
 
 export default Slider;
 
-const slide = css({
+const sliderWrapper = css({
   position: "relative",
-  width: "100vw",
-  height: "100%",
-  backgroundColor: "red",
+  width: "100%",
+  maxWidth: "80rem",
+  overflowX: "hidden",
 });
 
-const wrapper = (index: number) =>
+const container = css({
+  width: "100%",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+});
+
+const slide = (backgroundColor: string) =>
   css({
     position: "relative",
-    width: "calc(100vw * 2)",
+    width: "100%",
+    height: "100%",
+    backgroundColor,
+  });
+
+const wrapper = (index: number, length: number) =>
+  css({
+    position: "relative",
+    width: `calc(100% * ${length})`,
     height: "20rem",
     display: "flex",
     justifyContent: "start",
     alignItems: "center",
-    transform: `translateX(-${index * 100}vw)`,
+    transform: `translateX(-${(100 / length) * index}%)`,
     transition: "transform 0.5s ease-in-out",
   });

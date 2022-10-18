@@ -12,12 +12,6 @@ interface Props {
 const Layout = ({ children }: Props) => {
   const router = useRouter();
 
-  useEffect(() => {
-    if (localStorage.getItem("theme") === "dark") {
-      document.querySelector("html")?.classList.add("dark");
-    }
-  }, []);
-
   const template = {
     loginSingup: (
       <>

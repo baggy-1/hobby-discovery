@@ -28,6 +28,5 @@ const profile = css({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  marginRight: "1rem",
   cursor: "pointer",
 });
