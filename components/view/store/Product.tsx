@@ -52,9 +52,9 @@ const prodWrapper = css({
   justifyContent: "center",
   alignItems: "center",
   gap: "1rem",
-  flexDirection: "column",
+  flexDirection: "row",
   [mq[2]]: {
-    flexDirection: "row",
+    flexDirection: "column",
   },
 });
 

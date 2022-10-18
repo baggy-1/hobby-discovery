@@ -11,3 +11,5 @@ export const hoverTranslateY = css({
   },
   transition: "all 0.3s ease",
 });
+
+export const MAIN_COLOR = "#F4BB5F";
