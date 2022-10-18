@@ -18,5 +18,4 @@ export default HomeView;
 const sectionWrapper = css({
   width: "100%",
   height: "100%",
-  maxWidth: "100rem",
 });

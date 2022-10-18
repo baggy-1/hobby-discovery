@@ -89,11 +89,11 @@ const mobTapWrapper = (path: string) =>
   });
 
 const mobTap = css({
-  display: "block",
   padding: "1rem",
+  display: "none",
   cursor: "pointer",
   [mq[1]]: {
-    display: "none",
+    display: "block",
   },
 });
 
@@ -101,10 +101,10 @@ const taps = css({
   alignItems: "center",
   justifyContent: "center",
   gap: "1rem",
-  display: "none",
+  display: "flex",
   cursor: "pointer",
   [mq[1]]: {
-    display: "flex",
+    display: "none",
   },
 });
 
@@ -112,11 +112,11 @@ const hamburger = css({
   width: "2rem",
   height: "2rem",
   cursor: "pointer",
-  display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  display: "none",
   [mq[1]]: {
-    display: "none",
+    display: "flex",
   },
 });
 

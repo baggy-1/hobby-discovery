@@ -1,13 +1,19 @@
 import { css } from "@emotion/react";
-import { section } from "components/view/home/styles";
+import { mq } from "components/styles";
+import Image from "next/image";
 
 const MainSection = () => {
   return (
     <>
       <div css={section}>
-        <div css={back}>
-          <div css={leftBack}></div>
-          <div css={rightBack}></div>
+        <div css={backWrapper}>
+          <div css={back}>
+            <Image
+              src={`/asset/image/main-image.png`}
+              alt={`main`}
+              layout={`fill`}
+            />
+          </div>
         </div>
         <div css={textBox}>
           <span>C H I H A M</span>
@@ -22,6 +28,23 @@ const MainSection = () => {
 };
 
 export default MainSection;
+
+const section = css({
+  position: "relative",
+  width: "100%",
+  height: "calc(100vh - 4rem)",
+});
+
+const backWrapper = css({
+  width: "100%",
+  height: "100%",
+  display: "flex",
+  justifyContent: "end",
+  alignItems: "center",
+  [mq[1]]: {
+    height: "50%",
+  },
+});
 
 const textBox = css({
   position: "absolute",
@@ -40,6 +63,9 @@ const textBox = css({
       marginBottom: "2rem",
     },
   },
+  [mq[1]]: {
+    position: "static",
+  },
 });
 
 const back = css({
@@ -48,19 +74,6 @@ const back = css({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  position: "absolute",
-  top: "0",
-  left: "0",
-});
-
-const rightBack = css({
-  width: "50%",
-  height: "100%",
-  backgroundColor: "#F2F2F2",
-});
-
-const leftBack = css({
-  width: "50%",
-  height: "100%",
-  backgroundColor: "#FFFFFF",
+  position: "relative",
+  maxWidth: "90rem",
 });
