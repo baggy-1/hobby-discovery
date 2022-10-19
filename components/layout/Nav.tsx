@@ -65,19 +65,24 @@ const Nav = () => {
               {pathname !== "/" && (
                 <>
                   {user ? (
-                    <div onClick={onClickLogout}>로그아웃</div>
+                    <>
+                      <div onClick={onClickLogout}>로그아웃</div>
+                      <Profile />
+                    </>
                   ) : (
                     <>
                       <div onClick={onClickMoveTap(`/login`)}>로그인</div>
                       <div onClick={onClickMoveTap(`/signup`)}>회원가입</div>
                     </>
                   )}
-                  <Profile />
                 </>
               )}
             </div>
-            <div css={hamburger} onClick={() => setNavOpen((prev) => !prev)}>
-              {navOpen ? <Close /> : <Hamburger />}
+            <div css={mobNav}>
+              {user && <Profile />}
+              <div css={hamburger} onClick={() => setNavOpen((prev) => !prev)}>
+                {navOpen ? <Close /> : <Hamburger />}
+              </div>
             </div>
           </div>
         </div>
@@ -158,16 +163,23 @@ const taps = css({
   },
 });
 
+const mobNav = css({
+  display: "none",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: "0.5rem",
+  [mq[1]]: {
+    display: "flex",
+  },
+});
+
 const hamburger = css({
   width: "2rem",
   height: "2rem",
   cursor: "pointer",
   alignItems: "center",
   justifyContent: "center",
-  display: "none",
-  [mq[1]]: {
-    display: "flex",
-  },
+  display: "flex",
 });
 
 const navTapWrapper = css({

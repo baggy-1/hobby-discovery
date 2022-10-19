@@ -1,5 +1,6 @@
 import { borderRadius } from "components/common/styles";
 import { useFetchUser } from "hooks/useFetchUser";
+import useUser from "hooks/useUser";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Chevron from "public/asset/svg/Chevron";
@@ -20,7 +21,7 @@ const hobbies = [
 
 const ProfileView = () => {
   const [openHobby, setOpenHobby] = useState(false);
-  const { user, loading, error } = useFetchUser();
+  const { user, loading, error } = useUser();
   const router = useRouter();
 
   if (error) {

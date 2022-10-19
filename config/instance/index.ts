@@ -23,6 +23,10 @@ authInstance.interceptors.request.use(
   }
 );
 
+const setCookie = (name: string, value: string) => {
+  document.cookie = `${name}=${value}`;
+};
+
 authInstance.interceptors.response.use(
   (response) => {
     return response;
@@ -42,8 +46,8 @@ authInstance.interceptors.response.use(
         );
 
         const { access_token, access_exp } = data;
-        document.cookie = `_hobby_at=${access_token}`;
-        document.cookie = `_hobby_ae=${access_exp}`;
+        setCookie("_hobby_at", access_token);
+        setCookie("_hobby_ae", access_exp);
 
         const headers = config.headers || {};
         headers["Authorization"] = `Bearer ${access_token}`;
