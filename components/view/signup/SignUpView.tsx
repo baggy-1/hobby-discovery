@@ -1,4 +1,3 @@
-import { useFetchUser } from "hooks/useFetchUser";
 import useInput from "hooks/useInput";
 import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";

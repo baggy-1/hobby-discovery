@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { getCookie } from "util/cookie";
+import { getCookie, setCookie } from "util/cookie";
 
 const authInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
@@ -22,10 +22,6 @@ authInstance.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
-const setCookie = (name: string, value: string) => {
-  document.cookie = `${name}=${value}`;
-};
 
 authInstance.interceptors.response.use(
   (response) => {

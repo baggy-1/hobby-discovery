@@ -2,9 +2,9 @@ import useSWR from "swr";
 import CommentBox from "components/community/CommentBox";
 import axios from "axios";
 import { ChangeEvent, FormEvent, useState } from "react";
-import { useFetchUser } from "hooks/useFetchUser";
 import Close from "public/asset/svg/Close";
 import { Comment } from "types";
+import useUser from "hooks/useUser";
 
 interface Props {
   postId: number;
@@ -15,7 +15,7 @@ const CommentView = ({ postId }: Props) => {
 
   const [openComment, setOpenComment] = useState(false);
   const [comment, setComment] = useState("");
-  const { user } = useFetchUser();
+  const { user } = useUser();
   const { data } = useSWR<Comment[]>(COMMENT_URL, { refreshInterval: 1000 });
 
   const onClickHandleCommentBox = () => {

@@ -1,12 +1,12 @@
 import axios from "axios";
 import Seo from "components/Seo";
-import { useFetchUser } from "hooks/useFetchUser";
 import useInput from "hooks/useInput";
+import useUser from "hooks/useUser";
 import { useRouter } from "next/router";
 import { FormEvent } from "react";
 
 const Write = () => {
-  const { user } = useFetchUser();
+  const { user } = useUser();
   const title = useInput();
   const content = useInput();
   const router = useRouter();

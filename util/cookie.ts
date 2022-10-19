@@ -10,8 +10,12 @@ const getCookie = (name: string) => {
   }
 };
 
+const setCookie = (name: string, value: string) => {
+  document.cookie = `${name}=${value}`;
+};
+
 const deleteCookie = (name: string) => {
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
 };
 
-export { getCookie, deleteCookie };
+export { getCookie, setCookie, deleteCookie };

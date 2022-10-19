@@ -1,9 +1,9 @@
+import UpdateUserView from "components/view/profile/UpdateUserView";
+
 const Update = () => {
   return (
     <>
-      <form>
-        <input type="text" placeholder="닉네임" />
-      </form>
+      <UpdateUserView />
     </>
   );
 };

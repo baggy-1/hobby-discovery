@@ -9,6 +9,7 @@ import Close from "public/asset/svg/Close";
 import Hamburger from "public/asset/svg/Hamburger";
 import { useState } from "react";
 import { useSWRConfig } from "swr";
+import { deleteCookie } from "util/cookie";
 
 const Nav = () => {
   const { mutate } = useSWRConfig();
@@ -27,9 +28,9 @@ const Nav = () => {
   };
 
   const onClickLogout = () => {
-    document.cookie = "_hobby_rt=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-    document.cookie = "_hobby_ae=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-    document.cookie = "_hobby_at=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    deleteCookie("_hobby_rt");
+    deleteCookie("_hobby_ae");
+    deleteCookie("_hobby_at");
 
     router.replace("/store");
     setNavOpen(false);

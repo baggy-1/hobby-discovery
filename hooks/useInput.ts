@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-const useInput = (vaild?: RegExp) => {
-  const [value, setValue] = useState("");
+const useInput = (vaild?: RegExp, initValue?: string) => {
+  const [value, setValue] = useState(initValue || "");
   const onChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
