@@ -32,3 +32,12 @@ export interface Hobby {
   descrition: string;
   images: Image[];
 }
+
+export interface AccessToken {
+  access_token: string;
+  access_exp: number;
+}
+
+export type AddNull<T> = {
+  [P in keyof T]: T[P] | null;
+};

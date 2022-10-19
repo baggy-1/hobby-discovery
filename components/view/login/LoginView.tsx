@@ -1,12 +1,12 @@
-import { useFetchUser } from "hooks/useFetchUser";
 import { useRouter } from "next/router";
 import LoginForm from "components/view/login/LoginForm";
 import LogoWithText from "components/common/LogoWithText";
 import { cursorPoint } from "components/common/styles";
+import useUser from "hooks/useUser";
 
 const LoginView = () => {
   const router = useRouter();
-  const { user } = useFetchUser();
+  const { user } = useUser();
 
   if (user) {
     router.replace("/store");

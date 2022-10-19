@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
-import { MAIN_COLOR } from "components/common/styles";
-import { mq } from "components/styles";
+import { MAIN_COLOR } from "config/styles";
+import { mq } from "config/styles";
 import Image from "next/image";
 import { section } from "components/view/home/styles";
 

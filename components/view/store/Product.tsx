@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { mq } from "components/styles";
+import { mq } from "config/styles";
 import useSWR from "swr";
 import { Hobby } from "types";
 import Card from "components/view/store/Card";

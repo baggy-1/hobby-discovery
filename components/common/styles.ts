@@ -1,7 +1,5 @@
 import { css } from "@emotion/react";
 
-export const MAIN_COLOR = "#F4BB5F";
-
 export const borderRadius = (radius: string) =>
   css({
     borderRadius: radius,

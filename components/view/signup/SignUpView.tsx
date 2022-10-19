@@ -5,10 +5,11 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
 import LogoWithText from "components/common/LogoWithText";
 import { cursorPoint } from "components/common/styles";
+import useUser from "hooks/useUser";
 
 const SignUpView = () => {
+  const { user } = useUser();
   const router = useRouter();
-  const { user } = useFetchUser();
   const [notice, setNotice] = useState("");
   const userId = useInput(/^[a-zA-Z0-9]*$/gm);
   const [formData, setFormData] = useState<FormData | null>(null);

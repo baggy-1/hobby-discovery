@@ -1,19 +1,21 @@
 import { css } from "@emotion/react";
 import Profile from "components/common/Profile";
-import { mq } from "components/styles";
+import { mq } from "config/styles";
 import navLink from "data/navLink";
-import { useFetchUser } from "hooks/useFetchUser";
+import useUser from "hooks/useUser";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Close from "public/asset/svg/Close";
 import Hamburger from "public/asset/svg/Hamburger";
 import { useState } from "react";
+import { useSWRConfig } from "swr";
 
 const Nav = () => {
+  const { mutate } = useSWRConfig();
   const router = useRouter();
   const { pathname } = router;
   const [navOpen, setNavOpen] = useState(false);
-  const { user, setUser } = useFetchUser();
+  const { user } = useUser();
 
   const onClickMoveTap = (path: string) => () => {
     router.push(path);
@@ -31,7 +33,9 @@ const Nav = () => {
 
     router.replace("/store");
     setNavOpen(false);
-    setUser(null);
+    mutate("/user/user", null, {
+      revalidate: true,
+    });
   };
 
   return (
