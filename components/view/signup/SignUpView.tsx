@@ -75,7 +75,10 @@ const SignUpView = () => {
       router.replace("/store");
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        throw new Error(`${error.name}${error.message}${error.response}`);
+        if (error.response?.status === 400) {
+          setNotice("중복된 아이디입니다");
+          return;
+        }
       } else if (error instanceof Error) {
         throw new Error(`${error.name}${error.message}`);
       }
@@ -149,7 +152,7 @@ const SignUpView = () => {
         <input type="file" onChange={onChangeFile} /> */}
         <div className="flex flex-col items-center justify-center">
           <span>이미 회원이신가요?</span>
-          <span onClick={() => router.replace("/login")} css={cursorPoint}>
+          <span onClick={() => router.replace("/auth/login")} css={cursorPoint}>
             로그인하기
           </span>
         </div>

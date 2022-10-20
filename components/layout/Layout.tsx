@@ -38,7 +38,7 @@ const Layout = ({ children }: Props) => {
 
   return (
     <>
-      {router.pathname === "/login" || router.pathname === "/signup"
+      {router.pathname === "/auth/login" || router.pathname === "/auth/signup"
         ? template.loginSingup
         : template.default}
     </>

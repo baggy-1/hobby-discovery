@@ -66,7 +66,7 @@ const wrapper = (index: number, length: number) =>
   css({
     position: "relative",
     width: `calc(100% * ${length})`,
-    height: "20rem",
+    height: "30rem",
     display: "flex",
     justifyContent: "start",
     alignItems: "center",

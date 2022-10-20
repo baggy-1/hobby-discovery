@@ -10,7 +10,7 @@ const ProfileView = () => {
   const router = useRouter();
 
   if (error) {
-    router.replace("/login");
+    router.replace("/auth/login");
     return <div>정보 가져오기 실패... 잠시 후 로그인 화면으로 이동됩니다</div>;
   }
 

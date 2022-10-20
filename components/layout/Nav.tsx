@@ -1,7 +1,8 @@
 import { css } from "@emotion/react";
+import Cart from "components/common/Cart";
 import Profile from "components/common/Profile";
+import navLink from "config/data/navLink";
 import { mq } from "config/styles";
-import navLink from "data/navLink";
 import useUser from "hooks/useUser";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -68,19 +69,27 @@ const Nav = () => {
                   {user ? (
                     <>
                       <div onClick={onClickLogout}>로그아웃</div>
+                      <Cart />
                       <Profile />
                     </>
                   ) : (
                     <>
-                      <div onClick={onClickMoveTap(`/login`)}>로그인</div>
-                      <div onClick={onClickMoveTap(`/signup`)}>회원가입</div>
+                      <div onClick={onClickMoveTap(`/auth/login`)}>로그인</div>
+                      <div onClick={onClickMoveTap(`/auth/signup`)}>
+                        회원가입
+                      </div>
                     </>
                   )}
                 </>
               )}
             </div>
             <div css={mobNav}>
-              {user && <Profile />}
+              {user && (
+                <>
+                  <Cart />
+                  <Profile />
+                </>
+              )}
               <div css={hamburger} onClick={() => setNavOpen((prev) => !prev)}>
                 {navOpen ? <Close /> : <Hamburger />}
               </div>
@@ -106,10 +115,10 @@ const Nav = () => {
                   </div>
                 ) : (
                   <>
-                    <div css={mobTap} onClick={onClickMoveTap(`/login`)}>
+                    <div css={mobTap} onClick={onClickMoveTap(`/auth/login`)}>
                       로그인
                     </div>
-                    <div css={mobTap} onClick={onClickMoveTap(`/signup`)}>
+                    <div css={mobTap} onClick={onClickMoveTap(`/auth/signup`)}>
                       회원가입
                     </div>
                   </>

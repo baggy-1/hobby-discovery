@@ -48,6 +48,8 @@ const textBox = css({
 });
 
 const prodWrapper = css({
+  width: "100%",
+  height: "auto",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
@@ -60,4 +62,6 @@ const prodWrapper = css({
 
 const wrapper = css({
   padding: "2rem 0",
+  width: "100%",
+  height: "30rem",
 });

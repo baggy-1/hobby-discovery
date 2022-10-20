@@ -1,29 +1,40 @@
+import { css } from "@emotion/react";
+import { AxiosError } from "axios";
 import fetchLogin from "function/fetchLogin";
 import useInput from "hooks/useInput";
 import { useRouter } from "next/router";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 
 const LoginForm = () => {
   const userId = useInput(/^[a-zA-Z0-9]*$/gm);
   const userPw = useInput();
   const router = useRouter();
+  const [notice, setNotice] = useState("");
 
   const onSubmitLogin = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (userId.value && userPw.value) {
-      try {
-        const data = {
-          username: userId.value,
-          password: userPw.value,
-        };
+      const data = {
+        username: userId.value,
+        password: userPw.value,
+      };
 
-        fetchLogin(data).then((_) => {
+      fetchLogin(data)
+        .then((_) => {
           router.replace("/store");
+        })
+        .catch((error: unknown) => {
+          if (error instanceof AxiosError) {
+            if (error.response?.status === 400) {
+              setNotice("아이디 또는 비밀번호가 일치하지 않습니다.");
+
+              return;
+            }
+          }
+
+          throw new Error(`error: ${error}`);
         });
-      } catch (error) {
-        throw new Error(`error: ${error}`);
-      }
     }
   };
 
@@ -51,6 +62,7 @@ const LoginForm = () => {
             {...userPw}
           />
         </div>
+        <div css={Notice}>{notice}</div>
         <button
           type="submit"
           className="h-12 w-80 bg-[#F4BB5F] rounded text-white cursor-pointer"
@@ -63,3 +75,10 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
+
+const Notice = css({
+  width: "20rem",
+  height: "3rem",
+  color: "red",
+  textAlign: "center",
+});

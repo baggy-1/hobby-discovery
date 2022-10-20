@@ -1,7 +1,7 @@
+import footerLink from "config/data/footerLink";
 import useHandlePage from "hooks/useHandlePage";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import footerLink from "util/footerLink";
 
 interface Props {
   home: boolean;

@@ -10,7 +10,7 @@ const UpdateUserView = () => {
 
   if (loading) return <div>로딩중...</div>;
   if (error) {
-    router.replace("/login");
+    router.replace("/auth/login");
     return <div>에러 발생...</div>;
   }
 
