@@ -2,37 +2,38 @@ import { css } from "@emotion/react";
 import { MAIN_COLOR } from "config/styles";
 import { mq } from "config/styles";
 import Image from "next/image";
-import { section } from "components/view/home/styles";
 
 const MainSection = () => {
   return (
     <>
       <div css={section}>
-        <div css={backWrapper}>
-          <div css={back}>
-            <Image
-              src={`/asset/image/main-image.png`}
-              alt={`main`}
-              layout={`fill`}
-            />
-          </div>
-        </div>
-        <div css={textWrapper}>
-          <div css={textBox}>
-            <span css={span}>
-              <h1 css={h1}>C</h1>
-              <h1 css={h1}>H</h1>
-              <h1 css={h1}>I</h1>
-              <h1 css={h1}>H</h1>
-              <h1 css={h1}>A</h1>
-              <h1 css={h1}>M</h1>
-            </span>
-            <div css={underBox}>
-              <span css={underSpan}>
-                매달, 문 앞에 <br />
-                취미 박스가 찾아와요
+        <div css={wrapper}>
+          <div css={textWrapper}>
+            <div css={textBox}>
+              <span css={span}>
+                <h1 css={h1}>C</h1>
+                <h1 css={h1}>H</h1>
+                <h1 css={h1}>I</h1>
+                <h1 css={h1}>H</h1>
+                <h1 css={h1}>A</h1>
+                <h1 css={h1}>M</h1>
               </span>
-              <div css={button}>지금 바로 구독하기</div>
+              <div css={underBox}>
+                <span css={underSpan}>
+                  매달, 문 앞에 <br />
+                  취미 박스가 찾아와요
+                </span>
+                <div css={button}>지금 바로 구독하기</div>
+              </div>
+            </div>
+          </div>
+          <div css={backWrapper}>
+            <div css={back}>
+              <Image
+                src={`/asset/image/main-image.png`}
+                alt={`main`}
+                layout={`fill`}
+              />
             </div>
           </div>
         </div>
@@ -47,7 +48,7 @@ const underBox = css({
   display: "flex",
   flexDirection: "column",
   gap: "1rem",
-  [mq[1]]: {
+  [mq[2]]: {
     alignItems: "center",
   },
 });
@@ -70,7 +71,7 @@ const h1 = css({
   fontWeight: "700",
   fontSize: "1.5rem",
   color: MAIN_COLOR,
-  [mq[1]]: {
+  [mq[2]]: {
     fontSize: "2.4rem",
   },
 });
@@ -83,10 +84,10 @@ const underSpan = css({
   },
   [mq[2]]: {
     fontSize: "2.5rem",
+    textAlign: "center",
   },
   [mq[1]]: {
     fontSize: "2rem",
-    textAlign: "center",
   },
   [mq[0]]: {
     fontSize: "1.5rem",
@@ -96,7 +97,7 @@ const underSpan = css({
 const span = css({
   width: "fit-content",
   height: "auto",
-  [mq[1]]: {
+  [mq[2]]: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -105,19 +106,16 @@ const span = css({
 });
 
 const backWrapper = css({
-  position: "absolute",
-  top: "0",
-  left: "0",
   width: "100%",
   height: "100%",
   display: "flex",
   justifyContent: "end",
   alignItems: "center",
   zIndex: "-1",
-  [mq[1]]: {
-    height: "40%",
-    position: "relative",
-  },
+  // [mq[1]]: {
+  //   height: "40%",
+  //   position: "relative",
+  // },
 });
 
 const textWrapper = css({
@@ -126,6 +124,9 @@ const textWrapper = css({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
+  // [mq[1]]: {
+  //   height: "40%",
+  // },
 });
 
 const textBox = css({
@@ -138,8 +139,7 @@ const textBox = css({
   wordBreak: "keep-all",
   gap: "3rem",
   paddingLeft: "5rem",
-  [mq[1]]: {
-    height: "60%",
+  [mq[2]]: {
     alignItems: "center",
     flexDirection: "column",
     width: "100%",
@@ -149,23 +149,44 @@ const textBox = css({
 });
 
 const back = css({
-  width: "60%",
+  width: "100%",
   height: "100%",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
   position: "relative",
-  maxWidth: "90rem",
-  [mq[4]]: {
-    width: "70%",
-  },
-  [mq[3]]: {
-    width: "80%",
-  },
+  // maxWidth: "50rem",
+  // [mq[4]]: {
+  //   width: "70%",
+  // },
+  // [mq[3]]: {
+  //   width: "80%",
+  // },
+  // [mq[2]]: {
+  //   width: "90%",
+  // },
+  // [mq[1]]: {
+  //   width: "100%",
+  // },
+});
+
+const wrapper = css({
+  position: "relative",
+  display: "flex",
+  width: "100%",
+  maxWidth: "80rem",
+  height: "100%",
   [mq[2]]: {
-    width: "90%",
+    flexDirection: "column-reverse",
   },
-  [mq[1]]: {
-    width: "100%",
-  },
+});
+
+const section = css({
+  position: "relative",
+  widht: "100%",
+  height: "80vh",
+  maxHeight: "40rem",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
 });
