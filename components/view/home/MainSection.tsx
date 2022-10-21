@@ -2,8 +2,11 @@ import { css } from "@emotion/react";
 import { MAIN_COLOR } from "config/styles";
 import { mq } from "config/styles";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 const MainSection = () => {
+  const router = useRouter();
+
   return (
     <>
       <div css={section}>
@@ -23,7 +26,17 @@ const MainSection = () => {
                   매달, 문 앞에 <br />
                   취미 박스가 찾아와요
                 </span>
-                <div css={button}>지금 바로 구독하기</div>
+                <div css={buttonBox}>
+                  <div css={button(MAIN_COLOR, "#FFFFFF")}>
+                    지금 바로 구독하기
+                  </div>
+                  <div
+                    css={button("#FFFFFF", MAIN_COLOR)}
+                    onClick={() => router.push("/store")}
+                  >
+                    스토어 구경하기
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -53,17 +66,26 @@ const underBox = css({
   },
 });
 
-const button = css({
-  width: "10rem",
-  height: "2.6rem",
-  backgroundColor: MAIN_COLOR,
-  borderRadius: "0.5rem",
+const button = (backgroundColor: string, color: string) =>
+  css({
+    backgroundColor,
+    color,
+    width: "10rem",
+    height: "2.6rem",
+    borderRadius: "0.5rem",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontWeight: "700",
+    cursor: "pointer",
+    border: "1px solid",
+  });
+
+const buttonBox = css({
   display: "flex",
-  justifyContent: "center",
+  justifyContent: "start",
   alignItems: "center",
-  color: "#FFFFFF",
-  fontWeight: "700",
-  cursor: "pointer",
+  gap: "1rem",
 });
 
 const h1 = css({
@@ -112,10 +134,6 @@ const backWrapper = css({
   justifyContent: "end",
   alignItems: "center",
   zIndex: "-1",
-  // [mq[1]]: {
-  //   height: "40%",
-  //   position: "relative",
-  // },
 });
 
 const textWrapper = css({
@@ -124,9 +142,6 @@ const textWrapper = css({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  // [mq[1]]: {
-  //   height: "40%",
-  // },
 });
 
 const textBox = css({
@@ -155,19 +170,6 @@ const back = css({
   justifyContent: "center",
   alignItems: "center",
   position: "relative",
-  // maxWidth: "50rem",
-  // [mq[4]]: {
-  //   width: "70%",
-  // },
-  // [mq[3]]: {
-  //   width: "80%",
-  // },
-  // [mq[2]]: {
-  //   width: "90%",
-  // },
-  // [mq[1]]: {
-  //   width: "100%",
-  // },
 });
 
 const wrapper = css({

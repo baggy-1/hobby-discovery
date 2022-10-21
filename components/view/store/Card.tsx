@@ -30,15 +30,15 @@ const Card = ({ title, images, price, id, prod }: Props) => {
       }
     >
       {images.length === 0 ? (
-        <div css={[noImage, hoverTranslateY]}></div>
+        <div css={[noImage, borderRadius("1.2rem")]}></div>
       ) : (
-        <div css={[image, hoverTranslateY]}>
+        <div css={[image, borderRadius("1.2rem")]}>
           <Image
             src={images[0]["image"]}
             alt={title}
             width={250}
             height={300}
-            css={borderRadius("1.2rem")}
+            css={[borderRadius("1.2rem"), hoverScale]}
           />
         </div>
       )}
@@ -50,6 +50,13 @@ const Card = ({ title, images, price, id, prod }: Props) => {
 
 export default Card;
 
+const hoverScale = css({
+  ":hover": {
+    transform: "scale(1.2)",
+  },
+  transition: "all 0.3s ease-in-out",
+});
+
 const prodCard = css({
   cursor: "pointer",
 });
@@ -58,9 +65,11 @@ const noImage = css({
   width: "250px",
   height: "300px",
   backgroundColor: "#f5f5f5",
-  borderRadius: "1.2rem",
 });
 
 const image = css({
-  borderRadius: "1.2rem",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  overflow: "hidden",
 });

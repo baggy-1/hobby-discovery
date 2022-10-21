@@ -6,6 +6,7 @@ const ProductDetailView = () => {
   const { id, prod } = router.query;
 
   const data = typeof prod === "string" ? JSON.parse(prod) : null;
+  console.log(data);
 
   return (
     <>
