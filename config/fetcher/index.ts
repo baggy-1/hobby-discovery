@@ -1,4 +1,4 @@
-import { authInstance } from "config/instance";
+import { authInstance, instance } from "config/instance";
 
 const authFetcher = async (url: string) => {
   const { data } = await authInstance.get(url);
@@ -6,4 +6,10 @@ const authFetcher = async (url: string) => {
   return data;
 };
 
-export { authFetcher };
+const fetcher = async (url: string) => {
+  const { data } = await instance.get(url);
+
+  return data;
+};
+
+export { fetcher, authFetcher };

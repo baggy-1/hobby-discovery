@@ -1,9 +1,12 @@
 import axios, { AxiosError } from "axios";
 import { getCookie, setCookie } from "util/cookie";
 
+const instance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+});
+
 const authInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
-  timeout: 1000,
 });
 
 authInstance.interceptors.request.use(
@@ -55,4 +58,4 @@ authInstance.interceptors.response.use(
   }
 );
 
-export { authInstance };
+export { instance, authInstance };

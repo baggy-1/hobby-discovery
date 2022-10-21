@@ -112,7 +112,7 @@ const label = css({
 });
 
 const input = css({
-  padding: "1rem",
+  padding: "0.5rem 1rem",
 });
 
 const inputBox = css({

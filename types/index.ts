@@ -41,3 +41,8 @@ export interface AccessToken {
 export type AddNull<T> = {
   [P in keyof T]: T[P] | null;
 };
+
+export interface Cart {
+  prod: Hobby;
+  count: number;
+}

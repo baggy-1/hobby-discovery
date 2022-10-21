@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import Cart from "components/common/Cart";
 import Profile from "components/common/Profile";
+import { CartContext } from "config/context";
 import navLink from "config/data/navLink";
 import { mq } from "config/styles";
 import useUser from "hooks/useUser";
@@ -8,16 +9,18 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import Close from "public/asset/svg/Close";
 import Hamburger from "public/asset/svg/Hamburger";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useSWRConfig } from "swr";
 import { deleteCookie } from "util/cookie";
 
 const Nav = () => {
+  const cartInfo = useContext(CartContext);
   const { mutate } = useSWRConfig();
   const router = useRouter();
   const { pathname } = router;
   const [navOpen, setNavOpen] = useState(false);
   const { user } = useUser();
+  const isHome = pathname === "/";
 
   const onClickMoveTap = (path: string) => () => {
     router.push(path);
@@ -32,6 +35,8 @@ const Nav = () => {
     deleteCookie("_hobby_rt");
     deleteCookie("_hobby_ae");
     deleteCookie("_hobby_at");
+    localStorage.removeItem("cart");
+    cartInfo?.dispatch({ type: "RESET" });
 
     router.replace("/store");
     setNavOpen(false);
@@ -44,8 +49,8 @@ const Nav = () => {
     <>
       <nav css={nav(pathname)}>
         <div css={wrapper}>
-          <div css={imageWrapper}>
-            <div css={logo} onClick={push("/")}>
+          <div css={imageWrapper} onClick={isHome ? push("/") : push("/store")}>
+            <div css={logo}>
               <Image
                 src="/asset/image/logo.png"
                 alt="logo"
@@ -53,9 +58,7 @@ const Nav = () => {
                 height={32}
               />
             </div>
-            <span css={logoText} onClick={push("/")}>
-              CHIHAM
-            </span>
+            <span css={logoText}>CHIHAM</span>
           </div>
           <div css={navTapWrapper}>
             <div css={taps}>
@@ -64,13 +67,11 @@ const Nav = () => {
                   <div>{link.title}</div>
                 </div>
               ))}
-              {pathname !== "/" && (
+              {!isHome && (
                 <>
                   {user ? (
                     <>
                       <div onClick={onClickLogout}>로그아웃</div>
-                      <Cart />
-                      <Profile />
                     </>
                   ) : (
                     <>
@@ -80,11 +81,13 @@ const Nav = () => {
                       </div>
                     </>
                   )}
+                  <Cart />
+                  <Profile />
                 </>
               )}
             </div>
             <div css={mobNav}>
-              {user && (
+              {!isHome && (
                 <>
                   <Cart />
                   <Profile />
@@ -107,7 +110,7 @@ const Nav = () => {
                 <div>{link.title}</div>
               </div>
             ))}
-            {pathname !== "/" && (
+            {!isHome && (
               <>
                 {user ? (
                   <div css={mobTap} onClick={onClickLogout}>
@@ -216,11 +219,14 @@ const imageWrapper = css({
   display: "flex",
   alignItems: "center",
   justifyContent: "start",
-  width: "100%",
+  width: "10rem",
   height: "100%",
   gap: "0.5rem",
   [mq[2]]: {
     paddingLeft: "1rem",
+  },
+  [mq[1]]: {
+    width: "100%",
   },
 });
 

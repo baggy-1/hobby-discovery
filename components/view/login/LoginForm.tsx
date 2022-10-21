@@ -22,7 +22,7 @@ const LoginForm = () => {
 
       fetchLogin(data)
         .then((_) => {
-          router.replace("/store");
+          router.back();
         })
         .catch((error: unknown) => {
           if (error instanceof AxiosError) {

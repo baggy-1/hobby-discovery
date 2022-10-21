@@ -1,19 +1,17 @@
 import { css } from "@emotion/react";
-import { borderRadius, hoverTranslateY } from "components/common/styles";
+import { borderRadius } from "components/common/styles";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { Hobby } from "types";
 
 interface Props {
-  title: string;
-  price: number;
-  id: number;
-  images: { image: string }[];
-  prod: any;
+  prod: Hobby;
 }
 
-const Card = ({ title, images, price, id, prod }: Props) => {
+const Card = ({ prod }: Props) => {
   const router = useRouter();
-
+  const { id, hobby_title, images } = prod;
+  const imagePath = images[0] ? images[0].image : "/asset/image/main-image.png";
   return (
     <div
       css={prodCard}
@@ -29,21 +27,17 @@ const Card = ({ title, images, price, id, prod }: Props) => {
         )
       }
     >
-      {images.length === 0 ? (
-        <div css={[noImage, borderRadius("1.2rem")]}></div>
-      ) : (
-        <div css={[image, borderRadius("1.2rem")]}>
-          <Image
-            src={images[0]["image"]}
-            alt={title}
-            width={250}
-            height={300}
-            css={[borderRadius("1.2rem"), hoverScale]}
-          />
-        </div>
-      )}
-      <div>{title}</div>
-      <div>{price}원</div>
+      <div css={[image, borderRadius("1.2rem")]}>
+        <Image
+          src={imagePath}
+          alt={hobby_title}
+          width={250}
+          height={300}
+          css={[borderRadius("1.2rem"), hoverScale]}
+        />
+      </div>
+      <div>{hobby_title}</div>
+      <div>{`39000`}원</div>
     </div>
   );
 };
@@ -59,12 +53,6 @@ const hoverScale = css({
 
 const prodCard = css({
   cursor: "pointer",
-});
-
-const noImage = css({
-  width: "250px",
-  height: "300px",
-  backgroundColor: "#f5f5f5",
 });
 
 const image = css({

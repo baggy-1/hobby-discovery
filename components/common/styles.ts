@@ -15,3 +15,16 @@ export const hoverTranslateY = css({
 export const cursorPoint = css({
   cursor: "pointer",
 });
+
+export const container = css({
+  width: "100%",
+  height: "auto",
+  display: "flex",
+  justifyContent: "center",
+});
+
+export const maxWidthWrapper = css({
+  width: "100%",
+  maxWidth: "80rem",
+  height: "auto",
+});

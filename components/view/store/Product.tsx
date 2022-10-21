@@ -16,15 +16,8 @@ const Product = () => {
           <h1 css={h1}>신상품</h1>
         </div>
         <div css={prodWrapper}>
-          {data?.map(({ hobby_title, id, images }) => (
-            <Card
-              key={id}
-              title={hobby_title}
-              price={id}
-              images={images}
-              id={id}
-              prod={data[0]}
-            />
+          {data?.map((prod) => (
+            <Card key={prod.id} prod={prod} />
           ))}
         </div>
       </div>
@@ -55,7 +48,7 @@ const prodWrapper = css({
   alignItems: "center",
   gap: "1rem",
   flexDirection: "row",
-  [mq[2]]: {
+  [mq[1]]: {
     flexDirection: "column",
   },
 });
@@ -63,5 +56,6 @@ const prodWrapper = css({
 const wrapper = css({
   padding: "2rem 0",
   width: "100%",
-  height: "30rem",
+  height: "auto",
+  minHeight: "30rem",
 });
