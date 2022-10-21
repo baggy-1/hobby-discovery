@@ -26,5 +26,5 @@ export const container = css({
 export const maxWidthWrapper = css({
   width: "100%",
   maxWidth: "80rem",
-  height: "auto",
+  height: "100%",
 });

@@ -1,11 +1,11 @@
 import { css } from "@emotion/react";
 import { mq } from "config/styles";
 import useSWR from "swr";
-import { Hobby } from "types";
 import Card from "components/view/store/Card";
+import { KitItem } from "types";
 
 const Product = () => {
-  const { data } = useSWR<Hobby[]>(
+  const { data } = useSWR<KitItem[]>(
     `${process.env.NEXT_PUBLIC_BASE_URL}/main/hobby`
   );
 
@@ -16,8 +16,8 @@ const Product = () => {
           <h1 css={h1}>신상품</h1>
         </div>
         <div css={prodWrapper}>
-          {data?.map((prod) => (
-            <Card key={prod.id} prod={prod} />
+          {data?.map((kitItem) => (
+            <Card key={kitItem.pd_id} kitItem={kitItem} />
           ))}
         </div>
       </div>

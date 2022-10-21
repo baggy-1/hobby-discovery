@@ -2,15 +2,15 @@ import { css } from "@emotion/react";
 import { borderRadius } from "components/common/styles";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { Hobby } from "types";
+import { KitItem } from "types";
 
 interface Props {
-  prod: Hobby;
+  kitItem: KitItem;
 }
 
-const Card = ({ prod }: Props) => {
+const Card = ({ kitItem }: Props) => {
   const router = useRouter();
-  const { id, hobby_title, images } = prod;
+  const { pd_id, pd_title, images } = kitItem;
   const imagePath = images[0] ? images[0].image : "/asset/image/main-image.png";
   return (
     <div
@@ -18,25 +18,25 @@ const Card = ({ prod }: Props) => {
       onClick={() =>
         router.push(
           {
-            pathname: `/store/product/${id}`,
+            pathname: `/store/product/${pd_id}`,
             query: {
-              prod: JSON.stringify(prod),
+              prod: JSON.stringify(kitItem),
             },
           },
-          `/store/product/${id}`
+          `/store/product/${pd_id}`
         )
       }
     >
       <div css={[image, borderRadius("1.2rem")]}>
         <Image
           src={imagePath}
-          alt={hobby_title}
+          alt={pd_title}
           width={250}
           height={300}
           css={[borderRadius("1.2rem"), hoverScale]}
         />
       </div>
-      <div>{hobby_title}</div>
+      <div>{pd_title}</div>
       <div>{`39000`}원</div>
     </div>
   );

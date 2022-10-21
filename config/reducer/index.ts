@@ -1,9 +1,10 @@
-import { Cart, Hobby } from "types";
+import { Cart, KitItem } from "types";
 
 const CART_ACTION_TYPE = {
   ADD: "ADD",
   INIT: "INIT",
   DEL: "DEL",
+  DEC: "DEC",
   RESET: "RESET",
 } as const;
 
@@ -14,14 +15,29 @@ interface InitAction {
 
 interface AddAction {
   type: "ADD";
-  item: Hobby;
+  kitItem: KitItem;
 }
 
 interface ResetAction {
   type: "RESET";
 }
 
-export type CartAction = InitAction | AddAction | ResetAction;
+interface DecAction {
+  type: "DEC";
+  kitItem: KitItem;
+}
+
+interface DelAction {
+  type: "DEL";
+  kitItem: KitItem;
+}
+
+export type CartAction =
+  | InitAction
+  | AddAction
+  | ResetAction
+  | DecAction
+  | DelAction;
 
 const cartReducer = (state: Cart[], action: CartAction) => {
   const localCart = localStorage.getItem("cart");
@@ -31,7 +47,7 @@ const cartReducer = (state: Cart[], action: CartAction) => {
     case CART_ACTION_TYPE.ADD:
       if (prevCart.length !== 0) {
         const find = prevCart.find((item: Cart) => {
-          const exist = item.prod.id === action.item.id;
+          const exist = item.kitItem.pd_id === action.kitItem.pd_id;
 
           if (exist) {
             item.count += 1;
@@ -46,7 +62,7 @@ const cartReducer = (state: Cart[], action: CartAction) => {
           newCart = [...prevCart];
         } else {
           const cartInfo = {
-            prod: action.item,
+            kitItem: action.kitItem,
             count: 1,
           };
 
@@ -57,7 +73,7 @@ const cartReducer = (state: Cart[], action: CartAction) => {
         return newCart;
       } else {
         const cartInfo = {
-          prod: action.item,
+          kitItem: action.kitItem,
           count: 1,
         };
 
@@ -73,6 +89,29 @@ const cartReducer = (state: Cart[], action: CartAction) => {
     case CART_ACTION_TYPE.RESET:
       localStorage.removeItem("cart");
       return [];
+
+    case CART_ACTION_TYPE.DEC:
+      prevCart.find((item: Cart) => {
+        const exist = item.kitItem.pd_id === action.kitItem.pd_id;
+        if (exist && item.count > 1) {
+          item.count -= 1;
+        }
+
+        return exist;
+      });
+
+      const newCart: Cart[] = [...prevCart];
+      localStorage.setItem("cart", JSON.stringify(newCart));
+
+      return newCart;
+
+    case CART_ACTION_TYPE.DEL:
+      const delCart = prevCart.filter(
+        (item: Cart) => item.kitItem.pd_id !== action.kitItem.pd_id
+      );
+
+      localStorage.setItem("cart", JSON.stringify(delCart));
+      return delCart;
 
     default:
       throw new Error("Invalid action type");
