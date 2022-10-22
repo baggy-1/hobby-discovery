@@ -61,5 +61,5 @@ const address = (value: string | null) =>
     fontSize: value ? "1rem" : "0.75rem",
     color: value ? "#000000" : "#999999",
     whiteSpace: "nowrap",
-    overflowX: "scroll",
+    overflowX: "auto",
   });

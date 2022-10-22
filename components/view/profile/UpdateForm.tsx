@@ -10,19 +10,24 @@ import Edit from "public/asset/svg/Edit";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Address from "components/view/profile/Address";
 import { formWrapper, Input, InputBox } from "../signup/SignUpForm";
+import { useRouter } from "next/router";
 
 const defaultProfile = "/asset/image/default-profile.jpg";
 
 const UpdateForm = () => {
+  const router = useRouter();
   const { user } = useUser();
+  const addressArr = user?.address.split("@%");
   const [profile, setProfile] = useState(user?.profile || defaultProfile);
   const [formData, setFormData] = useState<FormData | null>(null);
   const nickname = useInput(undefined, user?.nickname || "");
   const password = useInput(REG_PW);
   const passwordCheck = useInput();
   const number = useInput(REG_NUMBER, user?.number || "");
-  const [addressValue, setAddressValue] = useState(user?.address || "");
-  const addressDetail = useInput();
+  const [addressValue, setAddressValue] = useState(
+    addressArr ? addressArr[0] : ""
+  );
+  const addressDetail = useInput(undefined, addressArr ? addressArr[1] : "");
 
   useEffect(() => {
     const data = new FormData();
@@ -65,7 +70,7 @@ const UpdateForm = () => {
 
     let updateNumber = user.number;
     if (number.value !== "") {
-      if (!number.isvalid) {
+      if (!number.value.match(REG_NUMBER)) {
         alert("전화번호를 확인해주세요");
         return;
       }
@@ -75,15 +80,12 @@ const UpdateForm = () => {
     formData.append("password", updatePW);
     formData.append("nickname", nickname.value || user.nickname);
     formData.append("number", updateNumber);
-    formData.append(
-      "address",
-      `${addressValue} ${addressDetail.value}` || user.address
-    );
+    formData.append("address", `${addressValue}@%${addressDetail.value}`);
 
     try {
       authInstance.patch("/user/update", formData).then((res) => {
-        console.log(res);
         alert("회원정보가 수정되었습니다.");
+        router.push("/profile");
       });
     } catch (error) {
       throw new Error(`error: ${error}`);

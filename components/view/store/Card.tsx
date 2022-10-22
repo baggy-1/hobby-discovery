@@ -1,5 +1,6 @@
 import { css } from "@emotion/react";
 import { borderRadius } from "components/common/styles";
+import { mq } from "config/styles";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { KitItem } from "types";
@@ -60,4 +61,11 @@ const image = css({
   justifyContent: "center",
   alignItems: "center",
   overflow: "hidden",
+  width: "250px",
+  height: "300px",
+  scrollSnapAlign: "start",
+  [mq[1]]: {
+    width: "200px",
+    height: "250px",
+  },
 });
