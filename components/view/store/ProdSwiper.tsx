@@ -95,7 +95,7 @@ const chevronBox = (direction: "left" | "right") =>
     right: direction === "right" ? "0" : "auto",
     zIndex: "1",
     cursor: "pointer",
-    [mq[1]]: {
+    [mq[2]]: {
       display: "none",
     },
   });
@@ -104,8 +104,8 @@ const chevron = (direction: "left" | "right") =>
   css({
     position: "absolute",
     top: "50%",
-    left: direction === "left" ? "0" : "auto",
-    right: direction === "right" ? "0" : "auto",
+    left: direction === "left" ? "0" : "0",
+    right: direction === "right" ? "0" : "0",
     transform: `translateY(-50%) ${
       direction === "left" ? "rotate(90deg)" : "rotate(270deg)"
     }`,
@@ -123,6 +123,7 @@ const prodWrapper = css({
   gap: "1rem",
   overflowX: "hidden",
   justifyContent: "start",
+  maxWidth: "80rem",
   [mq[2]]: {
     width: "90%",
     overflowX: "auto",
