@@ -8,13 +8,23 @@ const Product = () => {
         <div css={textBox}>
           <h1 css={h1}>신상품</h1>
         </div>
-        <ProdSwiper />
+        <div css={prodBox}>
+          <ProdSwiper />
+        </div>
       </div>
     </>
   );
 };
 
 export default Product;
+
+const prodBox = css({
+  width: "100%",
+  height: "100%",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+});
 
 const h1 = css({
   fontSize: "2rem",

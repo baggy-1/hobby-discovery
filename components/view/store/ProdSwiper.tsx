@@ -124,7 +124,7 @@ const prodWrapper = css({
   overflowX: "hidden",
   justifyContent: "start",
   [mq[2]]: {
-    margin: "0 1rem",
+    width: "90%",
     overflowX: "auto",
     scrollSnapType: "x mandatory",
     scrollbarWidth: "none",
