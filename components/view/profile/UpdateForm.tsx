@@ -17,7 +17,7 @@ const defaultProfile = "/asset/image/default-profile.jpg";
 const UpdateForm = () => {
   const router = useRouter();
   const { user } = useUser();
-  const addressArr = user?.address.split("@%");
+  const addressArr = user?.address ? user.address.split("@%") : ["", ""];
   const [profile, setProfile] = useState(user?.profile || defaultProfile);
   const [formData, setFormData] = useState<FormData | null>(null);
   const nickname = useInput(undefined, user?.nickname || "");
@@ -68,7 +68,7 @@ const UpdateForm = () => {
       updatePW = password.value;
     }
 
-    let updateNumber = user.number;
+    let updateNumber = user.number || "";
     if (number.value !== "") {
       if (!number.value.match(REG_NUMBER)) {
         alert("전화번호를 확인해주세요");
@@ -77,10 +77,15 @@ const UpdateForm = () => {
       updateNumber = number.value;
     }
 
+    let updateAddress = user.address || "";
+    if (addressValue !== "") {
+      updateAddress = `${addressValue}@%${addressDetail.value}`;
+    }
+
     formData.append("password", updatePW);
     formData.append("nickname", nickname.value || user.nickname);
     formData.append("number", updateNumber);
-    formData.append("address", `${addressValue}@%${addressDetail.value}`);
+    formData.append("address", updateAddress);
 
     try {
       authInstance.patch("/user/update", formData).then((res) => {
