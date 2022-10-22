@@ -50,7 +50,8 @@ const LoginForm = () => {
             id="id"
             className="w-80 h-12 rounded bg-[#EBEBEB] cursor-text p-4"
             placeholder="아이디"
-            {...userId}
+            value={userId.value}
+            onChange={userId.onChange}
           />
         </div>
         <div className="flex items-center justify-between w-80">
@@ -59,7 +60,8 @@ const LoginForm = () => {
             id="password"
             className="w-80 h-12 rounded bg-[#EBEBEB] cursor-text p-4"
             placeholder="비밀번호"
-            {...userPw}
+            value={userPw.value}
+            onChange={userPw.onChange}
           />
         </div>
         <div css={Notice}>{notice}</div>

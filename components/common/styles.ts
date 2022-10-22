@@ -19,6 +19,7 @@ export const cursorPoint = css({
 export const container = css({
   width: "100%",
   height: "auto",
+  minHeight: "calc(100vh - 4rem - 5rem)",
   display: "flex",
   justifyContent: "center",
 });

@@ -13,6 +13,8 @@ const ProductDetailView = () => {
   const cartInfo = useContext(CartContext);
   const router = useRouter();
   const { id, prod } = router.query;
+  const { data: reviews } = useSWR(`/main/reviews/`);
+  console.log(reviews);
 
   const query: KitItem | null =
     typeof prod === "string" ? JSON.parse(prod) : null;

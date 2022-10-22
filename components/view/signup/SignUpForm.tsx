@@ -3,16 +3,20 @@ import { AxiosError } from "axios";
 import useInput from "hooks/useInput";
 import { useRouter } from "next/router";
 import { instance } from "config/instance";
+import { REG_ID, REG_PW } from "config/regexp";
+import { css } from "@emotion/react";
+import { mq } from "config/styles";
 
 const SignUpForm = () => {
   const router = useRouter();
   const [notice, setNotice] = useState("");
-  const userId = useInput(/^[a-zA-Z0-9]*$/gm);
-  const { value: valuePwFirst, onChange: onChangePwFirst } = useInput(
-    /^[a-zA-Z0-9~!@#$%^&*?]*$/gm
-  );
+  const userId = useInput(REG_ID);
+  const {
+    value: valuePwFirst,
+    onChange: onChangePwFirst,
+    isvalid: isvalidPwFirst,
+  } = useInput(REG_PW);
   const { value: valuePwSecond, onChange: onChangePwSecond } = useInput();
-  const nickname = useInput();
 
   const onSubmitSignUp = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -26,13 +30,23 @@ const SignUpForm = () => {
       return;
     }
 
-    if (valuePwFirst.length < 8) {
-      setNotice("비밀번호는 8자 이상 입력해주세요");
+    if (!userId.isvalid) {
+      setNotice(
+        `아이디는 영문자와 숫자만 입력 가능합니다
+        (8~24자)`
+      );
+      return;
+    }
+
+    if (!isvalidPwFirst) {
+      setNotice(
+        "비밀번호는 영소문자, 대문자, 숫자, 특수문자 조합입니다 (8자 이상)"
+      );
       return;
     }
 
     if (valuePwFirst !== valuePwSecond) {
-      setNotice("비밀번호가 서로 달라요");
+      setNotice("비밀번호가 서로 다릅니다");
       return;
     }
 
@@ -68,40 +82,41 @@ const SignUpForm = () => {
   };
 
   return (
-    <form
-      className="flex flex-col items-center justify-center font-bold"
-      onSubmit={onSubmitSignUp}
-    >
-      <div className="flex items-center justify-between mb-6 w-80">
+    <form css={formWrapper} onSubmit={onSubmitSignUp}>
+      <div css={InputBox}>
+        <label>아이디</label>
         <input
           type="text"
           id="id"
-          className="w-80 h-12 rounded bg-[#EBEBEB] cursor-text p-4"
-          placeholder="아이디"
-          {...userId}
+          css={[Input]}
+          placeholder="영문, 숫자 조합 8~24자"
+          value={userId.value}
+          onChange={userId.onChange}
         />
       </div>
-      <div className="flex items-center justify-between mb-6 w-80">
+      <div css={InputBox}>
+        <label>비밀번호</label>
         <input
           type="password"
           id="password"
-          className="w-80 h-12 rounded bg-[#EBEBEB] cursor-text p-4"
-          placeholder="비밀번호"
+          css={[Input]}
+          placeholder="영소문자, 대문자, 숫자, 특수문자 조합 8자리 이상"
           value={valuePwFirst}
           onChange={onChangePwFirst}
         />
       </div>
-      <div className="flex items-center justify-between mb-4 w-80">
+      <div css={InputBox}>
+        <label>비밀번호 확인</label>
         <input
           type="password"
           id="passwordCheck"
-          className="w-80 h-12 rounded bg-[#EBEBEB] cursor-text p-4"
-          placeholder="비밀번호 확인"
+          css={[Input]}
+          placeholder="영소문자, 대문자, 숫자, 특수문자 조합 8자리 이상"
           value={valuePwSecond}
           onChange={onChangePwSecond}
         />
       </div>
-      <div className="w-full h-auto min-h-[2rem] flex justify-center items-center text-red-500">
+      <div className="w-full h-auto min-h-[2rem] flex justify-center items-center text-red-500 mb-6">
         {notice}
       </div>
       <button
@@ -116,21 +131,41 @@ const SignUpForm = () => {
 
 export default SignUpForm;
 
-// file form data
-// const [formData, setFormData] = useState<FormData | null>(null);
+export const Input = css({
+  width: "16.4rem",
+  height: "3rem",
+  borderRadius: "0.25rem",
+  backgroundColor: "#EBEBEB",
+  cursor: "text",
+  padding: "0 1rem",
+  fontSize: "1rem",
+  "&::placeholder": {
+    fontSize: "0.75rem",
+  },
+  [mq[1]]: {
+    width: "14rem",
+  },
+});
 
-// const onChangeFile = (event: ChangeEvent<HTMLInputElement>) => {
-//     const { files } = event.currentTarget;
-//     if (files) {
-//       formData?.append("profile", files[0]);
-//     }
-//   };
+export const InputBox = css({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  width: "100%",
+  height: "3rem",
+  [mq[1]]: {
+    padding: "0 1rem",
+  },
+});
 
-// formData?.append("username", userId.value);
-// formData?.append("password", valuePwFirst);
-// formData?.append("nickname", nickname.value || `익명#${Date.now()}`);
-
-// useEffect(() => {
-//     const data = new FormData();
-//     setFormData(data);
-//   }, []);
+export const formWrapper = css({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  fontWeight: "700",
+  gap: "1rem",
+  width: "100%",
+  height: "auto",
+  maxWidth: "24rem",
+});

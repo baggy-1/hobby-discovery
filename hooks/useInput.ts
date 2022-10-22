@@ -2,6 +2,8 @@ import { useState } from "react";
 
 const useInput = (vaild?: RegExp, initValue?: string) => {
   const [value, setValue] = useState(initValue || "");
+  const [isvalid, setIsvalid] = useState(false);
+
   const onChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -10,15 +12,18 @@ const useInput = (vaild?: RegExp, initValue?: string) => {
     } = event;
 
     if (vaild) {
-      if (vaild.test(value)) {
-        setValue(value);
+      setValue(value);
+      if (value.match(vaild)) {
+        setIsvalid(true);
+      } else {
+        setIsvalid(false);
       }
     } else {
       setValue(value);
     }
   };
 
-  return { value, onChange };
+  return { value, onChange, isvalid };
 };
 
 export default useInput;

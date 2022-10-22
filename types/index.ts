@@ -16,10 +16,12 @@ export interface Comment {
 
 export interface User {
   id: number;
-  nickname: string;
-  password: string;
-  profile: string | null;
   username: string;
+  password: string;
+  nickname: string;
+  profile: string;
+  number: string;
+  address: string;
 }
 
 interface Image {
@@ -28,7 +30,7 @@ interface Image {
 }
 
 export interface KitItem {
-  pd_id: number;
+  pd_id: string;
   pd_create: string;
   pd_descrition: string;
   pd_info: string; // 제품 추가 정보
@@ -50,4 +52,42 @@ export type AddNull<T> = {
 export interface Cart {
   kitItem: KitItem;
   count: number;
+}
+
+export interface DaumPostCodeData {
+  zonecode: string;
+  address: string;
+  addressEnglish: string;
+  addressType: "R" | "J";
+  userSelectedType: "R" | "J";
+  noSelected: "Y" | "N";
+  userLanguageType: "K" | "E";
+  roadAddress: string;
+  roadAddressEnglish: string;
+  jibunAddress: string;
+  jibunAddressEnglish: string;
+  autoRoadAddress: string;
+  autoRoadAddressEnglish: string;
+  autoJibunAddress: string;
+  autoJibunAddressEnglish: string;
+  buildingCode: string;
+  buildingName: string;
+  apartment: "Y" | "N";
+  sido: string;
+  sidoEnglish: string;
+  sigungu: string;
+  sigunguEnglish: string;
+  sigunguCode: string;
+  roadnameCode: string;
+  bcode: string;
+  roadname: string;
+  roadnameEnglish: string;
+  bname: string;
+  bnameEnglish: string;
+  bname1: string;
+  bname1English: string;
+  bname2: string;
+  bname2English: string;
+  hname: string;
+  query: string;
 }

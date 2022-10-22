@@ -20,7 +20,7 @@ const CartItem = ({ cartItem, dispatch }: Props) => {
   const { pd_id, pd_price, images, pd_title, pd_descrition } = kitItem;
   const defaultImage = "/asset/image/main-image.png";
 
-  const onClickDetail = (id: number) => () => {
+  const onClickDetail = (id: string) => () => {
     router.push(`/store/product/${id}`);
   };
 
