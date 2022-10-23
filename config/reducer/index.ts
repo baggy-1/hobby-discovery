@@ -6,6 +6,7 @@ const CART_ACTION_TYPE = {
   DEL: "DEL",
   DEC: "DEC",
   RESET: "RESET",
+  CHECK: "CHECK",
 } as const;
 
 interface InitAction {
@@ -32,12 +33,18 @@ interface DelAction {
   kitItem: KitItem;
 }
 
+interface CheckAction {
+  type: "CHECK";
+  kitItem: KitItem;
+}
+
 export type CartAction =
   | InitAction
   | AddAction
   | ResetAction
   | DecAction
-  | DelAction;
+  | DelAction
+  | CheckAction;
 
 const cartReducer = (state: Cart[], action: CartAction) => {
   const localCart = localStorage.getItem("cart");
@@ -64,6 +71,7 @@ const cartReducer = (state: Cart[], action: CartAction) => {
           const cartInfo = {
             kitItem: action.kitItem,
             count: 1,
+            checked: true,
           };
 
           newCart = [...prevCart, cartInfo];
@@ -75,6 +83,7 @@ const cartReducer = (state: Cart[], action: CartAction) => {
         const cartInfo = {
           kitItem: action.kitItem,
           count: 1,
+          checked: true,
         };
 
         const newCart = [cartInfo];
@@ -100,7 +109,7 @@ const cartReducer = (state: Cart[], action: CartAction) => {
         return exist;
       });
 
-      const newCart: Cart[] = [...prevCart];
+      const newCart = [...prevCart];
       localStorage.setItem("cart", JSON.stringify(newCart));
 
       return newCart;
@@ -112,6 +121,21 @@ const cartReducer = (state: Cart[], action: CartAction) => {
 
       localStorage.setItem("cart", JSON.stringify(delCart));
       return delCart;
+
+    case CART_ACTION_TYPE.CHECK:
+      prevCart.find((item: Cart) => {
+        const exist = item.kitItem.pd_id === action.kitItem.pd_id;
+        if (exist) {
+          item.checked = !item.checked;
+        }
+
+        return exist;
+      });
+
+      const checkCart = [...prevCart];
+      localStorage.setItem("cart", JSON.stringify(checkCart));
+
+      return checkCart;
 
     default:
       throw new Error("Invalid action type");

@@ -29,3 +29,17 @@ export const maxWidthWrapper = css({
   maxWidth: "80rem",
   height: "100%",
 });
+
+export const gap = (gap: string) =>
+  css({
+    display: "flex",
+    flexDirection: "column",
+    gap,
+  });
+
+export const Text = (fontSize: string, fontWeight: string, color: string) =>
+  css({
+    fontSize,
+    fontWeight,
+    color,
+  });

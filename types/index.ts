@@ -52,6 +52,7 @@ export type AddNull<T> = {
 export interface Cart {
   kitItem: KitItem;
   count: number;
+  checked: boolean;
 }
 
 export interface DaumPostCodeData {
