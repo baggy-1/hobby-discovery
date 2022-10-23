@@ -119,17 +119,35 @@ const ProductDetailView = () => {
           </div>
           <div css={descSection}>
             <div css={detailNav}>
-              <div css={navTap(currentTap === 0)}>상품정보</div>
-              <div css={navTap(currentTap === 1)}>구매후기</div>
+              <div
+                css={navTap(currentTap === 0)}
+                onClick={() => router.push("#sectionInfo")}
+              >
+                상품정보
+              </div>
+              <div
+                css={navTap(currentTap === 1)}
+                onClick={() => router.push("#sectionReview")}
+              >
+                구매후기
+              </div>
             </div>
-            <section css={imageDesc} ref={addRef(refArr, 0)}>
+            <section
+              css={[imageDesc, PaddingTop("8rem")]}
+              ref={addRef(refArr, 0)}
+              id="sectionInfo"
+            >
               <div css={[TapTitle, Center("row")]}>상품정보</div>
               <img
                 src={images[0].pd_image || defaultImage}
                 alt={"product-description"}
               />
             </section>
-            <section css={reviewSection} ref={addRef(refArr, 1)}>
+            <section
+              css={[reviewSection, PaddingTop("8rem")]}
+              ref={addRef(refArr, 1)}
+              id="sectionReview"
+            >
               <div css={[TapTitle, Center("row")]}>구매후기</div>
               <div>
                 {reviews?.map((review: Review) => (
@@ -145,6 +163,11 @@ const ProductDetailView = () => {
 };
 
 export default ProductDetailView;
+
+const PaddingTop = (paddingTop: string) =>
+  css({
+    paddingTop,
+  });
 
 const reviewSection = css({
   width: "100%",
@@ -170,6 +193,7 @@ const navTap = (currentTap: boolean) =>
     fontSize: "1.2rem",
     fontWeight: "700",
     color: currentTap ? MAIN_COLOR : "#000000",
+    cursor: "pointer",
   });
 
 const detailNav = css({
