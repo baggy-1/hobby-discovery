@@ -92,3 +92,15 @@ export interface DaumPostCodeData {
   hname: string;
   query: string;
 }
+
+export interface Review {
+  body: string;
+  create_time: string;
+  grade: number;
+  hobby_rv: number;
+  id: number;
+  images: Image[];
+  title: string;
+  update_time: string;
+  user: number;
+}

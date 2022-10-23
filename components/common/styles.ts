@@ -25,11 +25,20 @@ export const container = css({
   justifyContent: "center",
 });
 
-export const maxWidthWrapper = css({
-  width: "100%",
-  maxWidth: "80rem",
-  height: "100%",
-});
+export const maxWidthWrapper = (maxWidth: string) =>
+  css({
+    width: "100%",
+    maxWidth,
+    height: "100%",
+  });
+
+export const Center = (flexDirection: "column" | "row") =>
+  css({
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection,
+  });
 
 export const gap = (gap: string) =>
   css({

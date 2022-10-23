@@ -1,38 +1,66 @@
 import { css } from "@emotion/react";
-import { container, maxWidthWrapper } from "components/common/styles";
+import { Center, container, maxWidthWrapper } from "components/common/styles";
 import Seo from "components/Seo";
 import { CartContext } from "config/context";
 import { MAIN_COLOR, mq } from "config/styles";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Close from "public/asset/svg/Close";
-import { useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import useSWR from "swr";
-import { KitItem } from "types";
+import { KitItem, Review } from "types";
+import addRef from "util/addRef";
+import ReviewCard from "components/view/store/product/ReviewCard";
 
 const ProductDetailView = () => {
   const cartInfo = useContext(CartContext);
   const router = useRouter();
   const { id, prod } = router.query;
   const [isCartBack, setIsCartBack] = useState(false);
-  // const { data: reviews } = useSWR(`/main/reviews/`);
+  const refArr = useRef<HTMLElement[]>([]);
+  const [currentTap, setCurrentTap] = useState(0);
+
+  const handelScroll = useCallback(
+    (refArr: HTMLElement[]) => () => {
+      refArr.forEach((ref, index) => {
+        const { top, height } = ref.getBoundingClientRect();
+        const topValue = top - 64 - 48;
+        const isCurrentTap = topValue <= 0 && topValue + height >= 0;
+        if (isCurrentTap) {
+          setCurrentTap((prev) => {
+            if (prev === index) {
+              return prev;
+            }
+            return index;
+          });
+        }
+
+        return;
+      });
+    },
+    []
+  );
+
+  useEffect(() => {
+    const refarr = refArr.current;
+    window.addEventListener("scroll", handelScroll(refarr));
+
+    return () => {
+      window.removeEventListener("scroll", handelScroll(refarr));
+    };
+  }, [handelScroll]);
 
   const query: KitItem | null =
     typeof prod === "string" ? JSON.parse(prod) : null;
   const { data, error } = useSWR<KitItem>(query ? null : `/main/${id}`);
+  const { data: reviews } = useSWR<Review[]>(`/main/${id}/reviews`);
+
   const kitItem = query || data;
   if (!kitItem && error) return <div>상품 정보가 없습니다</div>;
   if (!kitItem) return <div>로딩중...</div>;
 
-  const {
-    pd_title,
-    pd_descrition,
-    pd_create,
-    pd_info,
-    pd_price,
-    pd_sell,
-    images,
-  } = kitItem;
+  const { pd_title, pd_descrition, pd_info, pd_price, pd_sell, images } =
+    kitItem;
 
   const defaultImage = "/asset/image/main-image.png";
 
@@ -45,7 +73,7 @@ const ProductDetailView = () => {
     <>
       <Seo />
       <div css={container}>
-        <div css={[maxWidthWrapper]}>
+        <div css={[maxWidthWrapper("100%"), Center("column")]}>
           <div css={topWrapper}>
             <div css={imageWrapper}>
               <Image
@@ -90,12 +118,25 @@ const ProductDetailView = () => {
             </div>
           </div>
           <div css={descSection}>
-            <div css={imageDesc}>
+            <div css={detailNav}>
+              <div css={navTap(currentTap === 0)}>상품정보</div>
+              <div css={navTap(currentTap === 1)}>구매후기</div>
+            </div>
+            <section css={imageDesc} ref={addRef(refArr, 0)}>
+              <div css={[TapTitle, Center("row")]}>상품정보</div>
               <img
                 src={images[0].pd_image || defaultImage}
                 alt={"product-description"}
               />
-            </div>
+            </section>
+            <section css={reviewSection} ref={addRef(refArr, 1)}>
+              <div css={[TapTitle, Center("row")]}>구매후기</div>
+              <div>
+                {reviews?.map((review: Review) => (
+                  <ReviewCard key={review.id} review={review} />
+                ))}
+              </div>
+            </section>
           </div>
         </div>
       </div>
@@ -104,6 +145,47 @@ const ProductDetailView = () => {
 };
 
 export default ProductDetailView;
+
+const reviewSection = css({
+  width: "100%",
+  height: "100vh",
+});
+
+const TapTitle = css({
+  width: "100%",
+  height: "auto",
+  fontSize: "2rem",
+  fontWeight: "700",
+  padding: "1rem 0",
+});
+
+const navTap = (currentTap: boolean) =>
+  css({
+    width: "15rem",
+    height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderBottom: currentTap ? `3px solid ${MAIN_COLOR}` : "none",
+    fontSize: "1.2rem",
+    fontWeight: "700",
+    color: currentTap ? MAIN_COLOR : "#000000",
+  });
+
+const detailNav = css({
+  zIndex: "10",
+  position: "sticky",
+  top: "4rem",
+  left: "0",
+  backgroundColor: "#FFFFFF",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  width: "100%",
+  height: "3rem",
+  borderTop: "0.5rem solid #D9D9D9",
+  borderBottom: "1px solid #D9D9D9",
+});
 
 const close = css({
   position: "absolute",
@@ -150,9 +232,12 @@ const imageDesc = css({
   width: "100%",
   height: "auto",
   position: "relative",
-  display: " flex",
+  display: "flex",
+  flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
+  borderBottom: "0.5rem solid #D9D9D9",
+  paddingBottom: "2rem",
 });
 
 const button = (backgroundColor: string, color: string) =>
@@ -219,6 +304,8 @@ const topWrapper = css({
   justifyContent: "center",
   width: "100%",
   height: "100%",
+  maxWidth: "80rem",
+  padding: "3rem 0",
   [mq[2]]: {
     flexDirection: "column",
     alignItems: "center",
@@ -227,8 +314,9 @@ const topWrapper = css({
 
 const descSection = css({
   width: "100%",
-  height: "100%",
-  padding: "4rem",
+  height: "auto",
+  display: "flex",
+  flexDirection: "column",
   [mq[2]]: {
     padding: "0",
   },

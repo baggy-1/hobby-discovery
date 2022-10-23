@@ -23,7 +23,7 @@ const CartView = () => {
     <>
       <Seo />
       <div css={container}>
-        <div css={[maxWidthWrapper, gap("2rem")]}>
+        <div css={[maxWidthWrapper("100%"), gap("2rem")]}>
           <div css={header}>장바구니</div>
           {cartInfo?.state.length !== 0 ? (
             <div css={itemWrapper}>
