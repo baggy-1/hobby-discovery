@@ -9,7 +9,6 @@ const SignUpView = () => {
   const router = useRouter();
 
   if (user) {
-    console.log(user);
     router.replace("/store");
   }
 
