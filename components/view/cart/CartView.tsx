@@ -9,7 +9,7 @@ import Seo from "components/Seo";
 import { CartContext } from "config/context";
 import { useContext } from "react";
 import CartItem from "components/view/cart/CartItem";
-import { MAIN_COLOR } from "config/styles";
+import { MAIN_COLOR, mq } from "config/styles";
 import { useRouter } from "next/router";
 
 const CartView = () => {
@@ -92,6 +92,12 @@ const buyButton = (able: boolean) =>
     fontWeight: "500",
     borderRadius: "0.25rem",
     cursor: able ? "pointer" : "not-allowed",
+    [mq[1]]: {
+      width: "90%",
+      maxWidth: "25rem",
+      fontSize: "1.25rem",
+      fontWeight: "700",
+    },
   });
 
 const footerBox = css({
@@ -101,6 +107,11 @@ const footerBox = css({
   width: "100%",
   height: "8rem",
   maxWidth: "50rem",
+  [mq[1]]: {
+    flexDirection: "column",
+    justifyContent: "center",
+    gap: "1rem",
+  },
 });
 
 const footer = css({
@@ -125,6 +136,6 @@ const itemWrapper = css({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  justifyContent: "center",
+  justifyContent: "start",
   gap: "2rem",
 });

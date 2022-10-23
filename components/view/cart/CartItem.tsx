@@ -1,6 +1,12 @@
 import { css } from "@emotion/react";
-import { borderRadius, cursorPoint, Text } from "components/common/styles";
+import {
+  borderRadius,
+  cursorPoint,
+  MobileDisplayNone,
+  Text,
+} from "components/common/styles";
 import { CartAction } from "config/reducer";
+import { mq } from "config/styles";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Close from "public/asset/svg/Close";
@@ -54,10 +60,7 @@ const CartItem = ({ cartItem, dispatch }: Props) => {
               checked={checked}
               onChange={onClickCheck(kitItem)}
             />
-            <label
-              htmlFor={`checkbox${pd_id}`}
-              // onClick={onClickCheck(kitItem)}
-            ></label>
+            <label htmlFor={`checkbox${pd_id}`}></label>
           </div>
           {images[0] && (
             <div
@@ -75,15 +78,22 @@ const CartItem = ({ cartItem, dispatch }: Props) => {
           )}
         </div>
         <div css={titleBox}>
-          <div css={Text("0.9rem", "500", "#8E8E8E")}>{pd_sell}</div>
+          <div css={[Text("0.9rem", "500", "#8E8E8E"), MobileDisplayNone]}>
+            {pd_sell}
+          </div>
           <div
             onClick={onClickDetail(pd_id)}
             css={[cursorPoint, Text("1.25rem", "700", "#000000")]}
           >
             {pd_title}
           </div>
-          <div css={Text("0.75rem", "500", "#8E8E8E")}>{pd_descrition}</div>
+          <div css={[Text("0.75rem", "500", "#8E8E8E"), MobileDisplayNone]}>
+            {pd_descrition}
+          </div>
         </div>
+        <button onClick={onClickDel(kitItem)} css={[MobDelButton]}>
+          <Close />
+        </button>
       </div>
       <div css={rightBox}>
         <div css={priceBox}>
@@ -100,7 +110,10 @@ const CartItem = ({ cartItem, dispatch }: Props) => {
             <button onClick={onClickAdd(kitItem)} css={button}>{`+`}</button>
           </div>
         </div>
-        <button onClick={onClickDel(kitItem)} css={delButton}>
+        <button
+          onClick={onClickDel(kitItem)}
+          css={[delButton, MobileDisplayNone]}
+        >
           <Close />
         </button>
       </div>
@@ -110,13 +123,29 @@ const CartItem = ({ cartItem, dispatch }: Props) => {
 
 export default CartItem;
 
+const MobDelButton = css({
+  display: "none",
+  [mq[1]]: {
+    position: "absolute",
+    top: "0",
+    right: "0",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "2.5rem",
+    height: "2.5rem",
+  },
+});
+
 const delButton = css({
   width: "2.5rem",
   height: "2.5rem",
 });
 
 const Count = css({
-  width: "1.5rem",
+  width: "auto",
+  padding: "0 10px",
+  minWidth: "1.5rem",
   height: "1.5rem",
   textAlign: "center",
   border: "1px solid #000000",
@@ -168,18 +197,30 @@ const checkbox = css({
     color: "#000000",
     fontSize: "1.5rem",
     fontWeight: "500",
-    width: "2rem",
-    height: "2rem",
+    width: "100%",
+    height: "100%",
     textAlign: "center",
     position: "absolute",
     top: "0",
     left: "0",
+    [mq[1]]: {
+      fontSize: "1.25rem",
+      top: "-0.25rem",
+    },
+  },
+  [mq[1]]: {
+    width: "1.5rem",
+    height: "1.5rem",
   },
 });
 
 const image = css({
   width: "150px",
   height: "150px",
+  [mq[1]]: {
+    width: "100px",
+    height: "100px",
+  },
 });
 
 const leftWrapper = css({
@@ -189,6 +230,8 @@ const leftWrapper = css({
 });
 
 const leftBox = css({
+  position: "relative",
+  width: "100%",
   display: "flex",
   gap: "1rem",
 });
@@ -196,12 +239,14 @@ const leftBox = css({
 const priceBox = css({
   textAlign: "center",
   gap: "1rem",
-  height: "100%",
 });
 
 const titleBox = css({
   width: "auto",
   height: "100%",
+  [mq[1]]: {
+    width: "9rem",
+  },
 });
 
 const wrapper = css({
@@ -212,6 +257,14 @@ const wrapper = css({
   width: "100%",
   maxWidth: "60rem",
   height: "100%",
+  [mq[1]]: {
+    flexDirection: "column",
+    paddingBottom: "1rem",
+    alignItems: "flex-start",
+    gap: "1rem",
+    overflowX: "hidden",
+    padding: "0 1rem",
+  },
 });
 
 const button = css({
@@ -227,7 +280,12 @@ const button = css({
 
 const rightBox = css({
   display: "flex",
-  justifyContent: "center",
+  justifyContent: "end",
   alignItems: "end",
   gap: "2rem",
+  width: "100%",
+  [mq[1]]: {
+    alignItems: "center",
+    paddingRight: "1rem",
+  },
 });

@@ -1,4 +1,5 @@
 import { css } from "@emotion/react";
+import { mq } from "config/styles";
 
 export const borderRadius = (radius: string) =>
   css({
@@ -43,3 +44,9 @@ export const Text = (fontSize: string, fontWeight: string, color: string) =>
     fontWeight,
     color,
   });
+
+export const MobileDisplayNone = css({
+  [mq[1]]: {
+    display: "none",
+  },
+});
