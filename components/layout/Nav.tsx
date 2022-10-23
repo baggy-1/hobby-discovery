@@ -1,8 +1,10 @@
 import { css } from "@emotion/react";
+import { HeadersDefaults } from "axios";
 import Cart from "components/common/Cart";
 import Profile from "components/common/Profile";
 import { CartContext } from "config/context";
 import navLink from "config/data/navLink";
+import { authInstance } from "config/instance";
 import { mq } from "config/styles";
 import useUser from "hooks/useUser";
 import Image from "next/image";
@@ -12,6 +14,10 @@ import Hamburger from "public/asset/svg/Hamburger";
 import { useContext, useState } from "react";
 import { useSWRConfig } from "swr";
 import { deleteCookie } from "util/cookie";
+
+type AddProps<T, U> = T & { [P in keyof U]: U[P] };
+type Auth = { Authorization: string };
+type Headers = AddProps<HeadersDefaults, Auth>;
 
 const Nav = () => {
   const cartInfo = useContext(CartContext);
@@ -35,6 +41,11 @@ const Nav = () => {
     deleteCookie("_hobby_rt");
     deleteCookie("_hobby_ae");
     deleteCookie("_hobby_at");
+    const headers: Headers = {
+      ...authInstance.defaults.headers,
+      Authorization: "",
+    };
+    headers["Authorization"] = "";
     localStorage.removeItem("cart");
     cartInfo?.dispatch({ type: "RESET" });
 
