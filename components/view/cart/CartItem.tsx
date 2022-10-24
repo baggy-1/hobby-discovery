@@ -32,8 +32,8 @@ const CartItem = ({ cartItem, dispatch }: Props) => {
     router.push(`/store/product/${id}`);
   };
 
-  const onClickAdd = (kitItem: KitItem) => () => {
-    dispatch({ type: "ADD", kitItem });
+  const onClickInc = (kitItem: KitItem) => () => {
+    dispatch({ type: "INC", kitItem });
   };
 
   const onClickDec = (kitItem: KitItem) => () => {
@@ -107,7 +107,7 @@ const CartItem = ({ cartItem, dispatch }: Props) => {
           <div css={CountBox}>
             <button onClick={onClickDec(kitItem)} css={button}>{`-`}</button>
             <div css={Count}>{count}</div>
-            <button onClick={onClickAdd(kitItem)} css={button}>{`+`}</button>
+            <button onClick={onClickInc(kitItem)} css={button}>{`+`}</button>
           </div>
         </div>
         <button

@@ -59,3 +59,14 @@ export const MobileDisplayNone = css({
     display: "none",
   },
 });
+
+export const WidthHeight = (width: string, height: string) =>
+  css({
+    width,
+    height,
+  });
+
+export const Position = (position: "absolute" | "relative" | "static") =>
+  css({
+    position,
+  });

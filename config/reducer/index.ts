@@ -2,6 +2,7 @@ import { Cart, KitItem } from "types";
 
 const CART_ACTION_TYPE = {
   ADD: "ADD",
+  INC: "INC",
   INIT: "INIT",
   DEL: "DEL",
   DEC: "DEC",
@@ -9,38 +10,44 @@ const CART_ACTION_TYPE = {
   CHECK: "CHECK",
 } as const;
 
+interface AddAction {
+  type: typeof CART_ACTION_TYPE.ADD;
+  cart: Cart;
+}
+
 interface InitAction {
-  type: "INIT";
+  type: typeof CART_ACTION_TYPE.INIT;
   cartList: Cart[];
 }
 
-interface AddAction {
-  type: "ADD";
+interface IncAction {
+  type: typeof CART_ACTION_TYPE.INC;
   kitItem: KitItem;
 }
 
 interface ResetAction {
-  type: "RESET";
+  type: typeof CART_ACTION_TYPE.RESET;
 }
 
 interface DecAction {
-  type: "DEC";
+  type: typeof CART_ACTION_TYPE.DEC;
   kitItem: KitItem;
 }
 
 interface DelAction {
-  type: "DEL";
+  type: typeof CART_ACTION_TYPE.DEL;
   kitItem: KitItem;
 }
 
 interface CheckAction {
-  type: "CHECK";
+  type: typeof CART_ACTION_TYPE.CHECK;
   kitItem: KitItem;
 }
 
 export type CartAction =
-  | InitAction
   | AddAction
+  | InitAction
+  | IncAction
   | ResetAction
   | DecAction
   | DelAction
@@ -52,6 +59,18 @@ const cartReducer = (state: Cart[], action: CartAction) => {
 
   switch (action.type) {
     case CART_ACTION_TYPE.ADD:
+      const find = prevCart.find(
+        (cart) => cart.kitItem.pd_id === action.cart.kitItem.pd_id
+      );
+
+      if (find) return [...prevCart];
+
+      const addCart = [...prevCart, action.cart];
+      localStorage.setItem("cart", JSON.stringify(addCart));
+
+      return addCart;
+
+    case CART_ACTION_TYPE.INC:
       if (prevCart.length !== 0) {
         const find = prevCart.find((item: Cart) => {
           const exist = item.kitItem.pd_id === action.kitItem.pd_id;

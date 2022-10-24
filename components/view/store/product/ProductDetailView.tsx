@@ -3,7 +3,9 @@ import {
   Center,
   container,
   maxWidthWrapper,
+  Position,
   Text,
+  WidthHeight,
 } from "components/common/styles";
 import Seo from "components/Seo";
 import { CartContext } from "config/context";
@@ -11,25 +13,13 @@ import { MAIN_COLOR, mq } from "config/styles";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Close from "public/asset/svg/Close";
-import {
-  ChangeEvent,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import useSWR from "swr";
-import { KitItem, Review } from "types";
+import { Cart, KitItem, Review } from "types";
 import addRef from "util/addRef";
 import ReviewCard from "components/view/store/product/ReviewCard";
 import Star from "public/asset/svg/Star";
 import Chevron from "public/asset/svg/Chevron";
-
-interface ResultKitItem {
-  kitItem: KitItem;
-  count: number;
-}
 
 const ProductDetailView = () => {
   const cartInfo = useContext(CartContext);
@@ -41,7 +31,8 @@ const ProductDetailView = () => {
   const [reviewOpen, setReviewOpen] = useState(false);
   const [optionOpen, setOptionOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [resultKitItem, setResultKitItem] = useState<ResultKitItem[]>([]);
+  const [resultKitItem, setResultKitItem] = useState<Cart[]>([]);
+  const [selectBoxOpen, setSelectBoxOpen] = useState(false);
 
   const handelScroll = useCallback(
     (refArr: HTMLElement[]) => () => {
@@ -117,44 +108,44 @@ const ProductDetailView = () => {
   const defaultImage = "/asset/image/main-image.png";
 
   const onClickCart = () => {
-    if (isMobile) {
+    if (isMobile && !optionOpen) {
       setOptionOpen(true);
+      return;
     } else {
-      cartInfo?.dispatch({ type: "ADD", kitItem });
-      setIsCartBack(true);
+      resultKitItem.forEach((item) => {
+        cartInfo?.dispatch({ type: "ADD", cart: item });
+        setIsCartBack(true);
+      });
     }
   };
 
-  const onChangeSelect = (event: ChangeEvent<HTMLSelectElement>) => {
-    const { value } = event.currentTarget;
-    if (value === "") return;
-
+  const onClickSelect = (value: string) => () => {
+    setSelectBoxOpen(false);
     const exist = resultKitItem.find((item) => item.kitItem.pd_title === value);
 
     if (exist) return;
 
     setResultKitItem((prev) => {
-      return [...prev, { kitItem, count: 1 }];
+      return [...prev, { kitItem, count: 1, checked: true }];
     });
   };
 
-  const onClickCount =
-    (type: "ADD" | "DESC" | "DEL", item: ResultKitItem) => () => {
-      setResultKitItem((prev) => {
-        const index = prev.findIndex((prevItem) => prevItem === item);
-        if (index === -1) return prev;
+  const onClickCount = (type: "ADD" | "DESC" | "DEL", item: Cart) => () => {
+    setResultKitItem((prev) => {
+      const index = prev.findIndex((prevItem) => prevItem === item);
+      if (index === -1) return prev;
 
-        if (type === "ADD") {
-          prev[index].count++;
-        } else if (type === "DESC" && prev[index].count > 1) {
-          prev[index].count--;
-        } else if (type === "DEL") {
-          prev.splice(index, 1);
-        }
+      if (type === "ADD") {
+        prev[index].count++;
+      } else if (type === "DESC" && prev[index].count > 1) {
+        prev[index].count--;
+      } else if (type === "DEL") {
+        prev.splice(index, 1);
+      }
 
-        return [...prev];
-      });
-    };
+      return [...prev];
+    });
+  };
 
   return (
     <>
@@ -185,15 +176,36 @@ const ProductDetailView = () => {
               <div css={optionWrapper(optionOpen)}>
                 {(!isMobile || (isMobile && optionOpen)) && (
                   <>
-                    {isMobile && (
-                      <div css={chevron} onClick={() => setOptionOpen(false)}>
-                        <Chevron />
+                    <div css={WidthHeight("100%", "auto")}>
+                      {isMobile && (
+                        <div css={chevron} onClick={() => setOptionOpen(false)}>
+                          <Chevron />
+                        </div>
+                      )}
+                      <div
+                        css={[
+                          WidthHeight("100%", "auto"),
+                          Position("relative"),
+                        ]}
+                      >
+                        <button
+                          css={selectBox}
+                          onClick={() => setSelectBoxOpen((prev) => !prev)}
+                        >
+                          상품 선택
+                        </button>
+                        {selectBoxOpen && (
+                          <div css={[selectBoxOpenWrapper]}>
+                            <span
+                              css={selectBoxOpenBox}
+                              onClick={onClickSelect(pd_title)}
+                            >
+                              {pd_title}
+                            </span>
+                          </div>
+                        )}
                       </div>
-                    )}
-                    <select onChange={onChangeSelect} css={selectBox}>
-                      <option value="">상품 선택</option>
-                      <option value={pd_title}>{pd_title}</option>
-                    </select>
+                    </div>
                     {resultKitItem.map((item) => (
                       <div key={item.kitItem.pd_id} css={optionBox}>
                         <div css={closeBox} onClick={onClickCount("DEL", item)}>
@@ -222,6 +234,10 @@ const ProductDetailView = () => {
                         </div>
                       </div>
                     ))}
+                  </>
+                )}
+                <div css={WidthHeight("100%", "auto")}>
+                  {optionOpen && (
                     <div css={totalPriceBox}>
                       <span>총 상품 금액</span>
                       <span>{`${resultKitItem
@@ -231,32 +247,32 @@ const ProductDetailView = () => {
                         )
                         .toLocaleString("ko-KR")}원`}</span>
                     </div>
-                  </>
-                )}
-                <div css={buttonBox}>
-                  <div css={CartBox}>
-                    <button
-                      css={button("#FFFFFF", MAIN_COLOR)}
-                      onClick={onClickCart}
-                    >
-                      장바구니 담기
-                    </button>
-                    {isCartBack && (
-                      <div css={cartBackInfo}>
-                        장바구니에
-                        <br /> 상품이 담겼습니다
-                        <div css={close} onClick={() => setIsCartBack(false)}>
-                          <Close />
+                  )}
+                  <div css={buttonBox}>
+                    <div css={CartBox}>
+                      <button
+                        css={button("#FFFFFF", MAIN_COLOR)}
+                        onClick={onClickCart}
+                      >
+                        장바구니 담기
+                      </button>
+                      {isCartBack && (
+                        <div css={cartBackInfo}>
+                          장바구니에
+                          <br /> 상품이 담겼습니다
+                          <div css={close} onClick={() => setIsCartBack(false)}>
+                            <Close />
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
+                    <button
+                      css={button(MAIN_COLOR, "#FFFFFF")}
+                      onClick={() => router.push("/order")}
+                    >
+                      바로구매
+                    </button>
                   </div>
-                  <button
-                    css={button(MAIN_COLOR, "#FFFFFF")}
-                    onClick={() => router.push("/order")}
-                  >
-                    바로구매
-                  </button>
                 </div>
               </div>
             </div>
@@ -353,6 +369,34 @@ const ProductDetailView = () => {
 
 export default ProductDetailView;
 
+const selectBoxOpenBox = css({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  position: "absolute",
+  top: "0",
+  left: "0",
+  width: "100%",
+  height: "3rem",
+  backgroundColor: "#FFFFFF",
+  borderRadius: "0.25rem",
+  border: "1px solid #E5E5E5",
+  zIndex: "1",
+  cursor: "pointer",
+  fontSize: "1.2rem",
+});
+
+const selectBoxOpenWrapper = css({
+  position: "absolute",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  width: "100%",
+  height: "4rem",
+  borderBottom: "1px solid #E5E5E5",
+  borderRadius: "0.25rem",
+});
+
 const chevron = css({
   width: "100%",
   height: "auto",
@@ -375,6 +419,7 @@ const selectBox = css({
   height: "2rem",
   border: "1px solid #E5E5E5",
   borderRadius: "0.25rem",
+  cursor: "pointer",
 });
 
 const totalPriceBox = css({
@@ -465,8 +510,9 @@ const optionWrapper = (isOpen: boolean) =>
       bottom: "0",
       left: "0",
       width: "100vw",
+      minHeight: isOpen ? "20rem" : "0",
       height: "auto",
-      justifyContent: "center",
+      justifyContent: "space-between",
       backgroundColor: "#FFFFFF",
       zIndex: "500",
       border: isOpen ? `1px solid ${MAIN_COLOR}` : "none",
@@ -733,6 +779,6 @@ const descSection = css({
 const Wrapper = css({
   [mq[1]]: {
     marginBottom: "3rem",
-    overflowX: "hidden",
+    // overflowX: "hidden",
   },
 });
