@@ -11,12 +11,25 @@ import { MAIN_COLOR, mq } from "config/styles";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Close from "public/asset/svg/Close";
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import useSWR from "swr";
 import { KitItem, Review } from "types";
 import addRef from "util/addRef";
 import ReviewCard from "components/view/store/product/ReviewCard";
 import Star from "public/asset/svg/Star";
+import Chevron from "public/asset/svg/Chevron";
+
+interface ResultKitItem {
+  kitItem: KitItem;
+  count: number;
+}
 
 const ProductDetailView = () => {
   const cartInfo = useContext(CartContext);
@@ -26,6 +39,9 @@ const ProductDetailView = () => {
   const refArr = useRef<HTMLElement[]>([]);
   const [currentTap, setCurrentTap] = useState(0);
   const [reviewOpen, setReviewOpen] = useState(false);
+  const [optionOpen, setOptionOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [resultKitItem, setResultKitItem] = useState<ResultKitItem[]>([]);
 
   const handelScroll = useCallback(
     (refArr: HTMLElement[]) => () => {
@@ -48,14 +64,38 @@ const ProductDetailView = () => {
     []
   );
 
+  const handelResize = () => {
+    if (window.innerWidth <= 600) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+  };
+
   useEffect(() => {
     const refarr = refArr.current;
+
     window.addEventListener("scroll", handelScroll(refarr));
 
     return () => {
       window.removeEventListener("scroll", handelScroll(refarr));
     };
   }, [handelScroll]);
+
+  useEffect(() => {
+    const { innerWidth } = window;
+    if (innerWidth <= 600) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+
+    window.addEventListener("resize", handelResize);
+
+    return () => {
+      window.removeEventListener("resize", handelResize);
+    };
+  }, []);
 
   const query: KitItem | null =
     typeof prod === "string" ? JSON.parse(prod) : null;
@@ -77,14 +117,49 @@ const ProductDetailView = () => {
   const defaultImage = "/asset/image/main-image.png";
 
   const onClickCart = () => {
-    cartInfo?.dispatch({ type: "ADD", kitItem });
-    setIsCartBack(true);
+    if (isMobile) {
+      setOptionOpen(true);
+    } else {
+      cartInfo?.dispatch({ type: "ADD", kitItem });
+      setIsCartBack(true);
+    }
   };
+
+  const onChangeSelect = (event: ChangeEvent<HTMLSelectElement>) => {
+    const { value } = event.currentTarget;
+    if (value === "") return;
+
+    const exist = resultKitItem.find((item) => item.kitItem.pd_title === value);
+
+    if (exist) return;
+
+    setResultKitItem((prev) => {
+      return [...prev, { kitItem, count: 1 }];
+    });
+  };
+
+  const onClickCount =
+    (type: "ADD" | "DESC" | "DEL", item: ResultKitItem) => () => {
+      setResultKitItem((prev) => {
+        const index = prev.findIndex((prevItem) => prevItem === item);
+        if (index === -1) return prev;
+
+        if (type === "ADD") {
+          prev[index].count++;
+        } else if (type === "DESC" && prev[index].count > 1) {
+          prev[index].count--;
+        } else if (type === "DEL") {
+          prev.splice(index, 1);
+        }
+
+        return [...prev];
+      });
+    };
 
   return (
     <>
       <Seo />
-      <div css={container}>
+      <div css={[container, Wrapper]}>
         <div css={[maxWidthWrapper("100%"), Center("column")]}>
           <div css={topWrapper}>
             <div css={imageWrapper}>
@@ -107,25 +182,82 @@ const ProductDetailView = () => {
                 </div>
                 <h3 css={[text("1.2rem", "500"), BorderTop]}>{pd_info}</h3>
               </div>
-              <div css={buttonBox}>
-                <div css={CartBox}>
-                  <button
-                    css={button("#FFFFFF", MAIN_COLOR)}
-                    onClick={onClickCart}
-                  >
-                    장바구니 담기
-                  </button>
-                  {isCartBack && (
-                    <div css={cartBackInfo}>
-                      장바구니에
-                      <br /> 상품이 담겼습니다
-                      <div css={close} onClick={() => setIsCartBack(false)}>
-                        <Close />
+              <div css={optionWrapper(optionOpen)}>
+                {(!isMobile || (isMobile && optionOpen)) && (
+                  <>
+                    {isMobile && (
+                      <div css={chevron} onClick={() => setOptionOpen(false)}>
+                        <Chevron />
                       </div>
+                    )}
+                    <select onChange={onChangeSelect} css={selectBox}>
+                      <option value="">상품 선택</option>
+                      <option value={pd_title}>{pd_title}</option>
+                    </select>
+                    {resultKitItem.map((item) => (
+                      <div key={item.kitItem.pd_id} css={optionBox}>
+                        <div css={closeBox} onClick={onClickCount("DEL", item)}>
+                          <Close />
+                        </div>
+                        <div>{item.kitItem.pd_title}</div>
+                        <div css={optionBottomBox}>
+                          <div css={CountButtonBox}>
+                            <button
+                              css={Button}
+                              onClick={onClickCount("DESC", item)}
+                            >{`-`}</button>
+                            <div css={[Count, Text("1rem", "500", "#000000")]}>
+                              {item.count}
+                            </div>
+                            <button
+                              css={Button}
+                              onClick={onClickCount("ADD", item)}
+                            >{`+`}</button>
+                          </div>
+                          <div css={Center("row")}>
+                            <div css={Text("1rem", "500", "#000000")}>{`${(
+                              item.kitItem.pd_price * item.count
+                            ).toLocaleString("ko-KR")}원`}</div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    <div css={totalPriceBox}>
+                      <span>총 상품 금액</span>
+                      <span>{`${resultKitItem
+                        .reduce(
+                          (acc, cur) => acc + cur.count * cur.kitItem.pd_price,
+                          0
+                        )
+                        .toLocaleString("ko-KR")}원`}</span>
                     </div>
-                  )}
+                  </>
+                )}
+                <div css={buttonBox}>
+                  <div css={CartBox}>
+                    <button
+                      css={button("#FFFFFF", MAIN_COLOR)}
+                      onClick={onClickCart}
+                    >
+                      장바구니 담기
+                    </button>
+                    {isCartBack && (
+                      <div css={cartBackInfo}>
+                        장바구니에
+                        <br /> 상품이 담겼습니다
+                        <div css={close} onClick={() => setIsCartBack(false)}>
+                          <Close />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <button
+                    css={button(MAIN_COLOR, "#FFFFFF")}
+                    onClick={() => router.push("/order")}
+                  >
+                    바로구매
+                  </button>
                 </div>
-                <button css={button(MAIN_COLOR, "#FFFFFF")}>바로구매</button>
               </div>
             </div>
           </div>
@@ -220,6 +352,130 @@ const ProductDetailView = () => {
 };
 
 export default ProductDetailView;
+
+const chevron = css({
+  width: "100%",
+  height: "auto",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  cursor: "pointer",
+});
+
+const optionBottomBox = css({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  width: "100%",
+  height: "auto",
+});
+
+const selectBox = css({
+  width: "100%",
+  height: "2rem",
+  border: "1px solid #E5E5E5",
+  borderRadius: "0.25rem",
+});
+
+const totalPriceBox = css({
+  width: "100%",
+  height: "auto",
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  padding: "1rem 0",
+  borderTop: `1px solid ${MAIN_COLOR}`,
+  borderBottom: `1px solid ${MAIN_COLOR}`,
+  fontSize: "1.25rem",
+  fontWeight: "500",
+  color: "#000000",
+  marginBottom: "2rem",
+  [mq[1]]: {
+    borderBottom: "none",
+    marginBottom: "0",
+  },
+});
+
+const closeBox = css({
+  width: "1.4rem",
+  height: "1.4rem",
+  position: "absolute",
+  top: "0.5rem",
+  right: "0.5rem",
+  cursor: "pointer",
+});
+
+const CountButtonBox = css({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+});
+
+const optionBox = css({
+  display: "flex",
+  justifyContent: "center",
+  flexDirection: "column",
+  alignItems: "start",
+  width: "100%",
+  height: "6rem",
+  position: "relative",
+  padding: "1rem",
+  gap: "1rem",
+  backgroundColor: "#EBEBEB",
+  borderRadius: "0.5rem",
+});
+
+const Button = css({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  backgroundColor: "#FFFFFF",
+  width: "1.5rem",
+  height: "1.5rem",
+  border: "1px solid #000",
+  fontWeight: "500",
+});
+
+const Count = css({
+  width: "auto",
+  padding: "0 10px",
+  minWidth: "1.5rem",
+  height: "1.5rem",
+  textAlign: "center",
+  border: "1px solid #000000",
+  borderLeft: "none",
+  borderRight: "none",
+  fontSize: "1rem",
+  fontWeight: "700",
+});
+
+const optionWrapper = (isOpen: boolean) =>
+  css({
+    position: "static",
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "column",
+    width: "100%",
+    height: "auto",
+    maxWidth: "30rem",
+    padding: "1rem",
+    gap: "1rem",
+    [mq[1]]: {
+      position: "fixed",
+      bottom: "0",
+      left: "0",
+      width: "100vw",
+      height: "auto",
+      justifyContent: "center",
+      backgroundColor: "#FFFFFF",
+      zIndex: "500",
+      border: isOpen ? `1px solid ${MAIN_COLOR}` : "none",
+      borderTop: isOpen ? "none" : `1px solid ${MAIN_COLOR}`,
+      borderTopLeftRadius: isOpen ? "1.5rem" : "0",
+      borderTopRightRadius: isOpen ? "1.5rem" : "0",
+      boxShadow: isOpen ? "rgba(0, 0, 0, 0.35) 0px 5px 15px" : "none",
+    },
+  });
 
 const gradeWrapper = css({
   paddingBottom: "2rem",
@@ -391,11 +647,19 @@ const button = (backgroundColor: string, color: string) =>
     backgroundColor,
     color,
     border: "1px solid",
+    [mq[2]]: {
+      width: "8rem",
+    },
+    [mq[1]]: {
+      width: "10rem",
+    },
   });
 
 const buttonBox = css({
+  width: "100%",
+  height: "auto",
   display: "flex",
-  justifyContent: "start",
+  justifyContent: "center",
   alignItems: "center",
   gap: "1rem",
   fontSize: "1.2rem",
@@ -428,7 +692,7 @@ const prodWrapper = css({
   flexDirection: "column",
   gap: "1rem",
   padding: "1rem",
-  [mq[2]]: {
+  [mq[1]]: {
     width: "100%",
     alignItems: "center",
   },
@@ -450,7 +714,7 @@ const topWrapper = css({
   height: "100%",
   maxWidth: "80rem",
   padding: "3rem 0",
-  [mq[2]]: {
+  [mq[1]]: {
     flexDirection: "column",
     alignItems: "center",
   },
@@ -461,7 +725,14 @@ const descSection = css({
   height: "auto",
   display: "flex",
   flexDirection: "column",
-  [mq[2]]: {
+  [mq[1]]: {
     padding: "0",
+  },
+});
+
+const Wrapper = css({
+  [mq[1]]: {
+    marginBottom: "3rem",
+    overflowX: "hidden",
   },
 });

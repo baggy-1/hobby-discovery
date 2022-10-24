@@ -66,7 +66,7 @@ const ReviewCard = ({ review }: Props) => {
               ))}
             </>
             <div>
-              <div css={Text("1.2rem", "700", "#000000")}>{title}</div>
+              <div css={Text("1rem", "700", "#000000")}>{title}</div>
               <div>{body}</div>
             </div>
           </div>
