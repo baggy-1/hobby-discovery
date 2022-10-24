@@ -1,3 +1,9 @@
+export type AddNull<T> = {
+  [P in keyof T]: T[P] | null;
+};
+
+export type AddProps<T, U> = T & { [P in keyof U]: U[P] };
+
 export interface Post {
   body: string;
   create_time: string;
@@ -45,10 +51,6 @@ export interface AccessToken {
   access_exp: number;
 }
 
-export type AddNull<T> = {
-  [P in keyof T]: T[P] | null;
-};
-
 export interface Cart {
   kitItem: KitItem;
   count: number;
@@ -93,14 +95,24 @@ export interface DaumPostCodeData {
   query: string;
 }
 
+interface ReviewImage {
+  image: string;
+}
+
 export interface Review {
   body: string;
   create_time: string;
   grade: number;
   hobby_rv: number;
   id: number;
-  images: Image[];
+  images: ReviewImage[];
   title: string;
   update_time: string;
   user: number;
+}
+
+export interface PublicUser {
+  id: number;
+  nickname: string;
+  profile: string;
 }

@@ -13,9 +13,9 @@ import Close from "public/asset/svg/Close";
 import Hamburger from "public/asset/svg/Hamburger";
 import { useContext, useState } from "react";
 import { useSWRConfig } from "swr";
+import { AddProps } from "types";
 import { deleteCookie } from "util/cookie";
 
-type AddProps<T, U> = T & { [P in keyof U]: U[P] };
 type Auth = { Authorization: string };
 type Headers = AddProps<HeadersDefaults, Auth>;
 

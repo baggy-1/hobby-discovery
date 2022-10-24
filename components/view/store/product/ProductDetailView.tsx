@@ -1,5 +1,10 @@
 import { css } from "@emotion/react";
-import { Center, container, maxWidthWrapper } from "components/common/styles";
+import {
+  Center,
+  container,
+  maxWidthWrapper,
+  Text,
+} from "components/common/styles";
 import Seo from "components/Seo";
 import { CartContext } from "config/context";
 import { MAIN_COLOR, mq } from "config/styles";
@@ -11,6 +16,7 @@ import useSWR from "swr";
 import { KitItem, Review } from "types";
 import addRef from "util/addRef";
 import ReviewCard from "components/view/store/product/ReviewCard";
+import Star from "public/asset/svg/Star";
 
 const ProductDetailView = () => {
   const cartInfo = useContext(CartContext);
@@ -19,6 +25,7 @@ const ProductDetailView = () => {
   const [isCartBack, setIsCartBack] = useState(false);
   const refArr = useRef<HTMLElement[]>([]);
   const [currentTap, setCurrentTap] = useState(0);
+  const [reviewOpen, setReviewOpen] = useState(false);
 
   const handelScroll = useCallback(
     (refArr: HTMLElement[]) => () => {
@@ -54,6 +61,11 @@ const ProductDetailView = () => {
     typeof prod === "string" ? JSON.parse(prod) : null;
   const { data, error } = useSWR<KitItem>(query ? null : `/main/${id}`);
   const { data: reviews } = useSWR<Review[]>(`/main/${id}/reviews`);
+  const grade = reviews
+    ? Math.floor(
+        reviews.reduce((acc, cur) => acc + cur.grade, 0) / reviews.length
+      )
+    : 0;
 
   const kitItem = query || data;
   if (!kitItem && error) return <div>상품 정보가 없습니다</div>;
@@ -149,10 +161,55 @@ const ProductDetailView = () => {
               id="sectionReview"
             >
               <div css={[TapTitle, Center("row")]}>구매후기</div>
-              <div>
-                {reviews?.map((review: Review) => (
-                  <ReviewCard key={review.id} review={review} />
-                ))}
+              <div css={[Center("column"), gradeWrapper]}>
+                <div css={gradeBoxPc}>
+                  {Array(5)
+                    .fill(0)
+                    .map((_, index) => (
+                      <Star isTarget={index < grade} key={index} />
+                    ))}
+                </div>
+                <div css={gradeBoxMob}>
+                  {Array(5)
+                    .fill(0)
+                    .map((_, index) => (
+                      <Star
+                        isTarget={index < grade}
+                        key={index}
+                        width={40}
+                        height={40}
+                      />
+                    ))}
+                </div>
+                <div css={Text("1.5rem", "500", "#999999")}>{`${
+                  isNaN(grade) ? 0 : grade
+                } / 5`}</div>
+              </div>
+              <div css={ReviewBox}>
+                {reviews && reviews?.length !== 0 ? (
+                  <>
+                    {reviews
+                      .slice(0, reviewOpen ? undefined : 2)
+                      .map((review: Review) => (
+                        <ReviewCard key={review.id} review={review} />
+                      ))}
+                    {!reviewOpen && (
+                      <div
+                        css={reviewMoreButton("#8E8E8E")}
+                        onClick={() => setReviewOpen(true)}
+                      >
+                        구매후기 더보기
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div css={noReviewBox}>
+                    <div>아직 후기가 없어요</div>
+                    <div css={reviewMoreButton(MAIN_COLOR)}>
+                      구매후기 작성하기
+                    </div>
+                  </div>
+                )}
               </div>
             </section>
           </div>
@@ -164,6 +221,69 @@ const ProductDetailView = () => {
 
 export default ProductDetailView;
 
+const gradeWrapper = css({
+  paddingBottom: "2rem",
+});
+
+const gradeBoxMob = css({
+  display: "none",
+  justifyContent: "center",
+  alignItems: "center",
+  [mq[1]]: {
+    display: "flex",
+  },
+});
+
+const gradeBoxPc = css({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  [mq[1]]: {
+    display: "none",
+  },
+});
+
+const noReviewBox = css({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "100%",
+  fontSize: "1.5rem",
+  fontWeight: "700",
+  color: "#999999",
+  width: "40rem",
+  borderTop: "1px solid #999999",
+  padding: "1rem 0",
+  gap: "2rem",
+});
+
+const reviewMoreButton = (color: string) =>
+  css({
+    width: "20rem",
+    height: "3rem",
+    backgroundColor: "#FFFFFF",
+    borderRadius: "0.25rem",
+    color,
+    fontSize: "1.5rem",
+    fontWeight: "500",
+    border: `1px solid ${color}`,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    cursor: "pointer",
+  });
+
+const ReviewBox = css({
+  display: "flex",
+  flexDirection: "column",
+  gap: "1rem",
+  justifyContent: "center",
+  alignItems: "center",
+  width: "100%",
+  height: "100%",
+});
+
 const PaddingTop = (paddingTop: string) =>
   css({
     paddingTop,
@@ -171,7 +291,7 @@ const PaddingTop = (paddingTop: string) =>
 
 const reviewSection = css({
   width: "100%",
-  height: "100vh",
+  height: "100%",
 });
 
 const TapTitle = css({
@@ -206,7 +326,7 @@ const detailNav = css({
   justifyContent: "center",
   alignItems: "center",
   width: "100%",
-  height: "3rem",
+  height: "5rem",
   borderTop: "0.5rem solid #D9D9D9",
   borderBottom: "1px solid #D9D9D9",
 });
@@ -261,7 +381,7 @@ const imageDesc = css({
   justifyContent: "center",
   alignItems: "center",
   borderBottom: "0.5rem solid #D9D9D9",
-  paddingBottom: "2rem",
+  paddingBottom: "10rem",
 });
 
 const button = (backgroundColor: string, color: string) =>
