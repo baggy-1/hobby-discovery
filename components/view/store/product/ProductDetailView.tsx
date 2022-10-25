@@ -502,7 +502,6 @@ const optionWrapper = (isOpen: boolean) =>
     flexDirection: "column",
     width: "100%",
     height: "auto",
-    maxWidth: "30rem",
     padding: "1rem",
     gap: "1rem",
     [mq[1]]: {
