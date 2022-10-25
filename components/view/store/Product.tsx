@@ -6,7 +6,7 @@ const Product = () => {
     <>
       <div css={wrapper}>
         <div css={textBox}>
-          <h1 css={h1}>신상품</h1>
+          <h1 css={h1}>이번 주 신상품</h1>
         </div>
         <div css={prodBox}>
           <ProdSwiper />

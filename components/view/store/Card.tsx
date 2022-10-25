@@ -11,7 +11,7 @@ interface Props {
 
 const Card = ({ kitItem }: Props) => {
   const router = useRouter();
-  const { pd_id, pd_title, images } = kitItem;
+  const { pd_id, pd_title, images, pd_price } = kitItem;
   const imagePath = images[0] ? images[0].image : "/asset/image/main-image.png";
   return (
     <div
@@ -38,7 +38,7 @@ const Card = ({ kitItem }: Props) => {
         />
       </div>
       <div>{pd_title}</div>
-      <div>{`39000`}원</div>
+      <div>{pd_price.toLocaleString("ko-KR")}원</div>
     </div>
   );
 };

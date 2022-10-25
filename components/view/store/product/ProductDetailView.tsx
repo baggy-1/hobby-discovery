@@ -20,6 +20,8 @@ import addRef from "util/addRef";
 import ReviewCard from "components/view/store/product/ReviewCard";
 import Star from "public/asset/svg/Star";
 import Chevron from "public/asset/svg/Chevron";
+import { type } from "os";
+import useUser from "hooks/useUser";
 
 const ProductDetailView = () => {
   const cartInfo = useContext(CartContext);
@@ -33,6 +35,7 @@ const ProductDetailView = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [resultKitItem, setResultKitItem] = useState<Cart[]>([]);
   const [selectBoxOpen, setSelectBoxOpen] = useState(false);
+  const { user } = useUser();
 
   const handelScroll = useCallback(
     (refArr: HTMLElement[]) => () => {
@@ -107,15 +110,30 @@ const ProductDetailView = () => {
 
   const defaultImage = "/asset/image/main-image.png";
 
-  const onClickCart = () => {
+  const onClickCart = (type: "cart" | "order") => () => {
     if (isMobile && !optionOpen) {
       setOptionOpen(true);
       return;
     } else {
-      resultKitItem.forEach((item) => {
-        cartInfo?.dispatch({ type: "ADD", cart: item });
-        setIsCartBack(true);
-      });
+      if (type === "cart") {
+        resultKitItem.forEach((item) => {
+          cartInfo?.dispatch({ type: "ADD", cart: item });
+          setIsCartBack(true);
+        });
+      } else {
+        if (resultKitItem.length === 0) return;
+        if (!user) {
+          alert("로그인이 필요합니다");
+          return;
+        }
+        router.push(
+          {
+            pathname: "/order",
+            query: { userId: user.id, items: JSON.stringify(resultKitItem) },
+          },
+          "/order"
+        );
+      }
     }
   };
 
@@ -252,7 +270,7 @@ const ProductDetailView = () => {
                     <div css={CartBox}>
                       <button
                         css={button("#FFFFFF", MAIN_COLOR)}
-                        onClick={onClickCart}
+                        onClick={onClickCart("cart")}
                       >
                         장바구니 담기
                       </button>
@@ -268,7 +286,7 @@ const ProductDetailView = () => {
                     </div>
                     <button
                       css={button(MAIN_COLOR, "#FFFFFF")}
-                      onClick={() => router.push("/order")}
+                      onClick={onClickCart("order")}
                     >
                       바로구매
                     </button>
