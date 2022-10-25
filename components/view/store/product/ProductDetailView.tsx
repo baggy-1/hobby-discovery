@@ -551,7 +551,8 @@ const noReviewBox = css({
   fontSize: "1.5rem",
   fontWeight: "700",
   color: "#999999",
-  width: "40rem",
+  width: "100%",
+  maxWidth: "40rem",
   borderTop: "1px solid #999999",
   padding: "1rem 0",
   gap: "2rem",
@@ -776,6 +777,5 @@ const descSection = css({
 const Wrapper = css({
   [mq[1]]: {
     marginBottom: "3rem",
-    // overflowX: "hidden",
   },
 });
