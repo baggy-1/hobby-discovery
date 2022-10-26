@@ -1,28 +1,20 @@
 import { css } from "@emotion/react";
 import { Text } from "components/common/styles";
 import { section } from "components/view/order/OrderView";
-import { useState } from "react";
-
-const PAYMENT = {
-  CARD: {
-    value: "card",
-    label: "신용카드",
-  },
-  DEPOSIT: {
-    value: "deposit",
-    label: "무통장입금",
-  },
-  KAKAOPAY: {
-    value: "kakaopay",
-    label: "카카오페이",
-  },
-};
+import { OrderContext } from "config/context";
+import { PAYMENT } from "config/data/order";
+import { useContext, useState } from "react";
 
 const PaymentSection = () => {
   const [active, setActive] = useState(PAYMENT.CARD.value);
+  const orderContext = useContext(OrderContext);
 
   const onClickActive = (value: string) => () => {
     setActive(value);
+    orderContext?.setOrder((prev) => ({
+      ...prev,
+      payment: value,
+    }));
   };
 
   return (

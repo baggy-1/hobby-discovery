@@ -11,13 +11,32 @@ import { useContext } from "react";
 import CartItem from "components/view/cart/CartItem";
 import { MAIN_COLOR, mq } from "config/styles";
 import { useRouter } from "next/router";
+import useUser from "hooks/useUser";
 
 const CartView = () => {
   const router = useRouter();
   const cartInfo = useContext(CartContext);
+  const { user } = useUser();
   const total = cartInfo?.state.reduce((acc, cur) => {
     return cur.checked ? acc + cur.kitItem.pd_price * cur.count : acc;
   }, 0);
+
+  const onClickOrder = () => {
+    if (!user) {
+      alert("로그인이 필요합니다.");
+      router.push("/auth/login");
+      return;
+    }
+
+    if (!cartInfo || cartInfo.state.length === 0) return;
+
+    const resultKitItem = cartInfo.state.filter((item) => item.checked);
+
+    router.push({
+      pathname: "/order",
+      query: { items: JSON.stringify(resultKitItem) },
+    });
+  };
 
   return (
     <>
@@ -53,9 +72,10 @@ const CartView = () => {
               <div
                 css={Text("1.25rem", "700", "#000000")}
               >{`결제 금액 ${total?.toLocaleString("ko-KR")}원`}</div>
-              <button css={buyButton(total !== 0)}>{`${total?.toLocaleString(
-                "ko-KR"
-              )}원 결제하기`}</button>
+              <button
+                onClick={onClickOrder}
+                css={buyButton(total !== 0)}
+              >{`${total?.toLocaleString("ko-KR")}원 결제하기`}</button>
             </div>
           </div>
         </div>

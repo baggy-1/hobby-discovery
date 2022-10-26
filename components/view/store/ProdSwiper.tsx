@@ -7,10 +7,15 @@ import { mq } from "config/styles";
 import Chevron from "public/asset/svg/Chevron";
 import { useRef, useState } from "react";
 
-const ProdSwiper = () => {
+interface Props {
+  query: string;
+}
+
+const ProdSwiper = ({ query }: Props) => {
   const { data } = useSWR<KitItem[]>(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/main/hobby`
+    `/main/hobby?order=${query}&items=10&page=1`
   );
+
   const [move, setMove] = useState(0);
   const refWrap = useRef<HTMLDivElement>(null);
 
@@ -50,14 +55,9 @@ const ProdSwiper = () => {
           </div>
         </div>
         <div css={imageWrap(move)} ref={refWrap}>
-          {data
-            ?.sort(({ pd_create: a }, { pd_create: b }) => {
-              return new Date(a).getTime() - new Date(b).getTime();
-            })
-            .slice(0, 8)
-            .map((kitItem) => (
-              <Card key={kitItem.pd_id} kitItem={kitItem} />
-            ))}
+          {data?.map((kitItem) => (
+            <Card key={kitItem.pd_id} kitItem={kitItem} />
+          ))}
         </div>
         <div css={chevronBox("right")} onClick={() => onClickMove("right")}>
           <div css={chevron("right")}>
@@ -69,7 +69,7 @@ const ProdSwiper = () => {
   );
 };
 
-export default withRouter(ProdSwiper);
+export default ProdSwiper;
 
 const imageWrap = (move: number) =>
   css({
@@ -86,7 +86,7 @@ const chevronBox = (direction: "left" | "right") =>
     justifyContent: "center",
     alignItems: "center",
     width: "2rem",
-    height: "100%",
+    height: "300px",
     position: "absolute",
     backgroundColor: "#EDEDED",
     opacity: "0.6",

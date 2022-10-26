@@ -5,16 +5,16 @@ import Daum from "react-daum-postcode";
 import { DaumPostCodeData } from "types";
 
 interface Props {
-  setValue: Dispatch<SetStateAction<string>>;
+  onComplete: (address: string) => void;
   setDaumOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const DaumPostCode = ({ setValue, setDaumOpen }: Props) => {
+const DaumPostCode = ({ onComplete, setDaumOpen }: Props) => {
   const onClickClose = () => {
     setDaumOpen(false);
   };
 
-  const onComplete = (data: DaumPostCodeData) => {
+  const onCompleteOrigin = (data: DaumPostCodeData) => {
     let fullAddress = data.address;
     let extraAddress = "";
 
@@ -29,7 +29,7 @@ const DaumPostCode = ({ setValue, setDaumOpen }: Props) => {
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
 
-    setValue(fullAddress);
+    onComplete(fullAddress);
     setDaumOpen(false);
   };
 
@@ -39,7 +39,7 @@ const DaumPostCode = ({ setValue, setDaumOpen }: Props) => {
       <div css={container}>
         <div css={wrapper}>
           <Daum
-            onComplete={onComplete}
+            onComplete={onCompleteOrigin}
             autoClose={false}
             style={{
               width: "100%",

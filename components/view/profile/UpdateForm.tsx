@@ -29,6 +29,10 @@ const UpdateForm = () => {
   );
   const addressDetail = useInput(undefined, addressArr ? addressArr[1] : "");
 
+  const onCompletAddress = (address: string) => {
+    setAddressValue(address);
+  };
+
   useEffect(() => {
     const data = new FormData();
     setFormData(data);
@@ -156,8 +160,11 @@ const UpdateForm = () => {
       </div>
       <Address
         value={addressValue}
-        setValue={setAddressValue}
-        detail={addressDetail}
+        onComplete={onCompletAddress}
+        detail={{
+          value: addressDetail.value,
+          onChange: addressDetail.onChange,
+        }}
       />
       <button type="submit" css={[button, borderRadius("0.25rem")]}>
         수정 완료

@@ -8,13 +8,14 @@ import TotalSection from "components/view/order/TotalSection";
 import { OrderContext } from "config/context";
 import { useEffect, useState } from "react";
 import { MAIN_COLOR } from "config/styles";
+import { PAYMENT } from "config/data/order";
 
 const INIT_ORDER: AddNull<Order> = {
   userId: null,
   address: null,
   number: null,
   name: null,
-  payment: null,
+  payment: PAYMENT.CARD.value,
   totalPrice: null,
   items: null,
 };
@@ -22,31 +23,43 @@ const INIT_ORDER: AddNull<Order> = {
 const OrderView = () => {
   const router = useRouter();
   const { items } = router.query;
-  const orderItems: Cart[] | null =
-    typeof items === "string" ? JSON.parse(items) : null;
-  const total = orderItems?.reduce(
-    (acc, cur) => acc + cur.kitItem.pd_price * cur.count,
-    0
-  );
-  const totalPrice = total ? total : null;
 
-  const [order, setOrder] = useState<AddNull<Order>>({
-    ...INIT_ORDER,
-    items: orderItems,
-    totalPrice,
-  });
+  const [order, setOrder] = useState<AddNull<Order>>(INIT_ORDER);
+
+  const onClickOrder = () => {
+    if (Object.values(order).some((value) => value === null)) return;
+    console.log(order);
+  };
+
+  useEffect(() => {
+    const orderItems: Cart[] | null =
+      typeof items === "string" ? JSON.parse(items) : null;
+    const total = orderItems?.reduce(
+      (acc, cur) => acc + cur.kitItem.pd_price * cur.count,
+      0
+    );
+    const totalPrice = total ? total : null;
+
+    setOrder({
+      ...INIT_ORDER,
+      items: orderItems,
+      totalPrice,
+    });
+  }, [items]);
 
   return (
     <OrderContext.Provider value={{ order, setOrder }}>
       <div css={container}>
         <UserInfoSection />
-        {orderItems && <ProdInfoSection />}
+        <ProdInfoSection />
         <PaymentSection />
         <TotalSection />
         <div css={ButtonBox}>
-          <button css={Button}>{`${totalPrice?.toLocaleString(
-            "ko-KR"
-          )}원 결제하기`}</button>
+          {order && (
+            <button css={Button} onClick={onClickOrder}>{`${
+              order.totalPrice ? order.totalPrice.toLocaleString("ko-KR") : 0
+            }원 결제하기`}</button>
+          )}
         </div>
       </div>
     </OrderContext.Provider>

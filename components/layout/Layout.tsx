@@ -29,7 +29,7 @@ const Layout = ({ children }: Props) => {
           <div css={wrapper}>
             <Nav />
             <main>{children}</main>
-            <Footer home={router.pathname === "/" ? true : false} />
+            <Footer />
           </div>
         </div>
       </>

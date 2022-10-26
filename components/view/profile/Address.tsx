@@ -2,22 +2,19 @@ import { css } from "@emotion/react";
 import DaumPostCode from "components/common/DaumPostCode";
 import { borderRadius, cursorPoint, Gap } from "components/common/styles";
 import { label } from "components/view/profile/UpdateForm";
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Input, InputBox } from "../signup/SignUpForm";
 
 interface Props {
   value: string;
-  setValue: Dispatch<SetStateAction<string>>;
+  onComplete: (address: string) => void;
   detail: {
     value: string;
-    onChange: (
-      event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => void;
-    isvalid: boolean;
+    onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   };
 }
 
-const Address = ({ value, setValue, detail }: Props) => {
+const Address = ({ value, onComplete, detail }: Props) => {
   const [daumOpen, setDaumOpen] = useState(false);
 
   const onClickAddressSearch = () => {
@@ -46,7 +43,7 @@ const Address = ({ value, setValue, detail }: Props) => {
         />
       </div>
       {daumOpen && (
-        <DaumPostCode setValue={setValue} setDaumOpen={setDaumOpen} />
+        <DaumPostCode onComplete={onComplete} setDaumOpen={setDaumOpen} />
       )}
     </>
   );

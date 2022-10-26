@@ -1,15 +1,20 @@
 import { css } from "@emotion/react";
 import ProdSwiper from "components/view/store/ProdSwiper";
 
-const Product = () => {
+interface Props {
+  query: string;
+  title: string;
+}
+
+const Product = ({ query, title }: Props) => {
   return (
     <>
       <div css={wrapper}>
         <div css={textBox}>
-          <h1 css={h1}>이번 주 신상품</h1>
+          <h1 css={h1}>{title}</h1>
         </div>
         <div css={prodBox}>
-          <ProdSwiper />
+          <ProdSwiper query={query} />
         </div>
       </div>
     </>
