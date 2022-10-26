@@ -1,6 +1,6 @@
 import { CartAction } from "config/reducer";
-import { createContext, Dispatch } from "react";
-import { Cart } from "types";
+import { createContext, Dispatch, SetStateAction } from "react";
+import { AddNull, Cart, Order } from "types";
 
 interface CartContext {
   state: Cart[];
@@ -9,4 +9,11 @@ interface CartContext {
 
 const CartContext = createContext<CartContext | null>(null);
 
-export { CartContext };
+interface OrderContext {
+  order: AddNull<Order>;
+  setOrder: Dispatch<SetStateAction<AddNull<Order>>>;
+}
+
+const OrderContext = createContext<OrderContext | null>(null);
+
+export { CartContext, OrderContext };

@@ -116,3 +116,13 @@ export interface PublicUser {
   nickname: string;
   profile: string;
 }
+
+export interface Order {
+  userId: number;
+  address: string;
+  number: string;
+  name: string;
+  payment: string;
+  totalPrice: number;
+  items: Cart[];
+}

@@ -88,7 +88,7 @@ const UpdateForm = () => {
     formData.append("address", updateAddress);
 
     try {
-      authInstance.patch("/user/update", formData).then((res) => {
+      authInstance.patch("/user/user", formData).then((res) => {
         alert("회원정보가 수정되었습니다.");
         router.push("/profile");
       });

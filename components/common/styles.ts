@@ -70,3 +70,43 @@ export const Position = (position: "absolute" | "relative" | "static") =>
   css({
     position,
   });
+
+export const Gap = (gap: string) =>
+  css({
+    display: "flex",
+    gap,
+  });
+
+export const None = (type: "pc" | "mob") =>
+  css({
+    display: type === "pc" ? "none" : "block",
+    [mq[1]]: {
+      display: type === "pc" ? "block" : "none",
+    },
+  });
+
+export const CenterFull = (
+  flexDirection: "column" | "row",
+  type: "pc" | "mob"
+) =>
+  css(
+    type === "pc"
+      ? {
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection,
+          width: "100%",
+          height: "auto",
+        }
+      : {
+          [mq[1]]: {
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection,
+            width: "100%",
+            height: "auto",
+          },
+        }
+  );

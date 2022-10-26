@@ -38,7 +38,7 @@ authInstance.interceptors.response.use(
 
       if (refreshToken) {
         const { data } = await axios.post(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/user/refresh`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/user/refresh/`,
           {
             refresh_token: refreshToken,
           }

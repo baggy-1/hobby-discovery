@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import DaumPostCode from "components/common/DaumPostCode";
-import { borderRadius } from "components/common/styles";
+import { borderRadius, cursorPoint, Gap } from "components/common/styles";
 import { label } from "components/view/profile/UpdateForm";
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import { Input, InputBox } from "../signup/SignUpForm";
@@ -26,13 +26,16 @@ const Address = ({ value, setValue, detail }: Props) => {
 
   return (
     <>
-      <div css={[InputBox, borderRadius("0.25rem")]}>
+      <div css={[InputBox, borderRadius("0.25rem"), Gap("2rem")]}>
         <label css={label}>배송지</label>
-        <div onClick={onClickAddressSearch} css={[address(value), Input]}>
+        <div
+          onClick={onClickAddressSearch}
+          css={[Input, address(value), cursorPoint]}
+        >
           {value || "주소를 입력해주세요"}
         </div>
       </div>
-      <div css={InputBox}>
+      <div css={[InputBox]}>
         <label css={label}>상세주소</label>
         <input
           css={Input}
@@ -53,8 +56,6 @@ export default Address;
 
 const address = (value: string | null) =>
   css({
-    width: "15rem",
-    padding: "0 1rem",
     display: "flex",
     justifyContent: "start",
     alignItems: "center",

@@ -6,6 +6,7 @@ import { instance } from "config/instance";
 import { REG_ID, REG_PW } from "config/regexp";
 import { css } from "@emotion/react";
 import { mq } from "config/styles";
+import { setCookie } from "util/cookie";
 
 const SignUpForm = () => {
   const router = useRouter();
@@ -63,9 +64,9 @@ const SignUpForm = () => {
         access_exp: accessExp,
         refresh_token: refreshToken,
       } = data;
-      document.cookie = `_hobby_at=${accessToken};`;
-      document.cookie = `_hobby_ae=${accessExp};`;
-      document.cookie = `_hobby_rt=${refreshToken};`;
+      setCookie("_hobby_at", accessToken);
+      setCookie("_hobby_ae", accessExp);
+      setCookie("_hobby_rt", refreshToken);
 
       router.replace("/store");
     } catch (error: unknown) {

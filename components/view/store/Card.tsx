@@ -17,15 +17,12 @@ const Card = ({ kitItem }: Props) => {
     <div
       css={prodCard}
       onClick={() =>
-        router.push(
-          {
-            pathname: `/store/product/${pd_id}`,
-            query: {
-              prod: JSON.stringify(kitItem),
-            },
+        router.push({
+          pathname: `/store/product/${pd_id}`,
+          query: {
+            prod: JSON.stringify(kitItem),
           },
-          `/store/product/${pd_id}`
-        )
+        })
       }
     >
       <div css={[image, borderRadius("1.2rem")]}>

@@ -20,7 +20,6 @@ import addRef from "util/addRef";
 import ReviewCard from "components/view/store/product/ReviewCard";
 import Star from "public/asset/svg/Star";
 import Chevron from "public/asset/svg/Chevron";
-import { type } from "os";
 import useUser from "hooks/useUser";
 
 const ProductDetailView = () => {
@@ -91,9 +90,8 @@ const ProductDetailView = () => {
     };
   }, []);
 
-  const query: KitItem | null =
+  const kitItem: KitItem | null =
     typeof prod === "string" ? JSON.parse(prod) : null;
-  const { data, error } = useSWR<KitItem>(query ? null : `/main/${id}`);
   const { data: reviews } = useSWR<Review[]>(`/main/${id}/reviews`);
   const grade = reviews
     ? Math.floor(
@@ -101,9 +99,7 @@ const ProductDetailView = () => {
       )
     : 0;
 
-  const kitItem = query || data;
-  if (!kitItem && error) return <div>상품 정보가 없습니다</div>;
-  if (!kitItem) return <div>로딩중...</div>;
+  if (!kitItem) return <div>상품 정보가 없습니다</div>;
 
   const { pd_title, pd_descrition, pd_info, pd_price, pd_sell, images } =
     kitItem;
@@ -121,18 +117,21 @@ const ProductDetailView = () => {
           setIsCartBack(true);
         });
       } else {
-        if (resultKitItem.length === 0) return;
-        if (!user) {
-          alert("로그인이 필요합니다");
+        if (resultKitItem.length === 0) {
+          alert("상품을 선택해주세요");
           return;
         }
-        router.push(
-          {
-            pathname: "/order",
-            query: { userId: user.id, items: JSON.stringify(resultKitItem) },
-          },
-          "/order"
-        );
+
+        if (!user) {
+          alert("로그인이 필요합니다");
+          router.push("/auth/login");
+          return;
+        }
+
+        router.push({
+          pathname: "/order",
+          query: { items: JSON.stringify(resultKitItem) },
+        });
       }
     }
   };
