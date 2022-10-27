@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { Text } from "components/common/styles";
+import { CenterFull, Text } from "components/common/styles";
 import { section } from "components/view/order/OrderView";
 import { OrderContext } from "config/context";
 import { PAYMENT } from "config/data/order";
@@ -19,8 +19,12 @@ const PaymentSection = () => {
 
   return (
     <section css={section}>
-      <h1 css={Text("1.25rem", "700", "#000000")}>결제 정보</h1>
-      <div css={paymentBox}>
+      <h1
+        css={[Text("1.25rem", "700", "#000000"), CenterFull("column", "mob")]}
+      >
+        결제 정보
+      </h1>
+      <div css={[paymentBox, CenterFull("row", "mob")]}>
         <span
           css={Button(active === PAYMENT.CARD.value)}
           onClick={onClickActive(PAYMENT.CARD.value)}

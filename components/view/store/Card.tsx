@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { borderRadius } from "components/common/styles";
+import { borderRadius, hoverScale } from "components/common/styles";
 import { mq } from "config/styles";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -41,13 +41,6 @@ const Card = ({ kitItem }: Props) => {
 };
 
 export default Card;
-
-const hoverScale = css({
-  ":hover": {
-    transform: "scale(1.2)",
-  },
-  transition: "all 0.3s ease-in-out",
-});
 
 const prodCard = css({
   cursor: "pointer",

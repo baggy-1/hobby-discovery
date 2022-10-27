@@ -1,6 +1,9 @@
 import { css } from "@emotion/react";
+import { useRouter } from "next/router";
 
 const StoreNav = () => {
+  const router = useRouter();
+
   return (
     <>
       <div css={wrapper}>
@@ -8,7 +11,7 @@ const StoreNav = () => {
           <li>전체상품</li>
           <li>신상품</li>
           <li>인기상품</li>
-          <li>구독박스</li>
+          <li onClick={() => router.push("/subscription")}>구독하기</li>
         </ul>
       </div>
     </>

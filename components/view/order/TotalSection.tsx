@@ -1,7 +1,8 @@
 import { css } from "@emotion/react";
-import { Text } from "components/common/styles";
+import { CenterFull, Text } from "components/common/styles";
 import { section } from "components/view/order/OrderView";
 import { OrderContext } from "config/context";
+import { mq } from "config/styles";
 import { useContext } from "react";
 
 const TotalSection = () => {
@@ -10,7 +11,11 @@ const TotalSection = () => {
 
   return (
     <section css={[section, BorderBottom]}>
-      <h1 css={Text("1.25rem", "700", "#000000")}>최종 결제 금액</h1>
+      <h1
+        css={[Text("1.25rem", "700", "#000000"), CenterFull("column", "mob")]}
+      >
+        최종 결제 금액
+      </h1>
       <div css={totalBox}>
         <span css={Text("1rem", "600", "#000000")}>상품 금액</span>
         <span css={Text("1.25rem", "700", "#000000")}>{`${(totalPrice
@@ -34,4 +39,7 @@ const totalBox = css({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
+  [mq[1]]: {
+    padding: "0 1rem",
+  },
 });

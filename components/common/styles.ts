@@ -13,6 +13,13 @@ export const hoverTranslateY = css({
   transition: "all 0.3s ease",
 });
 
+export const hoverScale = css({
+  ":hover": {
+    transform: "scale(1.2)",
+  },
+  transition: "all 0.3s ease-in-out",
+});
+
 export const cursorPoint = css({
   cursor: "pointer",
 });

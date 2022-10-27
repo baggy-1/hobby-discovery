@@ -32,7 +32,7 @@ const UserInfoSection = () => {
 
     const addressArr = user?.address ? user.address.split("@%") : ["", ""];
 
-    setNumber(user.number);
+    setNumber(user.number ? user.number : "");
     setAddressValue(addressArr ? addressArr[0] : "");
     setAddressDetail(addressArr ? addressArr[1] : "");
   }, [user]);
@@ -41,7 +41,6 @@ const UserInfoSection = () => {
     if (!user || !setOrder) return;
 
     setOrder((prev) => {
-      prev.userId = user.id;
       prev.number = user.number;
       prev.address = user.address;
 
@@ -92,7 +91,6 @@ const UserInfoSection = () => {
       const mainAddress = prevAddress?.split("@%")[0];
       if (mainAddress) {
         address = `${mainAddress}${address}`;
-        console.log(address);
       }
       orderContext.setOrder({
         ...orderContext.order,
@@ -107,7 +105,7 @@ const UserInfoSection = () => {
       >
         주문자 정보
       </h1>
-      <div css={Form}>
+      <div css={[Form, CenterFull("column", "mob")]}>
         <div css={leftForm}>
           <div css={[InputBox, Gap("2rem")]}>
             <label css={label}>수령인</label>

@@ -5,13 +5,13 @@ import ProdInfoSection from "components/view/order/ProdInfoSection";
 import { AddNull, Cart, Order } from "types";
 import PaymentSection from "components/view/order/PaymentSection";
 import TotalSection from "components/view/order/TotalSection";
-import { OrderContext } from "config/context";
-import { useEffect, useState } from "react";
+import { CartContext, OrderContext } from "config/context";
+import { useContext, useEffect, useState } from "react";
 import { MAIN_COLOR } from "config/styles";
 import { PAYMENT } from "config/data/order";
+import { authInstance } from "config/instance";
 
 const INIT_ORDER: AddNull<Order> = {
-  userId: null,
   address: null,
   number: null,
   name: null,
@@ -23,12 +23,32 @@ const INIT_ORDER: AddNull<Order> = {
 const OrderView = () => {
   const router = useRouter();
   const { items } = router.query;
+  const cartInfo = useContext(CartContext);
 
   const [order, setOrder] = useState<AddNull<Order>>(INIT_ORDER);
 
   const onClickOrder = () => {
-    if (Object.values(order).some((value) => value === null)) return;
-    console.log(order);
+    if (Object.values(order).some((value) => value === null)) {
+      alert("모든 정보를 입력해주세요.");
+      return;
+    }
+
+    const resultOrder = {
+      ...order,
+      items: order.items?.filter((item) => item.checked),
+    };
+
+    authInstance
+      .post("/order/", resultOrder)
+      .then((res) => {
+        alert("주문이 완료되었습니다.");
+        router.replace("/store");
+        cartInfo?.dispatch({ type: "RESET" });
+      })
+      .catch((err) => {
+        alert("주문에 실패했습니다.");
+        throw new Error(`error: ${err}`);
+      });
   };
 
   useEffect(() => {

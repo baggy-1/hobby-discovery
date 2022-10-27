@@ -118,7 +118,6 @@ export interface PublicUser {
 }
 
 export interface Order {
-  userId: number;
   address: string;
   number: string;
   name: string;

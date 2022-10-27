@@ -4,7 +4,7 @@ import OrderView from "components/view/order/OrderView";
 const Order = () => {
   return (
     <>
-      <Seo />
+      <Seo title={"구매"} />
       <OrderView />
     </>
   );

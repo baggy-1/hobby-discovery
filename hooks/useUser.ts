@@ -3,7 +3,7 @@ import useSWR from "swr";
 import { User } from "types";
 
 const useUser = () => {
-  const { data: user, error } = useSWR<User>("/user/user", authFetcher);
+  const { data: user, error } = useSWR<User>("/user", authFetcher);
 
   return {
     user,
