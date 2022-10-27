@@ -29,7 +29,7 @@ const MainSection = () => {
                 <div css={buttonBox}>
                   <div
                     css={button(MAIN_COLOR, "#FFFFFF")}
-                    onClick={() => router.push("/subsription")}
+                    onClick={() => router.push("/subscription")}
                   >
                     지금 바로 구독하기
                   </div>
