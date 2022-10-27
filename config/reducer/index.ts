@@ -87,10 +87,11 @@ const cartReducer = (state: Cart[], action: CartAction) => {
         if (find) {
           newCart = [...prevCart];
         } else {
-          const cartInfo = {
+          const cartInfo: Cart = {
             kitItem: action.kitItem,
             count: 1,
             checked: true,
+            type: "product",
           };
 
           newCart = [...prevCart, cartInfo];
@@ -99,10 +100,11 @@ const cartReducer = (state: Cart[], action: CartAction) => {
 
         return newCart;
       } else {
-        const cartInfo = {
+        const cartInfo: Cart = {
           kitItem: action.kitItem,
           count: 1,
           checked: true,
+          type: "product",
         };
 
         const newCart = [cartInfo];

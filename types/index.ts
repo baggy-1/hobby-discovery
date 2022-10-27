@@ -55,6 +55,7 @@ export interface Cart {
   kitItem: KitItem;
   count: number;
   checked: boolean;
+  type: "product";
 }
 
 export interface DaumPostCodeData {
@@ -117,11 +118,21 @@ export interface PublicUser {
   profile: string;
 }
 
+export interface SubKitItem {
+  body: string;
+  id: number;
+  price: number;
+  sub_image: string;
+  title: string;
+  type: "subscription";
+}
+
 export interface Order {
   address: string;
   number: string;
   name: string;
   payment: string;
   totalPrice: number;
-  items: Cart[];
+  items: Cart[] | SubKitItem[];
+  type: string;
 }

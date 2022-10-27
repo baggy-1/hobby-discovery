@@ -21,6 +21,7 @@ import ReviewCard from "components/view/store/product/ReviewCard";
 import Star from "public/asset/svg/Star";
 import Chevron from "public/asset/svg/Chevron";
 import useUser from "hooks/useUser";
+import { ITEM_TYPE } from "config/data/order";
 
 const ProductDetailView = () => {
   const cartInfo = useContext(CartContext);
@@ -130,7 +131,10 @@ const ProductDetailView = () => {
 
         router.push({
           pathname: "/order",
-          query: { items: JSON.stringify(resultKitItem) },
+          query: {
+            type: ITEM_TYPE.PRODUCT.order,
+            items: JSON.stringify(resultKitItem),
+          },
         });
       }
     }
@@ -143,7 +147,7 @@ const ProductDetailView = () => {
     if (exist) return;
 
     setResultKitItem((prev) => {
-      return [...prev, { kitItem, count: 1, checked: true }];
+      return [...prev, { kitItem, count: 1, checked: true, type: "product" }];
     });
   };
 

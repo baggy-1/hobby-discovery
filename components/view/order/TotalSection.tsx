@@ -18,10 +18,9 @@ const TotalSection = () => {
       </h1>
       <div css={totalBox}>
         <span css={Text("1rem", "600", "#000000")}>상품 금액</span>
-        <span css={Text("1.25rem", "700", "#000000")}>{`${(totalPrice
-          ? totalPrice
-          : 0
-        ).toLocaleString("ko-KR")}원`}</span>
+        <span css={Text("1.25rem", "700", "#000000")}>{`${
+          orderContext?.order.type === "sub" ? "월 " : ""
+        }${(totalPrice ? totalPrice : 0).toLocaleString("ko-KR")}원`}</span>
       </div>
     </section>
   );

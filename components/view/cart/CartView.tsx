@@ -12,6 +12,7 @@ import CartItem from "components/view/cart/CartItem";
 import { MAIN_COLOR, mq } from "config/styles";
 import { useRouter } from "next/router";
 import useUser from "hooks/useUser";
+import { ITEM_TYPE } from "config/data/order";
 
 const CartView = () => {
   const router = useRouter();
@@ -34,7 +35,10 @@ const CartView = () => {
 
     router.push({
       pathname: "/order",
-      query: { items: JSON.stringify(resultKitItem) },
+      query: {
+        items: JSON.stringify(resultKitItem),
+        type: ITEM_TYPE.PRODUCT.order,
+      },
     });
   };
 

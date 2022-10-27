@@ -27,7 +27,10 @@ const MainSection = () => {
                   취미 박스가 찾아와요
                 </span>
                 <div css={buttonBox}>
-                  <div css={button(MAIN_COLOR, "#FFFFFF")}>
+                  <div
+                    css={button(MAIN_COLOR, "#FFFFFF")}
+                    onClick={() => router.push("/subsription")}
+                  >
                     지금 바로 구독하기
                   </div>
                   <div

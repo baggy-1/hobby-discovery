@@ -1,27 +1,44 @@
 import { css } from "@emotion/react";
-import {
-  borderRadius,
-  hoverScale,
-  hoverTranslateY,
-  Text,
-} from "components/common/styles";
+import { borderRadius, hoverScale, Text } from "components/common/styles";
+import { ITEM_TYPE } from "config/data/order";
 import { mq } from "config/styles";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import { SubKitItem } from "types";
 
-const SUB_ITEM = [
+const SUB_ITEM: SubKitItem[] = [
   {
+    id: 1,
     title: "프리미엄 키트",
     price: 19900,
-    image: "/asset/image/main-image.png",
+    sub_image: "/asset/image/main-image.png",
+    body: "프리미엄 키트",
+    type: ITEM_TYPE.SUBSCRIPTION.item,
   },
   {
+    id: 2,
     title: "프리미엄 플러스 키트",
     price: 39900,
-    image: "/asset/image/main-image.png",
+    sub_image: "/asset/image/main-image.png",
+    body: "프리미엄 플러스 키트",
+    type: ITEM_TYPE.SUBSCRIPTION.item,
   },
 ];
 
 const MainSection = () => {
+  // const { data } = useSWR<SubKitItem>("/sub_pd");
+  const router = useRouter();
+
+  const onClickOrder = (item: SubKitItem) => () => {
+    router.push({
+      pathname: "/order",
+      query: {
+        items: JSON.stringify([item]),
+        type: ITEM_TYPE.SUBSCRIPTION.order,
+      },
+    });
+  };
+
   return (
     <section css={section}>
       <div css={container}>
@@ -36,9 +53,9 @@ const MainSection = () => {
         <div css={kitWrapper}>
           <div css={kitBox}>
             {SUB_ITEM.map((item) => (
-              <div css={imageBox} key={item.title}>
+              <div css={imageBox} key={item.title} onClick={onClickOrder(item)}>
                 <Image
-                  src={item.image}
+                  src={item.sub_image}
                   alt={`subscription-kit-${item.title}`}
                   width={250}
                   height={300}

@@ -13,4 +13,15 @@ const PAYMENT = {
   },
 };
 
-export { PAYMENT };
+const ITEM_TYPE = {
+  PRODUCT: {
+    item: "product" as const,
+    order: "prod" as const,
+  },
+  SUBSCRIPTION: {
+    item: "subscription" as const,
+    order: "sub" as const,
+  },
+};
+
+export { PAYMENT, ITEM_TYPE };
