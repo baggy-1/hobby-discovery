@@ -4,29 +4,13 @@ import { ITEM_TYPE } from "config/data/order";
 import { mq } from "config/styles";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { SubKitItem } from "types";
+import useSWR from "swr";
+import { DelProp, SubKitItem } from "types";
 
-const SUB_ITEM: SubKitItem[] = [
-  {
-    id: 1,
-    title: "프리미엄 키트",
-    price: 19900,
-    sub_image: "/asset/image/main-image.png",
-    body: "프리미엄 키트",
-    type: ITEM_TYPE.SUBSCRIPTION.item,
-  },
-  {
-    id: 2,
-    title: "프리미엄 플러스 키트",
-    price: 39900,
-    sub_image: "/asset/image/main-image.png",
-    body: "프리미엄 플러스 키트",
-    type: ITEM_TYPE.SUBSCRIPTION.item,
-  },
-];
+type OriginalSubKitItem = DelProp<SubKitItem, "type">;
 
 const MainSection = () => {
-  // const { data } = useSWR<SubKitItem>("/sub_pd");
+  const { data } = useSWR<OriginalSubKitItem[]>("user/sub_pd");
   const router = useRouter();
 
   const onClickOrder = (item: SubKitItem) => () => {
@@ -52,24 +36,34 @@ const MainSection = () => {
         </div>
         <div css={kitWrapper}>
           <div css={kitBox}>
-            {SUB_ITEM.map((item) => (
-              <div css={imageBox} key={item.title} onClick={onClickOrder(item)}>
-                <Image
-                  src={item.sub_image}
-                  alt={`subscription-kit-${item.title}`}
-                  width={250}
-                  height={300}
-                  objectFit="cover"
-                  css={[borderRadius("0.5rem")]}
-                />
-                <div css={[descBox, hoverScale]}>
-                  <h2 css={Text("1.25rem", "700", "#000000")}>{item.title}</h2>
-                  <h2 css={Text("1rem", "500", "#000000")}>
-                    {`월 ${item.price.toLocaleString("ko-KR")}원`}
-                  </h2>
+            {data &&
+              data.map((item) => (
+                <div
+                  css={imageBox}
+                  key={item.title}
+                  onClick={onClickOrder({
+                    ...item,
+                    type: ITEM_TYPE.SUBSCRIPTION.item,
+                  })}
+                >
+                  <Image
+                    src={item.sub_image}
+                    alt={`subscription-kit-${item.title}`}
+                    width={250}
+                    height={300}
+                    objectFit="cover"
+                    css={[borderRadius("0.5rem")]}
+                  />
+                  <div css={[descBox, hoverScale]}>
+                    <h2 css={Text("1.25rem", "700", "#000000")}>
+                      {item.title}
+                    </h2>
+                    <h2 css={Text("1rem", "500", "#000000")}>
+                      {`월 ${item.price.toLocaleString("ko-KR")}원`}
+                    </h2>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </div>

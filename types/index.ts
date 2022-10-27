@@ -4,6 +4,10 @@ export type AddNull<T> = {
 
 export type AddProps<T, U> = T & { [P in keyof U]: U[P] };
 
+export type DelProp<T, U> = {
+  [P in keyof T as P extends U ? never : P]: T[P];
+};
+
 export interface Post {
   body: string;
   create_time: string;
