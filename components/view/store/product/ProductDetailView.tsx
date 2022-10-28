@@ -123,12 +123,6 @@ const ProductDetailView = () => {
           return;
         }
 
-        if (!user) {
-          alert("로그인이 필요합니다");
-          router.push("/auth/login");
-          return;
-        }
-
         router.push({
           pathname: "/order",
           query: {

@@ -23,7 +23,7 @@ const ProdInfoSection = () => {
           (items as Cart[]).map(({ kitItem, count }) => (
             <div key={kitItem.pd_id} css={ItemWrapper}>
               <div css={leftBox}>
-                <div>
+                <div css={imageBox}>
                   <Image
                     src={kitItem.images[0].image}
                     alt={"product"}
@@ -62,12 +62,12 @@ const ProdInfoSection = () => {
           (items as SubKitItem[]).map((subKitItem) => (
             <div key={subKitItem.id} css={ItemWrapper}>
               <div css={leftBox}>
-                <div>
+                <div css={imageBox}>
                   <Image
                     src={subKitItem.sub_image}
                     alt={"product"}
-                    width={150}
-                    height={150}
+                    width={160}
+                    height={160}
                   />
                 </div>
                 <div css={textBox}>
@@ -105,6 +105,16 @@ const ProdInfoSection = () => {
 
 export default ProdInfoSection;
 
+const imageBox = css({
+  position: "relative",
+  width: "10rem",
+  height: "10rem",
+  [mq[1]]: {
+    maxWidth: "10rem",
+    maxHeight: "10rem",
+  },
+});
+
 const priceBox = css({
   [mq[1]]: {
     width: "100%",
@@ -118,18 +128,24 @@ const priceBox = css({
 
 const textBox = css({
   width: "100%",
+  maxWidth: "20rem",
   height: "auto",
   display: "flex",
   flexDirection: "column",
+  [mq[1]]: {
+    maxWidth: "10rem",
+    maxHeight: "10rem",
+  },
 });
 
 const leftBox = css({
   display: "flex",
   alignItems: "start",
   justifyContent: "start",
-  width: "auto",
+  width: "100%",
   height: "auto",
   gap: "1rem",
+  maxWidth: "40rem",
 });
 
 const ItemWrapper = css({

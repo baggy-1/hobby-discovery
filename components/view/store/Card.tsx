@@ -31,7 +31,7 @@ const Card = ({ kitItem }: Props) => {
           alt={pd_title}
           width={250}
           height={300}
-          css={[borderRadius("1.2rem"), hoverScale]}
+          css={[borderRadius("1.2rem"), hoverScale, imageO]}
         />
       </div>
       <div>{pd_title}</div>
@@ -41,6 +41,14 @@ const Card = ({ kitItem }: Props) => {
 };
 
 export default Card;
+
+const imageO = css({
+  [mq[1]]: {
+    ":hover": {
+      transform: "none",
+    },
+  },
+});
 
 const prodCard = css({
   cursor: "pointer",

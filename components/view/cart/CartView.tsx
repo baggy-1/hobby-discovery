@@ -11,24 +11,16 @@ import { useContext } from "react";
 import CartItem from "components/view/cart/CartItem";
 import { MAIN_COLOR, mq } from "config/styles";
 import { useRouter } from "next/router";
-import useUser from "hooks/useUser";
 import { ITEM_TYPE } from "config/data/order";
 
 const CartView = () => {
   const router = useRouter();
   const cartInfo = useContext(CartContext);
-  const { user } = useUser();
   const total = cartInfo?.state.reduce((acc, cur) => {
     return cur.checked ? acc + cur.kitItem.pd_price * cur.count : acc;
   }, 0);
 
   const onClickOrder = () => {
-    if (!user) {
-      alert("로그인이 필요합니다.");
-      router.push("/auth/login");
-      return;
-    }
-
     if (!cartInfo || cartInfo.state.length === 0) return;
 
     const resultKitItem = cartInfo.state.filter((item) => item.checked);

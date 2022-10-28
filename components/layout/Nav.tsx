@@ -1,5 +1,4 @@
 import { css } from "@emotion/react";
-import { HeadersDefaults } from "axios";
 import Cart from "components/common/Cart";
 import Profile from "components/common/Profile";
 import { CartContext } from "config/context";
@@ -13,11 +12,7 @@ import Close from "public/asset/svg/Close";
 import Hamburger from "public/asset/svg/Hamburger";
 import { useContext, useState } from "react";
 import { useSWRConfig } from "swr";
-import { AddProps } from "types";
 import { deleteCookie } from "util/cookie";
-
-type Auth = { Authorization: string };
-type Headers = AddProps<HeadersDefaults, Auth>;
 
 const Nav = () => {
   const cartInfo = useContext(CartContext);
@@ -41,17 +36,14 @@ const Nav = () => {
     deleteCookie("_hobby_rt");
     deleteCookie("_hobby_ae");
     deleteCookie("_hobby_at");
-    const headers: Headers = {
-      ...authInstance.defaults.headers,
-      Authorization: "",
-    };
-    headers["Authorization"] = "";
+    authInstance.defaults.headers.common["Authorization"] = "";
+
     localStorage.removeItem("cart");
     cartInfo?.dispatch({ type: "RESET" });
 
     router.replace("/store");
     setNavOpen(false);
-    mutate("/user/user", null, {
+    mutate("/user", null, {
       revalidate: true,
     });
   };

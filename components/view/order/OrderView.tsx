@@ -7,9 +7,10 @@ import PaymentSection from "components/view/order/PaymentSection";
 import TotalSection from "components/view/order/TotalSection";
 import { CartContext, OrderContext } from "config/context";
 import { useContext, useEffect, useState } from "react";
-import { MAIN_COLOR } from "config/styles";
+import { MAIN_COLOR, mq } from "config/styles";
 import { PAYMENT } from "config/data/order";
 import { authInstance } from "config/instance";
+import useUser from "hooks/useUser";
 
 const INIT_ORDER: AddNull<Order> = {
   address: null,
@@ -25,6 +26,7 @@ const OrderView = () => {
   const router = useRouter();
   const { items, type } = router.query;
   const cartInfo = useContext(CartContext);
+  const { user } = useUser();
 
   const [order, setOrder] = useState<AddNull<Order>>(INIT_ORDER);
 
@@ -64,6 +66,14 @@ const OrderView = () => {
         return null;
     }
   };
+
+  useEffect(() => {
+    if (!user) {
+      alert("로그인이 필요합니다");
+      router.push("/auth/login");
+      return;
+    }
+  }, [router, user]);
 
   useEffect(() => {
     const parseItems: Cart[] | SubKitItem[] | null =
@@ -117,13 +127,17 @@ const ButtonBox = css({
 });
 
 const Button = css({
-  width: "24rem",
+  width: "100%",
+  maxWidth: "24rem",
   height: "3rem",
   backgroundColor: MAIN_COLOR,
   color: "#FFFFFF",
   borderRadius: "0.5rem",
   fontSize: "1.25rem",
   fontWeight: "700",
+  [mq[1]]: {
+    maxWidth: "20rem",
+  },
 });
 
 export const section = css({
@@ -131,7 +145,7 @@ export const section = css({
   height: "auto",
   maxWidth: "60rem",
   borderBottom: "1px solid #999999",
-  padding: "2rem 0",
+  padding: "2rem 1rem",
   display: "flex",
   flexDirection: "column",
   gap: "1rem",

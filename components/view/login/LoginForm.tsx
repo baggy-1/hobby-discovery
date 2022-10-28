@@ -4,6 +4,7 @@ import fetchLogin from "function/fetchLogin";
 import useInput from "hooks/useInput";
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
+import { mutate } from "swr";
 
 const LoginForm = () => {
   const userId = useInput(/^[a-zA-Z0-9]*$/gm);
@@ -22,7 +23,11 @@ const LoginForm = () => {
 
       fetchLogin(data)
         .then((_) => {
-          router.back();
+          mutate("/user", null, {
+            revalidate: true,
+          }).then(() => {
+            router.back();
+          });
         })
         .catch((error: unknown) => {
           if (error instanceof AxiosError) {

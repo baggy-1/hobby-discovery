@@ -54,7 +54,7 @@ const MainSection = () => {
                     objectFit="cover"
                     css={[borderRadius("0.5rem")]}
                   />
-                  <div css={[descBox, hoverScale]}>
+                  <div css={[hoverScale, descBox]}>
                     <h2 css={Text("1.25rem", "700", "#000000")}>
                       {item.title}
                     </h2>
@@ -85,6 +85,11 @@ const descBox = css({
   position: "absolute",
   bottom: "-4rem",
   boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+  [mq[1]]: {
+    ":hover": {
+      transform: "none",
+    },
+  },
 });
 
 const imageBox = css({
@@ -107,6 +112,9 @@ const kitBox = css({
   justifyContent: "center",
   alignItems: "center",
   gap: "4rem",
+  [mq[1]]: {
+    gap: "2rem",
+  },
 });
 
 const kitWrapper = css({
@@ -116,8 +124,7 @@ const kitWrapper = css({
   width: "100%",
   height: "100%",
   [mq[1]]: {
-    padding: "0 2rem",
-    width: "100%",
+    width: "90%",
     height: "calc(300px + 4rem + 20px)",
     justifyContent: "flex-start",
     alignItems: "flex-start",
