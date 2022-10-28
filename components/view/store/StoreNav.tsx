@@ -1,6 +1,25 @@
 import { css } from "@emotion/react";
 import { useRouter } from "next/router";
 
+const NAV_LIST = [
+  {
+    label: "전체상품",
+    path: "/store/list/all",
+  },
+  {
+    label: "신상품",
+    path: "/store/list/new",
+  },
+  {
+    label: "인기상품",
+    path: "/store/list/popular",
+  },
+  {
+    label: "구독하기",
+    path: "/subscription",
+  },
+];
+
 const StoreNav = () => {
   const router = useRouter();
 
@@ -8,10 +27,11 @@ const StoreNav = () => {
     <>
       <div css={wrapper}>
         <ul css={ul}>
-          <li>전체상품</li>
-          <li>신상품</li>
-          <li>인기상품</li>
-          <li onClick={() => router.push("/subscription")}>구독하기</li>
+          {NAV_LIST.map((nav) => (
+            <li key={nav.label} onClick={() => router.push(nav.path)}>
+              {nav.label}
+            </li>
+          ))}
         </ul>
       </div>
     </>
