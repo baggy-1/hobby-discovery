@@ -5,7 +5,6 @@ import {
   maxWidthWrapper,
   Text,
 } from "components/common/styles";
-import Seo from "components/Seo";
 import { CartContext } from "config/context";
 import { useContext } from "react";
 import CartItem from "components/view/cart/CartItem";
@@ -36,7 +35,6 @@ const CartView = () => {
 
   return (
     <>
-      <Seo />
       <div css={container}>
         <div css={[maxWidthWrapper("100%"), gap("2rem")]}>
           <div css={header}>장바구니</div>

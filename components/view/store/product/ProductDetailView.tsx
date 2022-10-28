@@ -7,106 +7,51 @@ import {
   Text,
   WidthHeight,
 } from "components/common/styles";
-import Seo from "components/Seo";
-import { CartContext } from "config/context";
+import { CartContext, StoreDetailContext } from "config/context";
 import { MAIN_COLOR, mq } from "config/styles";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Close from "public/asset/svg/Close";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import useSWR from "swr";
-import { Cart, KitItem, Review } from "types";
+import { Cart, Review } from "types";
 import addRef from "util/addRef";
 import ReviewCard from "components/view/store/product/ReviewCard";
 import Star from "public/asset/svg/Star";
 import Chevron from "public/asset/svg/Chevron";
-import useUser from "hooks/useUser";
 import { ITEM_TYPE } from "config/data/order";
 
+const defaultImage = "/asset/image/main-image.png";
+
 const ProductDetailView = () => {
+  // data
   const cartInfo = useContext(CartContext);
-  const router = useRouter();
-  const { id, prod } = router.query;
+  const {
+    id,
+    kitItem,
+    kitItem: { pd_title, pd_descrition, pd_info, pd_price, pd_sell, images },
+  } = useContext(StoreDetailContext) as StoreDetailContext;
+  const { data: reviews } = useSWR<Review[]>(`/main/${id}/reviews`);
+
+  // state
   const [isCartBack, setIsCartBack] = useState(false);
-  const refArr = useRef<HTMLElement[]>([]);
   const [currentTap, setCurrentTap] = useState(0);
   const [reviewOpen, setReviewOpen] = useState(false);
   const [optionOpen, setOptionOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [resultKitItem, setResultKitItem] = useState<Cart[]>([]);
   const [selectBoxOpen, setSelectBoxOpen] = useState(false);
-  const { user } = useUser();
+  const refArr = useRef<HTMLElement[]>([]);
 
-  const handelScroll = useCallback(
-    (refArr: HTMLElement[]) => () => {
-      refArr.forEach((ref, index) => {
-        const { top, height } = ref.getBoundingClientRect();
-        const topValue = top - 64 - 48;
-        const isCurrentTap = topValue <= 0 && topValue + height >= 0;
-        if (isCurrentTap) {
-          setCurrentTap((prev) => {
-            if (prev === index) {
-              return prev;
-            }
-            return index;
-          });
-        }
-
-        return;
-      });
-    },
-    []
-  );
-
-  const handelResize = () => {
-    if (window.innerWidth <= 600) {
-      setIsMobile(true);
-    } else {
-      setIsMobile(false);
-    }
-  };
-
-  useEffect(() => {
-    const refarr = refArr.current;
-
-    window.addEventListener("scroll", handelScroll(refarr));
-
-    return () => {
-      window.removeEventListener("scroll", handelScroll(refarr));
-    };
-  }, [handelScroll]);
-
-  useEffect(() => {
-    const { innerWidth } = window;
-    if (innerWidth <= 600) {
-      setIsMobile(true);
-    } else {
-      setIsMobile(false);
-    }
-
-    window.addEventListener("resize", handelResize);
-
-    return () => {
-      window.removeEventListener("resize", handelResize);
-    };
-  }, []);
-
-  const kitItem: KitItem | null =
-    typeof prod === "string" ? JSON.parse(prod) : null;
-  const { data: reviews } = useSWR<Review[]>(`/main/${id}/reviews`);
+  // etc
+  const router = useRouter();
   const grade = reviews
     ? Math.floor(
         reviews.reduce((acc, cur) => acc + cur.grade, 0) / reviews.length
       )
     : 0;
 
-  if (!kitItem) return <div>상품 정보가 없습니다</div>;
-
-  const { pd_title, pd_descrition, pd_info, pd_price, pd_sell, images } =
-    kitItem;
-
-  const defaultImage = "/asset/image/main-image.png";
-
+  // onClick event
   const onClickCart = (type: "cart" | "order") => () => {
     if (isMobile && !optionOpen) {
       setOptionOpen(true);
@@ -162,9 +107,63 @@ const ProductDetailView = () => {
     });
   };
 
+  const handleScroll = useCallback(
+    (refArr: HTMLElement[]) => () => {
+      refArr.forEach((ref, index) => {
+        const { top, height } = ref.getBoundingClientRect();
+        const topValue = top - 64 - 48;
+        const isCurrentTap = topValue <= 0 && topValue + height >= 0;
+        if (isCurrentTap) {
+          setCurrentTap((prev) => {
+            if (prev === index) {
+              return prev;
+            }
+            return index;
+          });
+        }
+
+        return;
+      });
+    },
+    []
+  );
+
+  const handleResize = () => {
+    if (window.innerWidth <= 600) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+  };
+
+  // useEffect
+  useEffect(() => {
+    const refarr = refArr.current;
+
+    window.addEventListener("scroll", handleScroll(refarr));
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll(refarr));
+    };
+  }, [handleScroll]);
+
+  useEffect(() => {
+    const { innerWidth } = window;
+    if (innerWidth <= 600) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <>
-      <Seo />
       <div css={[container, Wrapper]}>
         <div css={[maxWidthWrapper("100%"), Center("column")]}>
           <div css={topWrapper}>

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import useSWR from "swr";
 import StoreNav from "components/view/store/StoreNav";
 import { KitItem } from "types";
@@ -7,50 +7,24 @@ import Image from "next/image";
 import { css } from "@emotion/react";
 import { borderRadius, Text } from "components/common/styles";
 import Chevron from "public/asset/svg/Chevron";
-
-type AddProps<T, U> = {
-  [P in keyof T]: T[P];
-} & {
-  [P: string]: U;
-};
-
-interface SortQuery {
-  all: string;
-  new: "pd_create";
-  popular: "review_count";
-}
-
-const SORT_QUERY: AddProps<SortQuery, string> = {
-  all: "",
-  new: "pd_create",
-  popular: "review_count",
-};
-
-const PAGE_ITEMS_NUM = 10;
+import { PAGE_ITEMS_NUM, SORT_QUERY } from "pages/store/list/[sort]";
+import { StoreMainContext } from "config/context";
 
 const defaultImage = "/asset/image/main-image.png";
 
 const StoreSortView = () => {
   const router = useRouter();
-  const { sort, page } = router.query;
-  const [pageIndex, setPageIndex] = useState(1);
+  const { sort, pageIndex } = useContext(StoreMainContext);
+  const order = SORT_QUERY[sort].order;
 
   const { data, isValidating } = useSWR<KitItem[]>(
-    typeof sort === "string"
-      ? `/main/hobby?order=${
-          SORT_QUERY[sort] || SORT_QUERY.new
-        }&page=${pageIndex}&items=${PAGE_ITEMS_NUM}`
-      : null,
+    `/main/hobby?order=${order}&page=${pageIndex}&items=${PAGE_ITEMS_NUM}`,
     {
       shouldRetryOnError: false,
     }
   );
   const { data: nextData, error: nextDataError } = useSWR<KitItem[]>(
-    typeof sort === "string"
-      ? `/main/hobby?order=${SORT_QUERY[sort] || SORT_QUERY.new}&page=${
-          pageIndex + 1
-        }&items=${PAGE_ITEMS_NUM}`
-      : null,
+    `/main/hobby?order=${order}&page=${pageIndex + 1}&items=${PAGE_ITEMS_NUM}`,
     {
       shouldRetryOnError: false,
     }
@@ -59,7 +33,6 @@ const StoreSortView = () => {
   const onClickPageIndex =
     (type: "prev" | "next" | "page", page?: number) => () => {
       if (page) {
-        setPageIndex(page);
         router.push(`/store/list/${sort}?page=${page}`);
         return;
       }
@@ -69,13 +42,9 @@ const StoreSortView = () => {
       if (type === "prev") {
         if (pageIndex === 1) return;
         resultPageIndex = pageIndex - 1;
-        setPageIndex((prev) => prev - 1);
       } else if (type === "next") {
         if (nextDataError || nextData?.length === 0) return;
         resultPageIndex = pageIndex + 1;
-        setPageIndex((prev) => prev + 1);
-      } else {
-        return;
       }
 
       router.push(`/store/list/${sort}?page=${resultPageIndex}`);
@@ -90,10 +59,6 @@ const StoreSortView = () => {
       },
     });
   };
-
-  useEffect(() => {
-    setPageIndex(typeof page === "string" ? +page : 1);
-  }, [page]);
 
   return (
     <div css={container}>
@@ -280,18 +245,18 @@ const section = css({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  justifyContent: "center",
+  justifyContent: "space-between",
   width: "100%",
   height: "100%",
-  maxWidth: "80rem",
 });
 
 const container = css({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  justifyContent: "center",
+  justifyContent: "flex-start",
   width: "100%",
   height: "100%",
   gap: "1rem",
+  minHeight: "calc(100vh - 6rem - 3rem)",
 });

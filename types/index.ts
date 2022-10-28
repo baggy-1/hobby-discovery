@@ -140,3 +140,7 @@ export interface Order {
   items: Cart[] | SubKitItem[];
   type: string;
 }
+
+export interface InitFallback<T> {
+  [key: string]: T;
+}

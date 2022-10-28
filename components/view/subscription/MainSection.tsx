@@ -10,7 +10,7 @@ import { DelProp, SubKitItem } from "types";
 type OriginalSubKitItem = DelProp<SubKitItem, "type">;
 
 const MainSection = () => {
-  const { data } = useSWR<OriginalSubKitItem[]>("user/sub_pd");
+  const { data: subKitItems } = useSWR<OriginalSubKitItem[]>("user/sub_pd");
   const router = useRouter();
 
   const onClickOrder = (item: SubKitItem) => () => {
@@ -36,8 +36,8 @@ const MainSection = () => {
         </div>
         <div css={kitWrapper}>
           <div css={kitBox}>
-            {data &&
-              data.map((item) => (
+            {subKitItems &&
+              subKitItems.map((item) => (
                 <div
                   css={imageBox}
                   key={item.title}

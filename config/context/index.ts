@@ -1,6 +1,6 @@
 import { CartAction } from "config/reducer";
 import { createContext, Dispatch, SetStateAction } from "react";
-import { AddNull, Cart, Order } from "types";
+import { AddNull, Cart, KitItem, Order } from "types";
 
 interface CartContext {
   state: Cart[];
@@ -16,4 +16,21 @@ interface OrderContext {
 
 const OrderContext = createContext<OrderContext | null>(null);
 
-export { CartContext, OrderContext };
+interface StoreMainContext {
+  sort: string;
+  pageIndex: number;
+}
+
+const StoreMainContext = createContext<StoreMainContext>({
+  sort: "all",
+  pageIndex: 1,
+});
+
+interface StoreDetailContext {
+  id: string;
+  kitItem: KitItem;
+}
+
+const StoreDetailContext = createContext<StoreDetailContext | null>(null);
+
+export { CartContext, OrderContext, StoreMainContext, StoreDetailContext };

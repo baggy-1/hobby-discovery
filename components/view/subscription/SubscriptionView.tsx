@@ -4,10 +4,12 @@ import PrSection from "components/view/subscription/PrSection";
 
 const SubscriptionView = () => {
   return (
-    <div css={container}>
-      <MainSection />
-      <PrSection />
-    </div>
+    <>
+      <div css={container}>
+        <MainSection />
+        <PrSection />
+      </div>
+    </>
   );
 };
 
