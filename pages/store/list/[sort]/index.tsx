@@ -1,4 +1,3 @@
-import Seo from "components/Seo";
 import StoreSortView from "components/view/store/list/sort/StoreSortView";
 import { StoreMainContext } from "config/context";
 import { fetcher } from "config/fetcher";
@@ -51,7 +50,6 @@ export const PAGE_ITEMS_NUM = 10;
 const StoreSortPage = ({ fallback, sort, pageIndex }: Props) => {
   return (
     <>
-      <Seo title={SORT_QUERY[sort].label} />
       <StoreMainContext.Provider value={{ sort, pageIndex }}>
         <SWRConfig value={{ fallback, fetcher }}>
           <StoreSortView />

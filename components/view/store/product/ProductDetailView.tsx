@@ -14,23 +14,21 @@ import { useRouter } from "next/router";
 import Close from "public/asset/svg/Close";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import useSWR from "swr";
-import { Cart, Review } from "types";
+import { Cart, KitItem, Review } from "types";
 import addRef from "util/addRef";
 import ReviewCard from "components/view/store/product/ReviewCard";
 import Star from "public/asset/svg/Star";
 import Chevron from "public/asset/svg/Chevron";
 import { ITEM_TYPE } from "config/data/order";
+import Seo from "components/Seo";
 
 const defaultImage = "/asset/image/main-image.png";
 
 const ProductDetailView = () => {
   // data
   const cartInfo = useContext(CartContext);
-  const {
-    id,
-    kitItem,
-    kitItem: { pd_title, pd_descrition, pd_info, pd_price, pd_sell, images },
-  } = useContext(StoreDetailContext) as StoreDetailContext;
+  const { id } = useContext(StoreDetailContext) as StoreDetailContext;
+  const { data: kitItem } = useSWR<KitItem>(`/main/${id}`);
   const { data: reviews } = useSWR<Review[]>(`/main/${id}/reviews`);
 
   // state
@@ -84,6 +82,7 @@ const ProductDetailView = () => {
     const exist = resultKitItem.find((item) => item.kitItem.pd_title === value);
 
     if (exist) return;
+    if (!kitItem) return;
 
     setResultKitItem((prev) => {
       return [...prev, { kitItem, count: 1, checked: true, type: "product" }];
@@ -162,8 +161,17 @@ const ProductDetailView = () => {
     };
   }, []);
 
+  if (!kitItem) return <div>상품이 없습니다</div>;
+  const { pd_title, pd_price, images, pd_descrition, pd_id, pd_sell, pd_info } =
+    kitItem;
+
   return (
     <>
+      <Seo
+        title={pd_title}
+        description={pd_descrition}
+        image={images[0].image}
+      />
       <div css={[container, Wrapper]}>
         <div css={[maxWidthWrapper("100%"), Center("column")]}>
           <div css={topWrapper}>

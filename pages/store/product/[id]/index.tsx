@@ -1,4 +1,3 @@
-import Seo from "components/Seo";
 import ProductDetailView from "components/view/store/product/ProductDetailView";
 import { StoreDetailContext } from "config/context";
 import { fetcher } from "config/fetcher";
@@ -9,22 +8,14 @@ import { SWRConfig } from "swr";
 import { InitFallback, KitItem, Review } from "types";
 
 interface Props {
-  fallback: InitFallback<Review[]>;
+  fallback: InitFallback<Review[] | KitItem>;
   id: string;
-  kitItem: string;
 }
 
-const ProductDetail = ({ fallback, id, kitItem }: Props) => {
-  const parseKitItem: KitItem = JSON.parse(kitItem);
-
+const ProductDetail = ({ fallback, id }: Props) => {
   return (
     <>
-      <Seo
-        title={parseKitItem.pd_title}
-        description={parseKitItem.pd_descrition}
-        image={parseKitItem.images[0].image}
-      />
-      <StoreDetailContext.Provider value={{ id, kitItem: parseKitItem }}>
+      <StoreDetailContext.Provider value={{ id }}>
         <SWRConfig value={{ fallback, fetcher }}>
           <ProductDetailView />
         </SWRConfig>
@@ -35,8 +26,17 @@ const ProductDetail = ({ fallback, id, kitItem }: Props) => {
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const fallback: InitFallback<Review[] | null> = {};
-  const { id, prod } = query;
+  const { id } = query;
   const reviewKey = `/main/${id}/reviews`;
+  const kitItemKey = `/main/${id}`;
+
+  try {
+    const { data } = await instance.get(kitItemKey);
+
+    fallback[kitItemKey] = data;
+  } catch (error) {
+    fallback[kitItemKey] = null;
+  }
 
   try {
     const { data } = await instance.get(reviewKey);
@@ -53,7 +53,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     props: {
       fallback,
       id,
-      kitItem: prod,
     },
   };
 };

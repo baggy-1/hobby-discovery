@@ -9,6 +9,7 @@ import { borderRadius, Text } from "components/common/styles";
 import Chevron from "public/asset/svg/Chevron";
 import { PAGE_ITEMS_NUM, SORT_QUERY } from "pages/store/list/[sort]";
 import { StoreMainContext } from "config/context";
+import Seo from "components/Seo";
 
 const defaultImage = "/asset/image/main-image.png";
 
@@ -54,95 +55,95 @@ const StoreSortView = () => {
   const onClickDetail = (item: KitItem) => () => {
     router.push({
       pathname: `/store/product/${item.pd_id}`,
-      query: {
-        prod: JSON.stringify(item),
-      },
     });
   };
 
   return (
-    <div css={container}>
-      <StoreNav />
-      <section css={section}>
-        <div css={itemsWrapper}>
-          {data?.map((item) => (
-            <div
-              key={item.pd_id}
-              css={itemWrapper}
-              onClick={onClickDetail(item)}
-            >
-              <div css={[imageBox, borderRadius("0.25rem")]}>
-                <Image
-                  src={item.images[0] ? item.images[0].image : defaultImage}
-                  alt={"kit-product"}
-                  layout={"fill"}
-                  objectFit={"cover"}
-                  css={borderRadius("0.25rem")}
-                />
-              </div>
-              <div css={textBox}>
-                <h2 css={Text("1rem", "500", "#999999")}>{item.pd_sell}</h2>
-                <div css={[textBottomBox, Text("1.1rem", "700", "#000000")]}>
-                  <h1>
-                    {item.pd_title.length <= 12
-                      ? item.pd_title
-                      : `${item.pd_title.slice(0, 12)}...`}
-                  </h1>
-                  <h1>{item.pd_price.toLocaleString("ko-KR")}원</h1>
+    <>
+      <Seo title={SORT_QUERY[sort].label} />
+      <div css={container}>
+        <StoreNav />
+        <section css={section}>
+          <div css={itemsWrapper}>
+            {data?.map((item) => (
+              <div
+                key={item.pd_id}
+                css={itemWrapper}
+                onClick={onClickDetail(item)}
+              >
+                <div css={[imageBox, borderRadius("0.25rem")]}>
+                  <Image
+                    src={item.images[0] ? item.images[0].image : defaultImage}
+                    alt={"kit-product"}
+                    layout={"fill"}
+                    objectFit={"cover"}
+                    css={borderRadius("0.25rem")}
+                  />
+                </div>
+                <div css={textBox}>
+                  <h2 css={Text("1rem", "500", "#999999")}>{item.pd_sell}</h2>
+                  <div css={[textBottomBox, Text("1.1rem", "700", "#000000")]}>
+                    <h1>
+                      {item.pd_title.length <= 12
+                        ? item.pd_title
+                        : `${item.pd_title.slice(0, 12)}...`}
+                    </h1>
+                    <h1>{item.pd_price.toLocaleString("ko-KR")}원</h1>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-        <div css={ButtonWrapper}>
-          {pageIndex !== 1 && (
-            <button
-              css={Button}
-              disabled={isValidating}
-              onClick={onClickPageIndex("prev")}
-            >
-              <div css={chevron("left")}>
-                <Chevron />
-              </div>
-            </button>
-          )}
-          <div css={ButtonIndexBox}>
-            {Array(5)
-              .fill(0)
-              .map((_, index) => {
-                const buttonIndex =
-                  Math.trunc((pageIndex - 1) / 5) * 5 + index + 1;
-
-                if (nextDataError) {
-                  if (buttonIndex > pageIndex) return null;
-                }
-
-                return (
-                  <button
-                    css={ButtonIndex(pageIndex === buttonIndex)}
-                    key={index}
-                    disabled={isValidating}
-                    onClick={onClickPageIndex("page", buttonIndex)}
-                  >
-                    {buttonIndex}
-                  </button>
-                );
-              })}
+            ))}
           </div>
-          {!nextDataError && (
-            <button
-              css={Button}
-              disabled={isValidating}
-              onClick={onClickPageIndex("next")}
-            >
-              <div css={chevron("right")}>
-                <Chevron />
-              </div>
-            </button>
-          )}
-        </div>
-      </section>
-    </div>
+          <div css={ButtonWrapper}>
+            {pageIndex !== 1 && (
+              <button
+                css={Button}
+                disabled={isValidating}
+                onClick={onClickPageIndex("prev")}
+              >
+                <div css={chevron("left")}>
+                  <Chevron />
+                </div>
+              </button>
+            )}
+            <div css={ButtonIndexBox}>
+              {Array(5)
+                .fill(0)
+                .map((_, index) => {
+                  const buttonIndex =
+                    Math.trunc((pageIndex - 1) / 5) * 5 + index + 1;
+
+                  if (nextDataError) {
+                    if (buttonIndex > pageIndex) return null;
+                  }
+
+                  return (
+                    <button
+                      css={ButtonIndex(pageIndex === buttonIndex)}
+                      key={index}
+                      disabled={isValidating}
+                      onClick={onClickPageIndex("page", buttonIndex)}
+                    >
+                      {buttonIndex}
+                    </button>
+                  );
+                })}
+            </div>
+            {!nextDataError && (
+              <button
+                css={Button}
+                disabled={isValidating}
+                onClick={onClickPageIndex("next")}
+              >
+                <div css={chevron("right")}>
+                  <Chevron />
+                </div>
+              </button>
+            )}
+          </div>
+        </section>
+      </div>
+    </>
   );
 };
 

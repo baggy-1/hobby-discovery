@@ -19,9 +19,6 @@ const Card = ({ kitItem }: Props) => {
       onClick={() =>
         router.push({
           pathname: `/store/product/${pd_id}`,
-          query: {
-            prod: JSON.stringify(kitItem),
-          },
         })
       }
     >
