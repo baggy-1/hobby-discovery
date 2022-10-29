@@ -5,10 +5,12 @@ import Layout from "components/layout/Layout";
 import { SWRConfig } from "swr";
 import { fetcher } from "config/fetcher";
 import CartProvider from "components/provider/CartProvider";
+import Ga from "components/common/Ga";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
+      <Ga />
       <SWRConfig value={{ fetcher }}>
         <CartProvider>
           <Layout>
