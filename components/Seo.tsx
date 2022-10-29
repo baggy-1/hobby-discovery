@@ -12,7 +12,7 @@ const BASE = {
   description:
     "문 앞으로 취미를 선물 해드려요. 한 달 마다 새롭고 흥미로운 취미 박스를 받아보세요. 남녀노소 집 안에서 즐길 수 있어요.",
   url: "https://chiham.vercel.app",
-  image: "asset/image/chiham-poster.png",
+  image: "/asset/image/chiham-poster.png",
 };
 
 const Seo = ({ title, description, url, image }: Props) => {
