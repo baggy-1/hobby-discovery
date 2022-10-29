@@ -13,7 +13,7 @@ interface Props {
 const Store = ({ fallback }: Props) => {
   return (
     <>
-      <Seo title="스토어" />
+      <Seo title="스토어" url={`/store`} />
       <SWRConfig value={{ fallback, fetcher }}>
         <StoreView />
       </SWRConfig>

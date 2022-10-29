@@ -16,7 +16,7 @@ interface Props {
 const Subscription = ({ fallback }: Props) => {
   return (
     <>
-      <Seo title={"구독"} />
+      <Seo title={"구독"} url={`/subscription`} />
       <SWRConfig value={{ fallback, fetcher }}>
         <SubscriptionView />
       </SWRConfig>

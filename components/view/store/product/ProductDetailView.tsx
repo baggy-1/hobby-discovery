@@ -170,6 +170,7 @@ const ProductDetailView = () => {
       <Seo
         title={pd_title}
         description={pd_descrition}
+        url={`/store/product/${pd_id}`}
         image={images[0].image}
       />
       <div css={[container, Wrapper]}>

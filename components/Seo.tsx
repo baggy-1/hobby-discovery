@@ -7,13 +7,19 @@ interface Props {
   image?: string;
 }
 
+const BASE = {
+  title: "취함(CHIHAM)",
+  description:
+    "문 앞으로 취미를 선물 해드려요. 한 달 마다 새롭고 흥미로운 취미 박스를 받아보세요. 남녀노소 집 안에서 즐길 수 있어요.",
+  url: "https://chiham.vercel.app",
+  image: "asset/image/chiham-poster.png",
+};
+
 const Seo = ({ title, description, url, image }: Props) => {
-  const titleText = title ? `${title} | 취함(CHIHAM)` : "취함(CHIHAM)";
-  const descriptionText = description
-    ? description
-    : "문 앞으로 취미를 선물 해드려요. 한 달 마다 새롭고 흥미로운 취미 박스를 받아보세요. 남녀노소 집 안에서 즐길 수 있어요.";
-  const urlPath = url ? url : "https://chiham.vercel.app";
-  const imagePath = image ? image : "asset/image/chiham-poster.png";
+  const titleText = title ? `${title} | ${BASE.title}` : BASE.title;
+  const descriptionText = description ? description : BASE.description;
+  const urlPath = url ? `${BASE.url}${url}` : BASE.url;
+  const imagePath = image ? image : BASE.image;
 
   return (
     <Head>

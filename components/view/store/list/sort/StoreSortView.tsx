@@ -60,7 +60,10 @@ const StoreSortView = () => {
 
   return (
     <>
-      <Seo title={SORT_QUERY[sort].label} />
+      <Seo
+        title={SORT_QUERY[sort].label}
+        url={`/store/list/${sort}?page=${pageIndex}`}
+      />
       <div css={container}>
         <StoreNav />
         <section css={section}>
