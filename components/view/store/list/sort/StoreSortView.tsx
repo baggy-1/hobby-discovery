@@ -190,6 +190,8 @@ const ButtonWrapper = css({
   justifyContent: "center",
   alignItems: "center",
   gap: "1rem",
+  width: "100%",
+  maxWidth: "80rem",
 });
 
 const Button = css({
@@ -211,6 +213,7 @@ const itemsWrapper = css({
   gap: "1rem",
   width: "100%",
   height: "100%",
+  maxWidth: "80rem",
 });
 
 const textBottomBox = css({
