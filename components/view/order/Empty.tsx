@@ -5,9 +5,10 @@ import { useRouter } from "next/router";
 
 interface Props {
   title: string;
+  pushPath: string;
 }
 
-const Empty = ({ title }: Props) => {
+const Empty = ({ title, pushPath }: Props) => {
   const router = useRouter();
 
   return (
@@ -15,7 +16,7 @@ const Empty = ({ title }: Props) => {
       <h1 css={Text("1.5rem", "700", "#000000")}>{title}</h1>
       <h2
         css={[Text("1.8rem", "700", MAIN_COLOR), emptyProd]}
-        onClick={() => router.push("/store")}
+        onClick={() => router.push(pushPath)}
       >
         상품 둘러보러 가기
       </h2>

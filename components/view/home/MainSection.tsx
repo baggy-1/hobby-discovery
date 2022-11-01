@@ -49,6 +49,7 @@ const MainSection = () => {
                 src={`/asset/image/main-image.png`}
                 alt={`main`}
                 layout={`fill`}
+                priority={true}
               />
             </div>
           </div>

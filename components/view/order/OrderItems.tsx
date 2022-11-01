@@ -15,7 +15,7 @@ const OrderItems = () => {
   return (
     <>
       {data?.order.length === 0 && (
-        <Empty title={"아직 구매한 상품이 없습니다!"} />
+        <Empty title={"아직 구매한 상품이 없습니다!"} pushPath={"/store"} />
       )}
       {data?.order.map((order) => (
         <div key={order.o_id} css={wrapper}>
@@ -33,7 +33,12 @@ const OrderItems = () => {
                   />
                 </div>
                 <div>
-                  <h2 css={Title}>{item.p_title}</h2>
+                  <h2
+                    css={Title}
+                    onClick={() => router.push(`/store/product/${item.p_id}`)}
+                  >
+                    {item.p_title}
+                  </h2>
                   <h2 css={Text("0.8rem", "400", "#999999")}>
                     {item.p_description}
                   </h2>
@@ -77,6 +82,7 @@ export const Title = css({
   fontSize: "1.1rem",
   fontWeight: "700",
   color: "#000000",
+  cursor: "pointer",
   width: "fit-content",
 });
 

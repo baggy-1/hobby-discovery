@@ -13,15 +13,19 @@ import {
 } from "components/view/order/OrderItems";
 import Image from "next/image";
 import { borderRadius, Text } from "components/common/styles";
+import { useRouter } from "next/router";
 
 const OrderSubs = () => {
+  const router = useRouter();
   const { data } = useSWR<OrderSubListObj>("/order?type=sub", authFetcher);
-  console.log(data);
 
   return (
     <>
       {data?.order.length === 0 && (
-        <Empty title={"아직 구독한 상품이 없습니다!"} />
+        <Empty
+          title={"아직 구독한 상품이 없습니다!"}
+          pushPath={"/subscription"}
+        />
       )}
       {data?.order.map((order) => (
         <div key={order.o_id} css={wrapper}>
@@ -39,7 +43,9 @@ const OrderSubs = () => {
                   />
                 </div>
                 <div>
-                  <h2 css={Title}>{item.s_title}</h2>
+                  <h2 css={Title} onClick={() => router.push("/subscription")}>
+                    {item.s_title}
+                  </h2>
                   <h2 css={Text("0.8rem", "400", "#999999")}>{item.s_body}</h2>
                   <h2 css={Text("0.8rem", "400", "#999999")}>1개</h2>
                   <h2 css={Text("1.1rem", "600", "#000000")}>
