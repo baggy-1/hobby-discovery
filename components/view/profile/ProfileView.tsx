@@ -1,4 +1,5 @@
 import { css } from "@emotion/react";
+import Loading from "components/common/Loading";
 import { borderRadius } from "components/common/styles";
 import { MAIN_COLOR } from "config/styles";
 import useUser from "hooks/useUser";
@@ -10,11 +11,11 @@ const ProfileView = () => {
   const router = useRouter();
 
   if (error) {
-    router.replace("/auth/login");
+    router.push("/auth/login");
     return <div>정보 가져오기 실패... 잠시 후 로그인 화면으로 이동됩니다</div>;
   }
 
-  if (!user || loading) return <div>정보 가져오는 중...</div>;
+  if (!user || loading) return <Loading />;
 
   const { username, profile, nickname } = user;
 
@@ -38,6 +39,9 @@ const ProfileView = () => {
         </div>
         <div css={updateButton} onClick={() => router.push("/profile/update")}>
           내 정보 수정
+        </div>
+        <div css={updateButton} onClick={() => router.push("/order/list")}>
+          결제 내역 보기
         </div>
       </div>
     </>

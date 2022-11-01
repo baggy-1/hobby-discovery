@@ -11,6 +11,7 @@ import { MAIN_COLOR, mq } from "config/styles";
 import { PAYMENT } from "config/data/order";
 import { authInstance } from "config/instance";
 import useUser from "hooks/useUser";
+import Loading from "components/common/Loading";
 
 const INIT_ORDER: AddNull<Order> = {
   address: null,
@@ -26,7 +27,7 @@ const OrderView = () => {
   const router = useRouter();
   const { items, type } = router.query;
   const cartInfo = useContext(CartContext);
-  const { user } = useUser();
+  const { user, loading, error } = useUser();
 
   const [order, setOrder] = useState<AddNull<Order>>(INIT_ORDER);
 
@@ -37,7 +38,7 @@ const OrderView = () => {
     }
 
     authInstance
-      .post("/order/", order)
+      .post(`/order/?type=${order.type}`, order)
       .then((res) => {
         alert("주문이 완료되었습니다.");
         router.replace("/store");
@@ -68,14 +69,6 @@ const OrderView = () => {
   };
 
   useEffect(() => {
-    if (!user) {
-      alert("로그인이 필요합니다");
-      router.push("/auth/login");
-      return;
-    }
-  }, [router, user]);
-
-  useEffect(() => {
     const parseItems: Cart[] | SubKitItem[] | null =
       typeof items === "string" ? JSON.parse(items) : null;
 
@@ -92,6 +85,13 @@ const OrderView = () => {
       type: typeof type === "string" ? type : null,
     });
   }, [items, type]);
+
+  if (loading) return <Loading />;
+
+  if (error) {
+    router.push("/auth/login");
+    return <div>에러 발생...</div>;
+  }
 
   return (
     <OrderContext.Provider value={{ order, setOrder }}>

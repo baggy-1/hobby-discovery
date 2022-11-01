@@ -144,3 +144,52 @@ export interface Order {
 export interface InitFallback<T> {
   [key: string]: T;
 }
+
+interface DefaultOrder {
+  o_add: string;
+  o_create: string;
+  o_id: number;
+  o_name: string;
+  o_num: string;
+  o_pay: string;
+  o_total_price: number;
+}
+
+interface OrderItem {
+  o_items: {
+    p_create: string;
+    p_description: string;
+    p_id: number;
+    p_info: string;
+    p_price: number;
+    p_quantity: number;
+    p_sell: string;
+    p_title: string;
+    p_total_price: number;
+    p_image: Image[];
+  }[];
+}
+
+type OrderItemList = AddProps<DefaultOrder, OrderItem>;
+
+export interface OrderItemListObj {
+  order: OrderItemList[];
+}
+
+interface OrderSub {
+  o_items: {
+    s_body: string;
+    s_id: number;
+    s_price: number;
+    s_sub_image: string;
+    s_title: string;
+    s_create: string;
+    s_delete: string;
+  }[];
+}
+
+type OrderSubList = AddProps<DefaultOrder, OrderSub>;
+
+export interface OrderSubListObj {
+  order: OrderSubList[];
+}

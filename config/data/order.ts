@@ -16,7 +16,7 @@ const PAYMENT = {
 const ITEM_TYPE = {
   PRODUCT: {
     item: "product" as const,
-    order: "prod" as const,
+    order: "item" as const,
   },
   SUBSCRIPTION: {
     item: "subscription" as const,

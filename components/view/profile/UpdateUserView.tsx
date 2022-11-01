@@ -1,4 +1,5 @@
 import { css } from "@emotion/react";
+import Loading from "components/common/Loading";
 import Seo from "components/Seo";
 import useUser from "hooks/useUser";
 import { useRouter } from "next/router";
@@ -8,7 +9,7 @@ const UpdateUserView = () => {
   const router = useRouter();
   const { user, loading, error } = useUser();
 
-  if (loading) return <div>로딩중...</div>;
+  if (loading) return <Loading />;
   if (error) {
     router.replace("/auth/login");
     return <div>에러 발생...</div>;
