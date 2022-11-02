@@ -17,49 +17,51 @@ const OrderItems = () => {
       {data?.order.length === 0 && (
         <Empty title={"아직 구매한 상품이 없습니다!"} pushPath={"/store"} />
       )}
-      {data?.order.map((order) => (
-        <div key={order.o_id} css={wrapper}>
-          <h1 css={Time}>{order.o_create.split("T")[0]}</h1>
-          {order.o_items.map((item) => (
-            <div key={item.p_id} css={itemWrapper}>
-              <div css={leftBox}>
-                <div css={ImageBox}>
-                  <Image
-                    src={item.p_image[0].image}
-                    alt={"order-item"}
-                    width={100}
-                    height={100}
-                    css={borderRadius("0.25rem")}
-                  />
+      {data?.order
+        .sort((a, b) => (new Date(a.o_create) > new Date(b.o_create) ? -1 : 1))
+        .map((order) => (
+          <div key={order.o_id} css={wrapper}>
+            <h1 css={Time}>{order.o_create.split("T")[0]}</h1>
+            {order.o_items.map((item) => (
+              <div key={item.p_id} css={itemWrapper}>
+                <div css={leftBox}>
+                  <div css={ImageBox}>
+                    <Image
+                      src={item.p_image[0].image}
+                      alt={"order-item"}
+                      width={100}
+                      height={100}
+                      css={borderRadius("0.25rem")}
+                    />
+                  </div>
+                  <div>
+                    <h2
+                      css={Title}
+                      onClick={() => router.push(`/store/product/${item.p_id}`)}
+                    >
+                      {item.p_title}
+                    </h2>
+                    <h2 css={Text("0.8rem", "400", "#999999")}>
+                      {item.p_description}
+                    </h2>
+                    <h2 css={Text("0.8rem", "400", "#999999")}>
+                      {item.p_quantity}개
+                    </h2>
+                    <h2 css={Text("1.1rem", "600", "#000000")}>
+                      {`총 ${item.p_total_price.toLocaleString("ko-KR")}원`}
+                    </h2>
+                  </div>
                 </div>
-                <div>
-                  <h2
-                    css={Title}
-                    onClick={() => router.push(`/store/product/${item.p_id}`)}
-                  >
-                    {item.p_title}
-                  </h2>
-                  <h2 css={Text("0.8rem", "400", "#999999")}>
-                    {item.p_description}
-                  </h2>
-                  <h2 css={Text("0.8rem", "400", "#999999")}>
-                    {item.p_quantity}개
-                  </h2>
-                  <h2 css={Text("1.1rem", "600", "#000000")}>
-                    {`총 ${item.p_total_price.toLocaleString("ko-KR")}원`}
-                  </h2>
-                </div>
+                <button
+                  css={Button}
+                  onClick={() => router.push(`/store/product/${item.p_id}`)}
+                >
+                  구매후기 작성하기
+                </button>
               </div>
-              <button
-                css={Button}
-                onClick={() => router.push(`/store/product/${item.p_id}`)}
-              >
-                구매후기 작성하기
-              </button>
-            </div>
-          ))}
-        </div>
-      ))}
+            ))}
+          </div>
+        ))}
     </>
   );
 };

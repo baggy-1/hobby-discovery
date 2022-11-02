@@ -50,6 +50,14 @@ export interface KitItem {
   images: Image[];
 }
 
+export interface KitItemWithPage {
+  total_page: number;
+  total_count: number;
+  current_page: number;
+  is_next: boolean;
+  result: KitItem[];
+}
+
 export interface AccessToken {
   access_token: string;
   access_exp: number;
@@ -185,6 +193,7 @@ interface OrderSub {
     s_title: string;
     s_create: string;
     s_delete: string;
+    sub_id: string;
   }[];
 }
 

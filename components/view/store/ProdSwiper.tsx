@@ -1,5 +1,5 @@
 import Card from "components/view/store/Card";
-import { KitItem } from "types";
+import { KitItem, KitItemWithPage } from "types";
 import { withRouter } from "next/router";
 import useSWR from "swr";
 import { css } from "@emotion/react";
@@ -12,7 +12,7 @@ interface Props {
 }
 
 const ProdSwiper = ({ query }: Props) => {
-  const { data } = useSWR<KitItem[]>(
+  const { data } = useSWR<KitItemWithPage>(
     `/main/hobby?order=${query}&items=10&page=1`
   );
 
@@ -55,7 +55,7 @@ const ProdSwiper = ({ query }: Props) => {
           </div>
         </div>
         <div css={imageWrap(move)} ref={refWrap}>
-          {data?.map((kitItem) => (
+          {data?.result.map((kitItem) => (
             <Card key={kitItem.pd_id} kitItem={kitItem} />
           ))}
         </div>
