@@ -4,7 +4,7 @@ import { fetcher } from "config/fetcher";
 import { instance } from "config/instance";
 import { GetServerSideProps } from "next";
 import { SWRConfig } from "swr";
-import { InitFallback, KitItem } from "types";
+import { InitFallback, KitItem, KitItemWithPage } from "types";
 
 interface Sort {
   label: string;
@@ -19,9 +19,10 @@ interface SortQuery {
 }
 
 interface Props {
-  fallback: InitFallback<KitItem[]>;
+  fallback: InitFallback<KitItemWithPage>;
   pageIndex: number;
   sort: string;
+  search: string;
 }
 
 export const SORT_QUERY: SortQuery = {
@@ -39,12 +40,12 @@ export const SORT_QUERY: SortQuery = {
   },
 };
 
-export const PAGE_ITEMS_NUM = 1;
+export const PAGE_ITEMS_NUM = 12;
 
-const StoreSortPage = ({ fallback, sort, pageIndex }: Props) => {
+const StoreSortPage = ({ fallback, sort, pageIndex, search }: Props) => {
   return (
     <>
-      <StoreMainContext.Provider value={{ sort, pageIndex }}>
+      <StoreMainContext.Provider value={{ sort, pageIndex, search }}>
         <SWRConfig value={{ fallback, fetcher }}>
           <StoreSortView />
         </SWRConfig>
@@ -54,15 +55,21 @@ const StoreSortPage = ({ fallback, sort, pageIndex }: Props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const { sort, page } = query;
-  const order = SORT_QUERY[sort as string].order || SORT_QUERY.new.order;
+  const { sort, page, search } = query;
+  const order =
+    typeof sort === "string"
+      ? SORT_QUERY[sort].order || SORT_QUERY.new.order
+      : SORT_QUERY.new.order;
   const pageIndex = page ? parseInt(page as string) : 1;
-  const key = `/main/hobby?order=${order}&page=${pageIndex}&items=${PAGE_ITEMS_NUM}`;
+  const key = `/main/hobby?order=${order}&page=${pageIndex}&items=${PAGE_ITEMS_NUM}${
+    search ? `&search=${search}` : ""
+  }`;
+
   const nextKey = `/main/hobby?order=${order}&page=${
     pageIndex + 1
   }&items=${PAGE_ITEMS_NUM}`;
 
-  const fallback: InitFallback<KitItem[] | null> = {};
+  const fallback: InitFallback<KitItemWithPage | null> = {};
 
   try {
     const { data } = await instance.get(key);
@@ -85,6 +92,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       fallback,
       pageIndex,
       sort,
+      search: search ? search : "",
     },
   };
 };

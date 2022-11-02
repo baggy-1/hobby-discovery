@@ -45,4 +45,6 @@ const cart = css({
   alignItems: "center",
   justifyContent: "center",
   cursor: "pointer",
+  width: "2rem",
+  height: "2rem",
 });

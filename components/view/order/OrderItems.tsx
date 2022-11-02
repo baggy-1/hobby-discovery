@@ -15,7 +15,11 @@ const OrderItems = () => {
   return (
     <>
       {data?.order.length === 0 && (
-        <Empty title={"아직 구매한 상품이 없습니다!"} pushPath={"/store"} />
+        <Empty
+          title={"아직 구매한 상품이 없습니다!"}
+          pushPath={"/store"}
+          height={"calc(100vh - 13rem)"}
+        />
       )}
       {data?.order
         .sort((a, b) => (new Date(a.o_create) > new Date(b.o_create) ? -1 : 1))

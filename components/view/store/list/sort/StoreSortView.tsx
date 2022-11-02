@@ -10,16 +10,19 @@ import Chevron from "public/asset/svg/Chevron";
 import { PAGE_ITEMS_NUM, SORT_QUERY } from "pages/store/list/[sort]";
 import { StoreMainContext } from "config/context";
 import Seo from "components/Seo";
+import Empty from "components/view/order/Empty";
+import { cmq } from "config/styles";
 
 const defaultImage = "/asset/image/main-image.png";
 
 const StoreSortView = () => {
   const router = useRouter();
-  const { sort, pageIndex } = useContext(StoreMainContext);
+  const { sort, pageIndex, search } = useContext(StoreMainContext);
   const order = SORT_QUERY[sort].order;
+  const querySearch = search !== "" ? `&search=${search}` : "";
 
   const { data, isValidating } = useSWR<KitItemWithPage>(
-    `/main/hobby?order=${order}&page=${pageIndex}&items=${PAGE_ITEMS_NUM}`,
+    `/main/hobby?order=${order}&page=${pageIndex}&items=${PAGE_ITEMS_NUM}${querySearch}`,
     {
       shouldRetryOnError: false,
     }
@@ -28,7 +31,7 @@ const StoreSortView = () => {
     data?.is_next
       ? `/main/hobby?order=${order}&page=${
           pageIndex + 1
-        }&items=${PAGE_ITEMS_NUM}`
+        }&items=${PAGE_ITEMS_NUM}${querySearch}`
       : null,
     {
       shouldRetryOnError: false,
@@ -51,8 +54,7 @@ const StoreSortView = () => {
         if (nextDataError || nextData?.result.length === 0) return;
         resultPageIndex = pageIndex + 1;
       }
-
-      router.push(`/store/list/${sort}?page=${resultPageIndex}`);
+      router.push(`/store/list/${sort}?page=${resultPageIndex}${querySearch}`);
       return;
     };
 
@@ -71,82 +73,106 @@ const StoreSortView = () => {
       <div css={container}>
         <StoreNav />
         <section css={section}>
-          <div css={itemsWrapper}>
-            {data?.result.map((item) => (
-              <div
-                key={item.pd_id}
-                css={itemWrapper}
-                onClick={onClickDetail(item)}
-              >
-                <div css={[imageBox, borderRadius("0.25rem")]}>
-                  <Image
-                    src={item.images[0] ? item.images[0].image : defaultImage}
-                    alt={"kit-product"}
-                    layout={"fill"}
-                    objectFit={"cover"}
-                    css={borderRadius("0.25rem")}
-                  />
-                </div>
-                <div css={textBox}>
-                  <h2 css={Text("1rem", "500", "#999999")}>{item.pd_sell}</h2>
-                  <div css={[textBottomBox, Text("1.1rem", "700", "#000000")]}>
-                    <h1>
-                      {item.pd_title.length <= 12
-                        ? item.pd_title
-                        : `${item.pd_title.slice(0, 12)}...`}
-                    </h1>
-                    <h1>{item.pd_price.toLocaleString("ko-KR")}원</h1>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div css={ButtonWrapper}>
-            {pageIndex !== 1 && (
-              <button
-                css={Button}
-                disabled={isValidating}
-                onClick={onClickPageIndex("prev")}
-              >
-                <div css={chevron("left")}>
-                  <Chevron />
-                </div>
-              </button>
-            )}
-            <div css={ButtonIndexBox}>
-              {data &&
-                Array(5)
-                  .fill(0)
-                  .map((_, index) => {
-                    const buttonIndex =
-                      Math.trunc((pageIndex - 1) / 5) * 5 + index + 1;
-
-                    if (buttonIndex > data.total_page) return null;
-
-                    return (
-                      <button
-                        css={ButtonIndex(pageIndex === buttonIndex)}
-                        key={index}
-                        disabled={isValidating}
-                        onClick={onClickPageIndex("page", buttonIndex)}
+          {data?.result.length === 0 ? (
+            search !== "" ? (
+              <Empty
+                title={`'${search}'에 대한 검색결과가 없습니다.`}
+                pushPath={"/store"}
+                height={"calc(100vh - 13.5rem)"}
+              />
+            ) : (
+              <Empty
+                title={"상품이 없습니다."}
+                pushPath={"/store"}
+                height={"calc(100vh - 13.5rem)"}
+              />
+            )
+          ) : (
+            <>
+              <div css={itemsWrapper}>
+                {data?.result.map((item) => (
+                  <div
+                    key={item.pd_id}
+                    css={itemWrapper}
+                    onClick={onClickDetail(item)}
+                  >
+                    <div css={[imageBox, borderRadius("0.25rem")]}>
+                      <Image
+                        src={
+                          item.images[0] ? item.images[0].image : defaultImage
+                        }
+                        alt={"kit-product"}
+                        layout={"fill"}
+                        objectFit={"cover"}
+                        css={borderRadius("0.25rem")}
+                      />
+                    </div>
+                    <div css={textBox}>
+                      <h2 css={Text("1rem", "500", "#999999")}>
+                        {item.pd_sell}
+                      </h2>
+                      <div
+                        css={[textBottomBox, Text("1.1rem", "700", "#000000")]}
                       >
-                        {buttonIndex}
-                      </button>
-                    );
-                  })}
-            </div>
-            {data && data.is_next && (
-              <button
-                css={Button}
-                disabled={isValidating}
-                onClick={onClickPageIndex("next")}
-              >
-                <div css={chevron("right")}>
-                  <Chevron />
+                        <h1>
+                          {item.pd_title.length <= 12
+                            ? item.pd_title
+                            : `${item.pd_title.slice(0, 12)}...`}
+                        </h1>
+                        <h1>{item.pd_price.toLocaleString("ko-KR")}원</h1>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div css={ButtonWrapper}>
+                {pageIndex !== 1 && (
+                  <button
+                    css={Button}
+                    disabled={isValidating}
+                    onClick={onClickPageIndex("prev")}
+                  >
+                    <div css={chevron("left")}>
+                      <Chevron />
+                    </div>
+                  </button>
+                )}
+                <div css={ButtonIndexBox}>
+                  {data &&
+                    Array(5)
+                      .fill(0)
+                      .map((_, index) => {
+                        const buttonIndex =
+                          Math.trunc((pageIndex - 1) / 5) * 5 + index + 1;
+
+                        if (buttonIndex > data.total_page) return null;
+
+                        return (
+                          <button
+                            css={ButtonIndex(pageIndex === buttonIndex)}
+                            key={index}
+                            disabled={isValidating}
+                            onClick={onClickPageIndex("page", buttonIndex)}
+                          >
+                            {buttonIndex}
+                          </button>
+                        );
+                      })}
                 </div>
-              </button>
-            )}
-          </div>
+                {data && data.is_next && (
+                  <button
+                    css={Button}
+                    disabled={isValidating}
+                    onClick={onClickPageIndex("next")}
+                  >
+                    <div css={chevron("right")}>
+                      <Chevron />
+                    </div>
+                  </button>
+                )}
+              </div>
+            </>
+          )}
         </section>
       </div>
     </>
@@ -258,6 +284,10 @@ const section = css({
   justifyContent: "space-between",
   width: "100%",
   height: "100%",
+  minHeight: "calc(100vh - 15rem)",
+  [cmq("700px")]: {
+    minHeight: "calc(100vh - 18rem)",
+  },
 });
 
 const container = css({
@@ -268,5 +298,8 @@ const container = css({
   width: "100%",
   height: "100%",
   gap: "1rem",
-  minHeight: "calc(100vh - 6rem - 3rem)",
+  minHeight: "calc(100vh - 9rem)",
+  [cmq("700px")]: {
+    minHeight: "calc(100vh - 12rem)",
+  },
 });

@@ -23,7 +23,7 @@ const useInput = (vaild?: RegExp, initValue?: string) => {
     }
   };
 
-  return { value, onChange, isvalid };
+  return { value, setValue, onChange, isvalid };
 };
 
 export default useInput;

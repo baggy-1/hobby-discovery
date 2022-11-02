@@ -6,13 +6,14 @@ import { useRouter } from "next/router";
 interface Props {
   title: string;
   pushPath: string;
+  height: string;
 }
 
-const Empty = ({ title, pushPath }: Props) => {
+const Empty = ({ title, pushPath, height }: Props) => {
   const router = useRouter();
 
   return (
-    <div css={empty}>
+    <div css={empty(height)}>
       <h1 css={Text("1.5rem", "700", "#000000")}>{title}</h1>
       <h2
         css={[Text("1.8rem", "700", MAIN_COLOR), emptyProd]}
@@ -32,12 +33,13 @@ const emptyProd = css({
   cursor: "pointer",
 });
 
-const empty = css({
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  gap: "1rem",
-  width: "100%",
-  height: "calc(100vh - 13rem)",
-});
+const empty = (height: string) =>
+  css({
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "1rem",
+    width: "100%",
+    height,
+  });

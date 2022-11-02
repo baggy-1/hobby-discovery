@@ -19,11 +19,13 @@ const OrderContext = createContext<OrderContext | null>(null);
 interface StoreMainContext {
   sort: string;
   pageIndex: number;
+  search: string;
 }
 
 const StoreMainContext = createContext<StoreMainContext>({
   sort: "all",
   pageIndex: 1,
+  search: "",
 });
 
 interface StoreDetailContext {

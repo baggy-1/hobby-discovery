@@ -4,13 +4,16 @@ import Profile from "components/common/Profile";
 import { CartContext } from "config/context";
 import navLink from "config/data/navLink";
 import { authInstance } from "config/instance";
-import { mq } from "config/styles";
+import { cmq, MAIN_COLOR, mq } from "config/styles";
+import useInput from "hooks/useInput";
 import useUser from "hooks/useUser";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { SORT_QUERY } from "pages/store/list/[sort]";
 import Close from "public/asset/svg/Close";
 import Hamburger from "public/asset/svg/Hamburger";
-import { useContext, useState } from "react";
+import Search from "public/asset/svg/Search";
+import { FormEvent, useContext, useState } from "react";
 import { useSWRConfig } from "swr";
 import { deleteCookie } from "util/cookie";
 
@@ -21,7 +24,27 @@ const Nav = () => {
   const { pathname } = router;
   const [navOpen, setNavOpen] = useState(false);
   const { user } = useUser();
+  const searchInput = useInput();
   const isHome = pathname === "/";
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  const onClickSearchIcon = () => {
+    if (searchOpen && searchInput.value.trim() !== "") {
+      router.push(`/store/list/new?search=${searchInput.value}`);
+      setSearchOpen((prev) => !prev);
+      searchInput.setValue("");
+    } else {
+      setSearchOpen((prev) => !prev);
+    }
+  };
+
+  const onSubmitSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    router.push(`/store/list/new?search=${searchInput.value}`);
+    setSearchOpen(false);
+    searchInput.setValue("");
+  };
 
   const onClickMoveTap = (path: string) => () => {
     router.push(path);
@@ -52,16 +75,33 @@ const Nav = () => {
     <>
       <nav css={nav(pathname)}>
         <div css={wrapper}>
-          <div css={imageWrapper} onClick={isHome ? push("/") : push("/store")}>
-            <div css={logo}>
-              <Image
-                src="/asset/image/logo.png"
-                alt="logo"
-                width={32}
-                height={32}
-              />
+          <div css={imageWrapper}>
+            <div css={imageBox} onClick={isHome ? push("/") : push("/store")}>
+              <div css={logo}>
+                <Image
+                  src="/asset/image/logo.png"
+                  alt="logo"
+                  width={32}
+                  height={32}
+                />
+              </div>
+              <span css={logoText}>CHIHAM</span>
             </div>
-            <span css={logoText}>CHIHAM</span>
+            {pathname.includes("store") && !pathname.includes("cart") && (
+              <form onSubmit={onSubmitSearch} css={searchWrapper}>
+                <input
+                  type="text"
+                  value={searchInput.value}
+                  onChange={searchInput.onChange}
+                  css={S_searchInput(searchOpen)}
+                  placeholder="어떤 상품을 찾고 있나요?"
+                />
+                <button css={searchButton} type="submit"></button>
+                <div css={searchBox(searchOpen)} onClick={onClickSearchIcon}>
+                  <Search />
+                </div>
+              </form>
+            )}
           </div>
           <div css={navTapWrapper}>
             <div css={taps}>
@@ -134,11 +174,103 @@ const Nav = () => {
           </div>
         )}
       </nav>
+      {pathname.includes("store") && !pathname.includes("cart") && (
+        <form onSubmit={onSubmitSearch} css={[mobSearchWrapper]}>
+          <input
+            type="text"
+            value={searchInput.value}
+            onChange={searchInput.onChange}
+            css={mobSearchInput}
+            placeholder="어떤 상품을 찾고 있나요?"
+          />
+          <button type="submit" css={searchButton}></button>
+          <div css={mobSearchBox} onClick={onClickSearchIcon}>
+            <Search />
+          </div>
+        </form>
+      )}
     </>
   );
 };
 
 export default Nav;
+
+const imageBox = css({
+  display: "flex",
+  alignItems: "center",
+  cursor: "pointer",
+  width: "auto",
+  height: "100%",
+  gap: "0.5rem",
+});
+
+const searchButton = css({
+  display: "none",
+});
+
+const mobSearchBox = css({
+  width: "2.4rem",
+  height: "2.4rem",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  padding: "0.2rem",
+  border: `2px solid ${MAIN_COLOR}`,
+  borderLeft: "none",
+  borderRadius: "0 0.25rem 0.25rem 0",
+});
+
+const mobSearchInput = css({
+  width: "80%",
+  height: "2.4rem",
+  border: `2px solid ${MAIN_COLOR}`,
+  borderRight: "none",
+  borderRadius: "0.25rem 0 0 0.25rem",
+  padding: "1rem",
+});
+
+const mobSearchWrapper = css({
+  display: "none",
+  [cmq("700px")]: {
+    display: "flex",
+    width: "auto",
+    height: "3rem",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
+
+const S_searchInput = (active: boolean) =>
+  css({
+    width: active ? "12rem" : "0",
+    height: "2rem",
+    padding: active ? "0 1rem" : "0",
+    border: active ? `2px solid ${MAIN_COLOR}` : "none",
+    borderRight: "none",
+    borderRadius: "0.25rem 0 0 0.25rem",
+    transitionDuration: "0.3s",
+  });
+
+const searchWrapper = css({
+  width: "auto",
+  height: "100%",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  [cmq("700px")]: {
+    display: "none",
+  },
+});
+
+const searchBox = (active: boolean) =>
+  css({
+    width: "2rem",
+    height: "2rem",
+    padding: "0.2rem",
+    border: active ? `2px solid ${MAIN_COLOR}` : "none",
+    borderLeft: "none",
+    borderRadius: "0 0.25rem 0.25rem 0",
+  });
 
 const logoText = css({
   fontSize: "1.1rem",
@@ -202,7 +334,7 @@ const navTapWrapper = css({
   display: "flex",
   alignItems: "center",
   justifyContent: "flex-end",
-  width: "100%",
+  width: "auto",
   height: "100%",
   [mq[2]]: {
     fontSize: "0.8rem",
@@ -222,7 +354,8 @@ const imageWrapper = css({
   display: "flex",
   alignItems: "center",
   justifyContent: "start",
-  width: "10rem",
+  width: "auto",
+  minWidth: "10rem",
   height: "100%",
   gap: "0.5rem",
   [mq[2]]: {

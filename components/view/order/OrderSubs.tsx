@@ -94,6 +94,7 @@ const OrderSubs = () => {
         <Empty
           title={"아직 구독한 상품이 없습니다!"}
           pushPath={"/subscription"}
+          height={"calc(100vh - 13rem)"}
         />
       )}
       {data?.order
