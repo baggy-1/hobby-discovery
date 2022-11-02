@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useContext } from "react";
 import useSWR from "swr";
 import StoreNav from "components/view/store/StoreNav";
-import { KitItem } from "types";
+import { KitItem, KitItemWithPage } from "types";
 import Image from "next/image";
 import { css } from "@emotion/react";
 import { borderRadius, Text } from "components/common/styles";
@@ -18,14 +18,18 @@ const StoreSortView = () => {
   const { sort, pageIndex } = useContext(StoreMainContext);
   const order = SORT_QUERY[sort].order;
 
-  const { data, isValidating } = useSWR<KitItem[]>(
+  const { data, isValidating } = useSWR<KitItemWithPage>(
     `/main/hobby?order=${order}&page=${pageIndex}&items=${PAGE_ITEMS_NUM}`,
     {
       shouldRetryOnError: false,
     }
   );
-  const { data: nextData, error: nextDataError } = useSWR<KitItem[]>(
-    `/main/hobby?order=${order}&page=${pageIndex + 1}&items=${PAGE_ITEMS_NUM}`,
+  const { data: nextData, error: nextDataError } = useSWR<KitItemWithPage>(
+    data?.is_next
+      ? `/main/hobby?order=${order}&page=${
+          pageIndex + 1
+        }&items=${PAGE_ITEMS_NUM}`
+      : null,
     {
       shouldRetryOnError: false,
     }
@@ -44,7 +48,7 @@ const StoreSortView = () => {
         if (pageIndex === 1) return;
         resultPageIndex = pageIndex - 1;
       } else if (type === "next") {
-        if (nextDataError || nextData?.length === 0) return;
+        if (nextDataError || nextData?.result.length === 0) return;
         resultPageIndex = pageIndex + 1;
       }
 
@@ -68,7 +72,7 @@ const StoreSortView = () => {
         <StoreNav />
         <section css={section}>
           <div css={itemsWrapper}>
-            {data?.map((item) => (
+            {data?.result.map((item) => (
               <div
                 key={item.pd_id}
                 css={itemWrapper}
@@ -110,29 +114,28 @@ const StoreSortView = () => {
               </button>
             )}
             <div css={ButtonIndexBox}>
-              {Array(5)
-                .fill(0)
-                .map((_, index) => {
-                  const buttonIndex =
-                    Math.trunc((pageIndex - 1) / 5) * 5 + index + 1;
+              {data &&
+                Array(5)
+                  .fill(0)
+                  .map((_, index) => {
+                    const buttonIndex =
+                      Math.trunc((pageIndex - 1) / 5) * 5 + index + 1;
 
-                  if (nextDataError) {
-                    if (buttonIndex > pageIndex) return null;
-                  }
+                    if (buttonIndex > data.total_page) return null;
 
-                  return (
-                    <button
-                      css={ButtonIndex(pageIndex === buttonIndex)}
-                      key={index}
-                      disabled={isValidating}
-                      onClick={onClickPageIndex("page", buttonIndex)}
-                    >
-                      {buttonIndex}
-                    </button>
-                  );
-                })}
+                    return (
+                      <button
+                        css={ButtonIndex(pageIndex === buttonIndex)}
+                        key={index}
+                        disabled={isValidating}
+                        onClick={onClickPageIndex("page", buttonIndex)}
+                      >
+                        {buttonIndex}
+                      </button>
+                    );
+                  })}
             </div>
-            {!nextDataError && (
+            {data && data.is_next && (
               <button
                 css={Button}
                 disabled={isValidating}

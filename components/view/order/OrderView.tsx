@@ -12,6 +12,8 @@ import { PAYMENT } from "config/data/order";
 import { authInstance } from "config/instance";
 import useUser from "hooks/useUser";
 import Loading from "components/common/Loading";
+import { useAlertControl } from "hooks/useAlertControl";
+import Alert from "components/common/Alert";
 
 const INIT_ORDER: AddNull<Order> = {
   address: null,
@@ -27,25 +29,37 @@ const OrderView = () => {
   const router = useRouter();
   const { items, type } = router.query;
   const cartInfo = useContext(CartContext);
-  const { user, loading, error } = useUser();
+  const { loading, error } = useUser();
+  const { alertControl, setAlertControl, onClickClose } = useAlertControl();
 
   const [order, setOrder] = useState<AddNull<Order>>(INIT_ORDER);
 
   const onClickOrder = () => {
     if (Object.values(order).some((value) => value === null)) {
-      alert("모든 정보를 입력해주세요.");
+      setAlertControl({
+        text: "주문 정보를 모두 입력해주세요.",
+        isOpen: true,
+      });
       return;
     }
 
     authInstance
       .post(`/order/?type=${order.type}`, order)
       .then((res) => {
-        alert("주문이 완료되었습니다.");
-        router.replace("/store");
-        cartInfo?.dispatch({ type: "RESET" });
+        setAlertControl({
+          text: "주문이 완료되었습니다.",
+          isOpen: true,
+        });
+        setTimeout(() => {
+          router.replace("/store");
+          cartInfo?.dispatch({ type: "RESET" });
+        }, 1000);
       })
       .catch((err) => {
-        alert("주문에 실패했습니다.");
+        setAlertControl({
+          text: "주문에 실패했습니다.",
+          isOpen: true,
+        });
         throw new Error(`error: ${err}`);
       });
   };
@@ -95,6 +109,9 @@ const OrderView = () => {
 
   return (
     <OrderContext.Provider value={{ order, setOrder }}>
+      {alertControl.isOpen && (
+        <Alert text={alertControl.text} onClickClose={onClickClose} />
+      )}
       <div css={container}>
         <UserInfoSection />
         <ProdInfoSection />

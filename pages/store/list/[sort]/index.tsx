@@ -6,12 +6,6 @@ import { GetServerSideProps } from "next";
 import { SWRConfig } from "swr";
 import { InitFallback, KitItem } from "types";
 
-type AddProps<T, U> = {
-  [P in keyof T]: T[P];
-} & {
-  [P: string]: U;
-};
-
 interface Sort {
   label: string;
   order: string;
@@ -45,7 +39,7 @@ export const SORT_QUERY: SortQuery = {
   },
 };
 
-export const PAGE_ITEMS_NUM = 10;
+export const PAGE_ITEMS_NUM = 1;
 
 const StoreSortPage = ({ fallback, sort, pageIndex }: Props) => {
   return (

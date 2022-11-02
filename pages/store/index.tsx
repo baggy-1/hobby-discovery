@@ -4,10 +4,10 @@ import { PRODUCT_SORT } from "config/data/mainCategory";
 import { fetcher } from "config/fetcher";
 import loop from "function/loop";
 import { SWRConfig } from "swr";
-import { InitFallback, KitItem } from "types";
+import { InitFallback, KitItemWithPage } from "types";
 
 interface Props {
-  fallback: InitFallback<KitItem[]>;
+  fallback: InitFallback<KitItemWithPage>;
 }
 
 const Store = ({ fallback }: Props) => {
@@ -22,7 +22,7 @@ const Store = ({ fallback }: Props) => {
 };
 
 export const getStaticProps = async () => {
-  const fallback: InitFallback<KitItem[]> = {};
+  const fallback: InitFallback<KitItemWithPage> = {};
 
   const getKey = (query: string) =>
     `/main/hobby?order=${query}&items=10&page=1`;

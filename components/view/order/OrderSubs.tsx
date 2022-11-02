@@ -15,9 +15,12 @@ import Image from "next/image";
 import { borderRadius, Text } from "components/common/styles";
 import { useRouter } from "next/router";
 import { authInstance } from "config/instance";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import { mq } from "config/styles";
+import { changeOverflowHtml } from "util/changeOverflowHtml";
+import Alert from "components/common/Alert";
+import { useAlertControl } from "hooks/useAlertControl";
 
 const OrderSubs = () => {
   const router = useRouter();
@@ -25,11 +28,12 @@ const OrderSubs = () => {
     id: string | null;
     state: boolean;
   }>({ id: null, state: false });
+  const { alertControl, setAlertControl, onClickClose } = useAlertControl();
+
   const { data } = useSWR<OrderSubListObj>("/order?type=sub", authFetcher);
 
-  // TODO 구독해지
-  // sub/ patch: sub_id
   const onClickDeleteSub = (subId: string) => () => {
+    changeOverflowHtml("open");
     setOpenDelete({ id: subId, state: true });
   };
 
@@ -39,20 +43,41 @@ const OrderSubs = () => {
       authInstance
         .patch(`user/sub`, { sub_id: id })
         .then((res) => {
-          alert("구독해지가 완료되었습니다.");
+          setAlertControl({
+            text: "구독이 취소되었습니다.",
+            isOpen: true,
+          });
           mutate("/order?type=sub");
         })
         .catch((err) => {
-          alert("구독해지에 실패했습니다.");
+          setAlertControl({
+            text: "구독 취소에 실패했습니다.",
+            isOpen: true,
+          });
           throw new Error(`error: ${err}`);
         });
     }
 
+    const html = document.querySelector("html");
+    if (html) {
+      html.style.overflow = "";
+    }
+
+    changeOverflowHtml("close");
     setOpenDelete({ id: null, state: false });
   };
 
+  useEffect(() => {
+    return () => {
+      changeOverflowHtml("close");
+    };
+  }, []);
+
   return (
     <>
+      {alertControl.isOpen && (
+        <Alert text={alertControl.text} onClickClose={onClickClose} />
+      )}
       {openDelete.state && (
         <>
           <div css={delPopUpBack}></div>

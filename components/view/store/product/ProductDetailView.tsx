@@ -21,6 +21,8 @@ import Star from "public/asset/svg/Star";
 import Chevron from "public/asset/svg/Chevron";
 import { ITEM_TYPE } from "config/data/order";
 import Seo from "components/Seo";
+import Alert from "components/common/Alert";
+import { useAlertControl } from "hooks/useAlertControl";
 
 const defaultImage = "/asset/image/main-image.png";
 
@@ -40,6 +42,7 @@ const ProductDetailView = () => {
   const [resultKitItem, setResultKitItem] = useState<Cart[]>([]);
   const [selectBoxOpen, setSelectBoxOpen] = useState(false);
   const refArr = useRef<HTMLElement[]>([]);
+  const { alertControl, setAlertControl, onClickClose } = useAlertControl();
 
   // etc
   const router = useRouter();
@@ -62,7 +65,10 @@ const ProductDetailView = () => {
         });
       } else {
         if (resultKitItem.length === 0) {
-          alert("상품을 선택해주세요");
+          setAlertControl({
+            text: "상품을 선택해주세요.",
+            isOpen: true,
+          });
           return;
         }
 
@@ -173,6 +179,9 @@ const ProductDetailView = () => {
         url={`/store/product/${pd_id}`}
         image={images[0].image}
       />
+      {alertControl.isOpen && (
+        <Alert text={alertControl.text} onClickClose={onClickClose} />
+      )}
       <div css={[container, Wrapper]}>
         <div css={[maxWidthWrapper("100%"), Center("column")]}>
           <div css={topWrapper}>

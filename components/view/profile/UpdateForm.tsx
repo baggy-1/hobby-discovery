@@ -11,6 +11,8 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Address from "components/view/profile/Address";
 import { formWrapper, Input, InputBox } from "../signup/SignUpForm";
 import { useRouter } from "next/router";
+import { useAlertControl } from "hooks/useAlertControl";
+import Alert from "components/common/Alert";
 
 const defaultProfile = "/asset/image/default-profile.jpg";
 
@@ -28,6 +30,7 @@ const UpdateForm = () => {
     addressArr ? addressArr[0] : ""
   );
   const addressDetail = useInput(undefined, addressArr ? addressArr[1] : "");
+  const { alertControl, setAlertControl, onClickClose } = useAlertControl();
 
   const onCompletAddress = (address: string) => {
     setAddressValue(address);
@@ -61,12 +64,18 @@ const UpdateForm = () => {
     let updatePW = user.password;
     if (password.value !== "") {
       if (!password.isvalid) {
-        alert("비밀번호 조건을 확인해주세요");
+        setAlertControl({
+          text: "비밀번호는 8자 이상의 영문, 대문자, 숫자, 특수문자를 사용해주세요.",
+          isOpen: true,
+        });
         return;
       }
 
       if (password.value !== passwordCheck.value) {
-        alert("비밀번호가 일치하지 않습니다.");
+        setAlertControl({
+          text: "비밀번호가 일치하지 않습니다.",
+          isOpen: true,
+        });
         return;
       }
       updatePW = password.value;
@@ -75,7 +84,10 @@ const UpdateForm = () => {
     let updateNumber = user.number || "";
     if (number.value !== "") {
       if (!number.value.match(REG_NUMBER)) {
-        alert("전화번호를 확인해주세요");
+        setAlertControl({
+          text: "연락처 조건을 확인해주세요. (숫자 10~11자리)",
+          isOpen: true,
+        });
         return;
       }
       updateNumber = number.value;
@@ -93,8 +105,13 @@ const UpdateForm = () => {
 
     try {
       authInstance.patch("/user/", formData).then((res) => {
-        alert("회원정보가 수정되었습니다.");
-        router.push("/profile");
+        setAlertControl({
+          text: "회원정보가 수정되었습니다.",
+          isOpen: true,
+        });
+        setTimeout(() => {
+          router.push("/profile");
+        }, 1000);
       });
     } catch (error) {
       throw new Error(`error: ${error}`);
@@ -103,6 +120,9 @@ const UpdateForm = () => {
 
   return (
     <form css={formWrapper} onSubmit={onSubmit}>
+      {alertControl.isOpen && (
+        <Alert text={alertControl.text} onClickClose={onClickClose} />
+      )}
       <label htmlFor="file">
         <div css={S_profile}>
           <Image
