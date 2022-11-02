@@ -27,8 +27,8 @@ const ProductDetail = ({ fallback, id }: Props) => {
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const fallback: InitFallback<Review[] | null> = {};
   const { id } = query;
-  const reviewKey = `/main/${id}/reviews`;
-  const kitItemKey = `/main/${id}`;
+  const reviewKey = `/main/reviews/${id}`;
+  const kitItemKey = `/main/hobby/${id}`;
 
   try {
     const { data } = await instance.get(kitItemKey);
