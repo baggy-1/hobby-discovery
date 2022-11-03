@@ -7,6 +7,7 @@ import useUser from "hooks/useUser";
 import Close from "public/asset/svg/Close";
 import Star from "public/asset/svg/Star";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { mutate } from "swr";
 import { changeOverflowHtml } from "util/changeOverflowHtml";
 
 interface Props {
@@ -39,7 +40,7 @@ const ReviewPostModal = ({ prodId, onClickClose }: Props) => {
     if (files && files[0]) {
       const reader = new FileReader();
       reader.readAsDataURL(files[0]);
-      formData?.append("profile", files[0]);
+      formData?.set("image", files[0]);
 
       setFileName(files[0].name);
     }
@@ -66,16 +67,17 @@ const ReviewPostModal = ({ prodId, onClickClose }: Props) => {
       return;
     }
 
-    formData.append("title", inputTitle.value);
-    formData.append("body", inputContent.value);
-    formData.append("grade", grade.toString());
-    formData.append("user", user.id.toString());
+    formData.set("title", inputTitle.value);
+    formData.set("body", inputContent.value);
+    formData.set("grade", grade.toString());
+    formData.set("hobby_rv", prodId);
 
     try {
       authInstance.post(`/main/review/`, formData).then((res) => {
         setNotice("리뷰가 등록되었습니다.");
         setTimeout(() => {
           onClickClose();
+          mutate(`/main/reviews/${prodId}`);
         }, 1000);
       });
     } catch (error) {

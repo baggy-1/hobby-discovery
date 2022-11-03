@@ -60,7 +60,7 @@ const OrderItems = () => {
                   css={Button}
                   onClick={() => router.push(`/store/product/${item.p_id}`)}
                 >
-                  구매후기 작성하기
+                  후기 작성하러 가기
                 </button>
               </div>
             ))}

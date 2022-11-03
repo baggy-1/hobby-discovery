@@ -3,12 +3,13 @@ import { mq } from "config/styles";
 import Star from "public/asset/svg/Star";
 import { Dispatch, MutableRefObject, SetStateAction, useState } from "react";
 import useSWR from "swr";
-import { Review } from "types";
+import { OrderItemListObj, Review } from "types";
 import addRef from "util/addRef";
 import ReviewCard from "components/view/store/product/ReviewCard";
 import { PaddingTop, TapTitle } from "../ProductDetailView";
 import { Center, Text } from "components/common/styles";
 import useUser from "hooks/useUser";
+import { authFetcher } from "config/fetcher";
 
 interface Props {
   prodId: string;
@@ -23,6 +24,10 @@ interface Props {
 
 const ReviewSection = ({ prodId, refArr, modalControl }: Props) => {
   const { user } = useUser();
+  const { data: userOrderList } = useSWR<OrderItemListObj>(
+    user ? "/order?type=item" : null,
+    authFetcher
+  );
   const { data: reviews } = useSWR<Review[]>(`/main/reviews/${prodId}`);
   const [reviewOpen, setReviewOpen] = useState(false);
 
@@ -70,15 +75,18 @@ const ReviewSection = ({ prodId, refArr, modalControl }: Props) => {
           isNaN(grade) ? 0 : grade
         } / 5`}</div>
       </div>
-      {user && (
-        <div css={ReviewPostButtonWrapper}>
-          <div css={ReviewPostButtonBox}>
-            <div css={ReviewPostButton} onClick={onClickReviewPostOpen}>
-              후기 작성
+      {user &&
+        userOrderList?.order.find((order) =>
+          order.o_items.find((item) => item.p_id.toString() === prodId)
+        ) && (
+          <div css={ReviewPostButtonWrapper}>
+            <div css={ReviewPostButtonBox}>
+              <div css={ReviewPostButton} onClick={onClickReviewPostOpen}>
+                후기 작성
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
       <div css={ReviewBox}>
         {reviews && reviews?.length !== 0 ? (
           <>

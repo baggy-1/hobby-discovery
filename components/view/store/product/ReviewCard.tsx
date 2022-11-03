@@ -19,9 +19,6 @@ const ReviewCard = ({ review }: Props) => {
     <>
       {data && (
         <div css={container}>
-          <div css={UpdateWrapper}>
-            <div css={UpdateButton}>수정</div>
-          </div>
           <div css={topWrapper}>
             <div css={leftBox}>
               <div css={[borderRadius("50%"), imageBox]}>
@@ -83,22 +80,6 @@ const ReviewCard = ({ review }: Props) => {
 
 export default ReviewCard;
 
-const UpdateButton = css({
-  width: "fit-content",
-  height: "fit-content",
-  fontSize: "1rem",
-  cursor: "pointer",
-});
-
-const UpdateWrapper = css({
-  display: "flex",
-  justifyContent: "flex-end",
-  alignItems: "center",
-  color: "#999999",
-  width: "100%",
-  height: "auto",
-});
-
 const Grade = css({
   display: "flex",
   gap: "0.1rem",
@@ -113,13 +94,10 @@ const imageBox = css({
 
 const bottomWrapper = css({
   display: "flex",
-  flexDirection: "row",
   justifyContent: "start",
   alignItems: "start",
   gap: "1rem",
-  [mq[1]]: {
-    flexDirection: "column",
-  },
+  flexDirection: "column",
 });
 
 const gradeTitle = css({
@@ -153,6 +131,7 @@ const container = css({
   paddingTop: "0.5rem",
   display: "flex",
   flexDirection: "column",
+  gap: "1rem",
   [mq[1]]: {
     maxWidth: "20rem",
   },
