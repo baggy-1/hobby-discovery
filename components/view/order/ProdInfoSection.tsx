@@ -39,7 +39,9 @@ const ProdInfoSection = () => {
                     {kitItem.pd_title}
                   </span>
                   <span css={Text("1rem", "500", "#999999")}>
-                    {kitItem.pd_descrition}
+                    {kitItem.pd_descrition.length > 30
+                      ? `${kitItem.pd_descrition.slice(0, 30)}...`
+                      : kitItem.pd_descrition}
                   </span>
                   <span
                     css={Text("1.1rem", "600", "#000000")}
@@ -157,5 +159,6 @@ const ItemWrapper = css({
   flexDirection: "row",
   [mq[1]]: {
     flexDirection: "column",
+    gap: "2rem",
   },
 });

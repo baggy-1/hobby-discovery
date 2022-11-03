@@ -87,8 +87,10 @@ const CartItem = ({ cartItem, dispatch }: Props) => {
           >
             {pd_title}
           </div>
-          <div css={[Text("0.75rem", "500", "#8E8E8E"), MobileDisplayNone]}>
-            {pd_descrition}
+          <div css={[Text("0.75rem", "500", "#8E8E8E")]}>
+            {pd_descrition.length > 30
+              ? `${pd_descrition.slice(0, 30)}...`
+              : pd_descrition}
           </div>
         </div>
         <button onClick={onClickDel(kitItem)} css={[MobDelButton]}>
@@ -267,7 +269,7 @@ const wrapper = css({
     flexDirection: "column",
     paddingBottom: "1rem",
     alignItems: "flex-start",
-    gap: "1rem",
+    gap: "2rem",
     overflowX: "hidden",
     padding: "0 1rem",
   },
@@ -295,6 +297,6 @@ const rightBox = css({
   width: "100%",
   [mq[1]]: {
     alignItems: "center",
-    paddingRight: "1rem",
+    justifyContent: "space-between",
   },
 });

@@ -46,7 +46,9 @@ const OrderItems = () => {
                       {item.p_title}
                     </h2>
                     <h2 css={Text("0.8rem", "400", "#999999")}>
-                      {item.p_description}
+                      {item.p_description.length > 30
+                        ? `${item.p_description.slice(0, 30)}...`
+                        : item.p_description}
                     </h2>
                     <h2 css={Text("0.8rem", "400", "#999999")}>
                       {item.p_quantity}개
@@ -74,12 +76,15 @@ export default OrderItems;
 
 const TextWapper = css({
   width: "100%",
+  minWidth: "30rem",
   maxWidth: "30rem",
   height: "auto",
   [mq[2]]: {
+    minWidth: "0",
     maxWidth: "20rem",
   },
   [mq[1]]: {
+    minWidth: "0",
     maxWidth: "15rem",
   },
 });
