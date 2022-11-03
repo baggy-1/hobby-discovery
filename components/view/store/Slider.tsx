@@ -1,16 +1,19 @@
 import { css } from "@emotion/react";
+import { mq } from "config/styles";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 const Slider = () => {
+  const router = useRouter();
   const [index, setIndex] = useState(0);
 
-  const length = 4;
+  const length = 3;
 
   useEffect(() => {
     const slideInterval = setInterval(() => {
       setIndex((prev) => (prev >= length - 1 ? 0 : prev + 1));
-    }, 3000);
+    }, 5000);
 
     return () => clearInterval(slideInterval);
   }, []);
@@ -20,17 +23,42 @@ const Slider = () => {
       <div css={container}>
         <div css={sliderWrapper}>
           <div css={wrapper(index, length)}>
-            <div css={slide("#FFFFFF")}>
+            <div
+              css={slide("#FFFFFF")}
+              onClick={() => router.push("/store/list/popular")}
+            >
               <Image
-                src={`/asset/image/main-image.png`}
+                src={`/asset/image/banner/banner-11-hot-kit.png`}
                 alt={`slide`}
-                layout={"fill"}
+                width={1280}
+                height={500}
                 priority={true}
               />
             </div>
-            <div css={slide("#F2F2F2")}></div>
-            <div css={slide("#000000")}></div>
-            <div css={slide("#E2E2E2")}></div>
+            <div
+              css={slide("#FFFFFF")}
+              onClick={() => router.push("/store/list/new")}
+            >
+              <Image
+                src={`/asset/image/banner/banner-pet-event.png`}
+                alt={`slide`}
+                width={1280}
+                height={500}
+                priority={true}
+              />
+            </div>
+            <div
+              css={slide("#FFFFFF")}
+              onClick={() => router.push("/subscription")}
+            >
+              <Image
+                src={`/asset/image/banner/banner-sub-desc.png`}
+                alt={`slide`}
+                width={1280}
+                height={500}
+                priority={true}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -60,13 +88,18 @@ const slide = (backgroundColor: string) =>
     width: "100%",
     height: "100%",
     backgroundColor,
+    overflow: "hidden",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    cursor: "pointer",
   });
 
 const wrapper = (index: number, length: number) =>
   css({
     position: "relative",
     width: `calc(100% * ${length})`,
-    height: "30rem",
+    height: "100%",
     display: "flex",
     justifyContent: "start",
     alignItems: "center",
