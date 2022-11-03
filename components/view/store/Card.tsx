@@ -1,5 +1,10 @@
 import { css } from "@emotion/react";
-import { borderRadius, hoverScale } from "components/common/styles";
+import {
+  borderRadius,
+  Center,
+  hoverScale,
+  Text,
+} from "components/common/styles";
 import { mq } from "config/styles";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -11,7 +16,7 @@ interface Props {
 
 const Card = ({ kitItem }: Props) => {
   const router = useRouter();
-  const { pd_id, pd_title, images, pd_price } = kitItem;
+  const { pd_id, pd_title, images, pd_price, pd_sell } = kitItem;
   const imagePath = images[0] ? images[0].image : "/asset/image/main-image.png";
   return (
     <div
@@ -31,8 +36,13 @@ const Card = ({ kitItem }: Props) => {
           css={[borderRadius("1.2rem"), hoverScale, imageO]}
         />
       </div>
-      <div>{pd_title}</div>
-      <div>{pd_price.toLocaleString("ko-KR")}원</div>
+      <div css={[Center("row"), Text("1rem", "400", "#999999")]}>{pd_sell}</div>
+      <div css={[Center("row"), Text("1rem", "400", "#000000")]}>
+        {pd_title}
+      </div>
+      <div css={[Center("row"), Text("1.25rem", "700", "#000000")]}>
+        {pd_price.toLocaleString("ko-KR")}원
+      </div>
     </div>
   );
 };

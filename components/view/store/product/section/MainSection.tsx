@@ -177,14 +177,14 @@ const MainSection = ({ kitItem, image, setAlertControl }: Props) => {
                   <div css={optionBottomBox}>
                     <div css={CountButtonBox}>
                       <button
-                        css={Button}
+                        css={Button("left")}
                         onClick={onClickCount("DESC", item)}
                       >{`-`}</button>
                       <div css={[Count, Text("1rem", "500", "#000000")]}>
                         {item.count}
                       </div>
                       <button
-                        css={Button}
+                        css={Button("right")}
                         onClick={onClickCount("ADD", item)}
                       >{`+`}</button>
                     </div>
@@ -345,16 +345,19 @@ const optionBox = css({
   borderRadius: "0.5rem",
 });
 
-const Button = css({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  backgroundColor: "#FFFFFF",
-  width: "1.5rem",
-  height: "1.5rem",
-  border: "1px solid #000",
-  fontWeight: "500",
-});
+const Button = (type: "left" | "right") =>
+  css({
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#FFFFFF",
+    width: "1.5rem",
+    height: "1.5rem",
+    border: "1px solid #E5E5E5",
+    fontWeight: "500",
+    borderRadius:
+      type === "left" ? "0.25rem 0 0 0.25rem" : "0 0.25rem 0.25rem 0",
+  });
 
 const Count = css({
   width: "auto",
@@ -362,7 +365,7 @@ const Count = css({
   minWidth: "1.5rem",
   height: "1.5rem",
   textAlign: "center",
-  border: "1px solid #000000",
+  border: "1px solid #E5E5E5",
   borderLeft: "none",
   borderRight: "none",
   fontSize: "1rem",
@@ -476,6 +479,10 @@ const textBox = css({
   display: "flex",
   flexDirection: "column",
   gap: "2rem",
+  padding: "0 1rem",
+  [mq[1]]: {
+    padding: "0",
+  },
 });
 
 const BorderTop = css({

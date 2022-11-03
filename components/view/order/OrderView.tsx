@@ -34,8 +34,6 @@ const OrderView = () => {
 
   const [order, setOrder] = useState<AddNull<Order>>(INIT_ORDER);
 
-  console.log(items);
-
   const onClickOrder = () => {
     if (Object.values(order).some((value) => value === null)) {
       setAlertControl({

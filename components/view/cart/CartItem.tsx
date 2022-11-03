@@ -105,9 +105,15 @@ const CartItem = ({ cartItem, dispatch }: Props) => {
         <div css={countWrapper}>
           <div css={Text("1rem", "600", "#000000")}>수량</div>
           <div css={CountBox}>
-            <button onClick={onClickDec(kitItem)} css={button}>{`-`}</button>
+            <button
+              onClick={onClickDec(kitItem)}
+              css={button("left")}
+            >{`-`}</button>
             <div css={Count}>{count}</div>
-            <button onClick={onClickInc(kitItem)} css={button}>{`+`}</button>
+            <button
+              onClick={onClickInc(kitItem)}
+              css={button("right")}
+            >{`+`}</button>
           </div>
         </div>
         <button
@@ -148,7 +154,7 @@ const Count = css({
   minWidth: "1.5rem",
   height: "1.5rem",
   textAlign: "center",
-  border: "1px solid #000000",
+  border: "1px solid #E5E5E5",
   borderLeft: "none",
   borderRight: "none",
   fontSize: "1rem",
@@ -179,7 +185,7 @@ const checkbox = css({
   width: "2.5rem",
   height: "2.5rem",
   backgroundColor: "#FFFFFF",
-  border: "2px solid #000000",
+  border: "2px solid #E5E5E5",
   borderRadius: "0.25rem",
   display: "flex",
   justifyContent: "center",
@@ -194,7 +200,7 @@ const checkbox = css({
   },
   "input:checked + label::after": {
     content: "'✓'",
-    color: "#000000",
+    color: "#999999",
     fontSize: "1.5rem",
     fontWeight: "500",
     width: "100%",
@@ -267,16 +273,19 @@ const wrapper = css({
   },
 });
 
-const button = css({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  backgroundColor: "#EBEBEB",
-  width: "1.5rem",
-  height: "1.5rem",
-  border: "1px solid #000",
-  fontWeight: "500",
-});
+const button = (type: "left" | "right") =>
+  css({
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#EBEBEB",
+    width: "1.5rem",
+    height: "1.5rem",
+    border: "1px solid #E5E5E5",
+    fontWeight: "500",
+    borderRadius:
+      type === "left" ? "0.25rem 0 0 0.25rem" : "0 0.25rem 0.25rem 0",
+  });
 
 const rightBox = css({
   display: "flex",
