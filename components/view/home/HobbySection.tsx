@@ -1,23 +1,19 @@
 import { css } from "@emotion/react";
 import { borderRadius, Text } from "components/common/styles";
 import { MAIN_COLOR, mq } from "config/styles";
+import useFadeIn from "hooks/useFadeIn";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useRef } from "react";
+import addRef from "util/addRef";
 
 const HobbySection = () => {
   const router = useRouter();
+  const refArr = useRef<HTMLDivElement[]>([]);
+  useFadeIn(refArr.current, 200);
 
   return (
     <>
-      <div css={topSection}>
-        <div css={topWrapper}>
-          <div css={textBox}>
-            인테리어 소품부터 실제 사용 가능한 키트까지
-            <br />
-            다양한 키트를 받아보세요
-          </div>
-        </div>
-      </div>
       <section css={section}>
         <div css={wrapper}>
           <div css={titleBox}>
@@ -41,18 +37,18 @@ const HobbySection = () => {
             </div>
           </div>
           <div css={descSection}>
-            <div css={descWrapper}>
+            <div css={descWrapper("origin")} ref={addRef(refArr, 0)}>
               <div css={IconBox}>
                 <Image
                   src={`/asset/image/sub/stop-icon.jpg`}
                   alt={"stop"}
-                  width={150}
-                  height={150}
+                  width={300}
+                  height={300}
                 />
               </div>
               <div css={TextBox}>
-                <h1 css={Text("1.8rem", "700", MAIN_COLOR)}>
-                  언제든지 구독하고 <br css={Br} />
+                <h1 css={C_text}>
+                  언제든지 구독하고 <br />
                   해지할 수 있어요
                 </h1>
                 <h2 css={Text("1.5rem", "700", "#999999")}>
@@ -62,17 +58,9 @@ const HobbySection = () => {
                 </h2>
               </div>
             </div>
-            <div css={descWrapper}>
-              <div css={IconBox}>
-                <Image
-                  src={`/asset/image/sub/box-icon.png`}
-                  alt={"box"}
-                  width={150}
-                  height={150}
-                />
-              </div>
+            <div css={descWrapper("reverse")} ref={addRef(refArr, 1)}>
               <div css={TextBox}>
-                <h1 css={Text("1.8rem", "700", MAIN_COLOR)}>
+                <h1 css={C_text}>
                   매달, 다른 테마 박스로
                   <br />
                   즐거운 시간을 보내요
@@ -83,18 +71,26 @@ const HobbySection = () => {
                   매달 다른 테마의 박스를 구성해요
                 </h2>
               </div>
+              <div css={IconBox}>
+                <Image
+                  src={`/asset/image/sub/box-icon.png`}
+                  alt={"box"}
+                  width={300}
+                  height={300}
+                />
+              </div>
             </div>
-            <div css={descWrapper}>
+            <div css={descWrapper("origin")} ref={addRef(refArr, 2)}>
               <div css={IconBox}>
                 <Image
                   src={`/asset/image/sub/delivery-icon.png`}
                   alt={"delivery"}
-                  width={150}
-                  height={150}
+                  width={300}
+                  height={300}
                 />
               </div>
               <div css={TextBox}>
-                <h1 css={Text("1.8rem", "700", MAIN_COLOR)}>
+                <h1 css={C_text}>
                   집 앞까지 안전하게 배송해요
                   <br />
                   당연히, 무료!
@@ -105,9 +101,22 @@ const HobbySection = () => {
                 </h2>
               </div>
             </div>
-            <div css={BottomButton}>
-              <div css={Button} onClick={() => router.push("/subscription")}>
-                지금 바로 구독하기
+            <div css={descWrapper("origin")} ref={addRef(refArr, 3)}>
+              <div css={TextBox}>
+                <div
+                  css={[Button]}
+                  onClick={() => router.push("/subscription")}
+                >
+                  지금 바로 구독하기
+                </div>
+              </div>
+              <div css={IconBox}>
+                <Image
+                  src={`/asset/image/sub/click-icon.jpg`}
+                  alt={`click`}
+                  width={300}
+                  height={300}
+                />
               </div>
             </div>
           </div>
@@ -118,9 +127,19 @@ const HobbySection = () => {
 };
 
 export default HobbySection;
+
+const C_text = css({
+  fontSize: "3rem",
+  fontWeight: "700",
+  color: MAIN_COLOR,
+  [mq[2]]: {
+    fontSize: "2.5rem",
+  },
+});
+
 const Button = css({
   width: "14rem",
-  height: "3rem",
+  height: "4rem",
   backgroundColor: MAIN_COLOR,
   color: "white",
   borderRadius: "0.5rem",
@@ -132,31 +151,22 @@ const Button = css({
   fontWeight: "700",
 });
 
-const BottomButton = css({
-  width: "100%",
-  height: "5rem",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-});
-
 const descSection = css({
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
-  gap: "4rem",
-});
-
-const Br = css({
-  display: "none",
-  [mq[1]]: {
-    display: "block",
+  gap: "20rem",
+  width: "100%",
+  maxWidth: "80rem",
+  [mq[2]]: {
+    gap: "10rem",
   },
 });
 
 const TextSet = css({
   wordBreak: "keep-all",
+  fontSize: "3rem",
   [mq[1]]: {
     fontSize: "1.7rem",
   },
@@ -189,13 +199,19 @@ const IconBox = css({
   },
 });
 
-const descWrapper = css({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  flexDirection: "column",
-  textAlign: "center",
-});
+const descWrapper = (type: "origin" | "reverse") =>
+  css({
+    opacity: "0",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    width: "100%",
+    [mq[2]]: {
+      flexDirection: type === "reverse" ? "column-reverse" : "column",
+      gap: "2rem",
+    },
+  });
 
 const title = css({
   display: "flex",
@@ -216,6 +232,10 @@ const imageWrapper = css({
   alignItems: "center",
   justifyContent: "center",
   padding: "2rem",
+  marginBottom: "10rem",
+  [mq[2]]: {
+    marginBottom: "5rem",
+  },
 });
 
 const titleBox = css({
@@ -259,29 +279,4 @@ const section = css({
   width: "100%",
   height: "100%",
   padding: "2rem 0",
-});
-
-const textBox = css({
-  padding: "5rem",
-  fontWeight: "700",
-  fontSize: "2.4rem",
-  width: "100%",
-  height: "auto",
-  wordBreak: "keep-all",
-  [mq[2]]: {
-    padding: "2rem",
-    fontSize: "1.8rem",
-  },
-});
-
-const topWrapper = css({
-  width: "100%",
-  maxWidth: "80rem",
-});
-
-const topSection = css({
-  width: "100%",
-  height: "auto",
-  display: "flex",
-  justifyContent: "center",
 });
