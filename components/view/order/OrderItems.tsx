@@ -38,7 +38,7 @@ const OrderItems = () => {
                       css={borderRadius("0.25rem")}
                     />
                   </div>
-                  <div>
+                  <div css={TextWapper}>
                     <h2
                       css={Title}
                       onClick={() => router.push(`/store/product/${item.p_id}`)}
@@ -71,6 +71,18 @@ const OrderItems = () => {
 };
 
 export default OrderItems;
+
+const TextWapper = css({
+  width: "100%",
+  maxWidth: "30rem",
+  height: "auto",
+  [mq[2]]: {
+    maxWidth: "20rem",
+  },
+  [mq[1]]: {
+    maxWidth: "15rem",
+  },
+});
 
 export const Button = css({
   width: "8.4rem",

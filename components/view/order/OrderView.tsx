@@ -43,6 +43,17 @@ const OrderView = () => {
       return;
     }
 
+    if (
+      order.number &&
+      (order.number.includes("-") || ![10, 11].includes(order.number.length))
+    ) {
+      setAlertControl({
+        text: "올바른 휴대폰 번호를 입력해주세요. ('-' 제외, 10~11자리)",
+        isOpen: true,
+      });
+      return;
+    }
+
     authInstance
       .post(`/order/?type=${order.type}`, order)
       .then((res) => {

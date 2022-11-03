@@ -145,7 +145,7 @@ const leftBox = css({
   width: "100%",
   height: "auto",
   gap: "1rem",
-  maxWidth: "40rem",
+  maxWidth: "30rem",
 });
 
 const ItemWrapper = css({

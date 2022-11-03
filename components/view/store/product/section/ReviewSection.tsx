@@ -91,6 +91,9 @@ const ReviewSection = ({ prodId, refArr, modalControl }: Props) => {
         {reviews && reviews?.length !== 0 ? (
           <>
             {reviews
+              .sort((a, b) =>
+                new Date(a.create_time) > new Date(b.create_time) ? -1 : 1
+              )
               .slice(0, reviewOpen ? undefined : 2)
               .map((review: Review) => (
                 <ReviewCard key={review.id} review={review} />
