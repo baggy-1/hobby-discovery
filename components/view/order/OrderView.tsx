@@ -34,6 +34,8 @@ const OrderView = () => {
 
   const [order, setOrder] = useState<AddNull<Order>>(INIT_ORDER);
 
+  console.log(items);
+
   const onClickOrder = () => {
     if (Object.values(order).some((value) => value === null)) {
       setAlertControl({
@@ -65,6 +67,8 @@ const OrderView = () => {
   };
 
   const getTotalPrice = (items: Cart[] | SubKitItem[]) => {
+    if (items.length === 0) return 0;
+
     switch (items[0].type) {
       case "product":
         const cartItems = items as Cart[];
