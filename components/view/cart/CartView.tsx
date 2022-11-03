@@ -69,6 +69,7 @@ const CartView = () => {
               <button
                 onClick={onClickOrder}
                 css={buyButton(total !== 0)}
+                disabled={total === 0}
               >{`${total?.toLocaleString("ko-KR")}원 결제하기`}</button>
             </div>
           </div>
