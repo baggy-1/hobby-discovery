@@ -218,6 +218,7 @@ const mobSearchBox = css({
   border: `2px solid ${MAIN_COLOR}`,
   borderLeft: "none",
   borderRadius: "0 0.25rem 0.25rem 0",
+  cursor: "pointer",
 });
 
 const mobSearchInput = css({
@@ -270,6 +271,7 @@ const searchBox = (active: boolean) =>
     border: active ? `2px solid ${MAIN_COLOR}` : "none",
     borderLeft: "none",
     borderRadius: "0 0.25rem 0.25rem 0",
+    cursor: "pointer",
   });
 
 const logoText = css({
