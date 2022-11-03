@@ -5,6 +5,7 @@ import {
   MobileDisplayNone,
   Text,
 } from "components/common/styles";
+import { DEFAULT_IMAGE } from "config/data";
 import { CartAction } from "config/reducer";
 import { mq } from "config/styles";
 import Image from "next/image";
@@ -26,7 +27,6 @@ const CartItem = ({ cartItem, dispatch }: Props) => {
   const { kitItem, count, checked } = cartItem;
   const router = useRouter();
   const { pd_id, pd_price, images, pd_title, pd_descrition, pd_sell } = kitItem;
-  const defaultImage = "/asset/image/main-image.png";
 
   const onClickDetail = (id: string) => () => {
     router.push(`/store/product/${id}`);
@@ -68,7 +68,7 @@ const CartItem = ({ cartItem, dispatch }: Props) => {
               css={[cursorPoint, image, borderRadius("0.25rem")]}
             >
               <Image
-                src={images[0].image || defaultImage}
+                src={images[0].image || DEFAULT_IMAGE}
                 alt={"product"}
                 width={150}
                 height={150}

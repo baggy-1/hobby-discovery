@@ -13,8 +13,7 @@ import ReviewSection from "components/view/store/product/section/ReviewSection";
 import ProdInfoSection from "components/view/store/product/section/ProdInfoSection";
 import MainSection from "components/view/store/product/section/MainSection";
 import ReviewPostModal from "components/view/store/product/ReviewPostModal";
-
-const defaultImage = "/asset/image/main-image.png";
+import { DEFAULT_IMAGE } from "config/data";
 
 const ProductDetailView = () => {
   // etc
@@ -87,7 +86,7 @@ const ProductDetailView = () => {
         <div css={[maxWidthWrapper("100%"), Center("column")]}>
           <MainSection
             kitItem={kitItem}
-            image={images[0] ? images[0].image || defaultImage : defaultImage}
+            image={images[0] ? images[0].image || DEFAULT_IMAGE : DEFAULT_IMAGE}
             setAlertControl={setAlertControl}
           />
           <div css={descSection}>
@@ -106,7 +105,7 @@ const ProductDetailView = () => {
               </div>
             </div>
             <ProdInfoSection
-              image={images[0].pd_image || defaultImage}
+              image={images[0].pd_image || DEFAULT_IMAGE}
               refArr={refArr}
             />
             <ReviewSection

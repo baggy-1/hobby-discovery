@@ -12,8 +12,7 @@ import { StoreMainContext } from "config/context";
 import Seo from "components/Seo";
 import Empty from "components/view/order/Empty";
 import { cmq } from "config/styles";
-
-const defaultImage = "/asset/image/main-image.png";
+import { DEFAULT_IMAGE } from "config/data";
 
 const StoreSortView = () => {
   const router = useRouter();
@@ -99,7 +98,7 @@ const StoreSortView = () => {
                     <div css={[imageBox, borderRadius("0.25rem")]}>
                       <Image
                         src={
-                          item.images[0] ? item.images[0].image : defaultImage
+                          item.images[0] ? item.images[0].image : DEFAULT_IMAGE
                         }
                         alt={"kit-product"}
                         layout={"fill"}

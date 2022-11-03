@@ -5,6 +5,7 @@ import {
   hoverScale,
   Text,
 } from "components/common/styles";
+import { DEFAULT_IMAGE } from "config/data";
 import { mq } from "config/styles";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -17,7 +18,8 @@ interface Props {
 const Card = ({ kitItem }: Props) => {
   const router = useRouter();
   const { pd_id, pd_title, images, pd_price, pd_sell } = kitItem;
-  const imagePath = images[0] ? images[0].image : "/asset/image/main-image.png";
+  const imagePath = images[0] ? images[0].image : DEFAULT_IMAGE;
+
   return (
     <div
       css={prodCard}
