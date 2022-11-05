@@ -30,7 +30,10 @@ const OrderSubs = () => {
   }>({ id: null, state: false });
   const { alertControl, setAlertControl, onClickClose } = useAlertControl();
 
-  const { data } = useSWR<OrderSubListObj>("/order?type=sub", authFetcher);
+  const { data, error } = useSWR<OrderSubListObj>(
+    "/order?type=sub",
+    authFetcher
+  );
 
   const onClickDeleteSub = (subId: string) => () => {
     changeOverflowHtml("open");
@@ -73,6 +76,16 @@ const OrderSubs = () => {
     };
   }, []);
 
+  if (!data && !error) {
+    return (
+      <Empty
+        title={"아직 구독한 상품이 없습니다!"}
+        pushPath={"/subscription"}
+        height={"calc(100vh - 13rem)"}
+      />
+    );
+  }
+
   return (
     <>
       {alertControl.isOpen && (
@@ -84,8 +97,8 @@ const OrderSubs = () => {
           <div css={delPopUp}>
             <h1 css={delText}>구독을 취소하시겠습니까?</h1>
             <div css={delButtonBox}>
-              <button onClick={onClickDelResult(true)}>확인</button>
               <button onClick={onClickDelResult(false)}>취소</button>
+              <button onClick={onClickDelResult(true)}>확인</button>
             </div>
           </div>
         </>

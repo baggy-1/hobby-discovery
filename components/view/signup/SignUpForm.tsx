@@ -7,6 +7,7 @@ import { REG_ID, REG_PW } from "config/regexp";
 import { css } from "@emotion/react";
 import { mq } from "config/styles";
 import { setCookie } from "util/cookie";
+import { mutate } from "swr";
 
 const SignUpForm = () => {
   const router = useRouter();
@@ -67,8 +68,9 @@ const SignUpForm = () => {
       setCookie("_hobby_at", accessToken);
       setCookie("_hobby_ae", accessExp);
       setCookie("_hobby_rt", refreshToken);
-
-      router.replace("/store");
+      mutate("/user").then(() => {
+        router.back();
+      });
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         if (error.response?.status === 400) {

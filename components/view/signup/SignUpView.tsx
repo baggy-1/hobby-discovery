@@ -3,14 +3,17 @@ import LogoWithText from "components/common/LogoWithText";
 import { cursorPoint } from "components/common/styles";
 import useUser from "hooks/useUser";
 import SignUpForm from "components/view/signup/SignUpForm";
+import { useEffect } from "react";
 
 const SignUpView = () => {
   const { user } = useUser();
   const router = useRouter();
 
-  if (user) {
-    router.replace("/store");
-  }
+  useEffect(() => {
+    if (user) {
+      router.replace("/store");
+    }
+  }, []);
 
   return (
     <div className="w-screen min-h-screen text-lg text-black bg-white">

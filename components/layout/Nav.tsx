@@ -64,10 +64,11 @@ const Nav = () => {
     localStorage.removeItem("cart");
     cartInfo?.dispatch({ type: "RESET" });
 
-    router.replace("/store");
     setNavOpen(false);
     mutate("/user", null, {
       revalidate: true,
+    }).then(() => {
+      router.replace("/store");
     });
   };
 

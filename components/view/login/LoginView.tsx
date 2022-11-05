@@ -3,14 +3,17 @@ import LogoWithText from "components/common/LogoWithText";
 import { cursorPoint } from "components/common/styles";
 import useUser from "hooks/useUser";
 import LoginForm from "components/view/login/LoginForm";
+import { useEffect } from "react";
 
 const LoginView = () => {
   const router = useRouter();
   const { user } = useUser();
 
-  if (user) {
-    router.replace("/store");
-  }
+  useEffect(() => {
+    if (user) {
+      router.replace("/store");
+    }
+  }, []);
 
   return (
     <>

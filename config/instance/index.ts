@@ -45,13 +45,15 @@ authInstance.interceptors.response.use(
         );
 
         const { access_token, access_exp } = data;
-        setCookie("_hobby_at", access_token);
-        setCookie("_hobby_ae", access_exp);
+        if (getCookie("_hobby_at") && getCookie("_hobby_ae")) {
+          setCookie("_hobby_at", access_token);
+          setCookie("_hobby_ae", access_exp);
 
-        const headers = config.headers || {};
-        headers["Authorization"] = `Bearer ${access_token}`;
+          const headers = config.headers || {};
+          headers["Authorization"] = `Bearer ${access_token}`;
 
-        return axios(config);
+          return axios(config);
+        }
       }
     }
     return Promise.reject(error);
