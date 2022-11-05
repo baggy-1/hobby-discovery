@@ -104,6 +104,10 @@ const UpdateForm = () => {
     formData.append("address", updateAddress);
 
     try {
+      setAlertControl({
+        text: "회원정보를 수정중입니다.",
+        isOpen: true,
+      });
       authInstance.patch("/user/", formData).then((res) => {
         setAlertControl({
           text: "회원정보가 수정되었습니다.",

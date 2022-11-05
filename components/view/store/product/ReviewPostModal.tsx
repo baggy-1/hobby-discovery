@@ -73,6 +73,8 @@ const ReviewPostModal = ({ prodId, onClickClose }: Props) => {
     formData.set("hobby_rv", prodId);
 
     try {
+      setNotice("리뷰를 등록중입니다.");
+
       authInstance.post(`/main/review/`, formData).then((res) => {
         setNotice("리뷰가 등록되었습니다.");
         setTimeout(() => {
@@ -109,7 +111,7 @@ const ReviewPostModal = ({ prodId, onClickClose }: Props) => {
           </div>
           <form css={Form} onSubmit={onSubmitPostReview}>
             <h1 css={Text("1.5rem", "700", "#999999")}>후기 작성</h1>
-            <div>{notice}</div>
+            <div css={Notice}>{notice}</div>
             <div css={StarsPc}>{StarComponent(60, 60)}</div>
             <div css={StarsMob}>{StarComponent(40, 40)}</div>
             <input
@@ -150,6 +152,13 @@ const ReviewPostModal = ({ prodId, onClickClose }: Props) => {
 };
 
 export default ReviewPostModal;
+
+const Notice = css({
+  fontSize: "1rem",
+  fontWeight: "400",
+  color: "red",
+  textAlign: "center",
+});
 
 const SubmitButton = css({
   width: "100%",
