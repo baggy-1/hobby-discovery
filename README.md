@@ -6,7 +6,7 @@
 
 ## 배포
 
-[배포 사이트]("https://chiham.vercel.app")
+[배포 사이트](https://chiham.vercel.app)
 
 ## 협업 툴
 
